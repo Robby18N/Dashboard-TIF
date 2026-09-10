@@ -164,7 +164,7 @@ function Sparkline({ trend }: { trend: "up" | "down" }) {
 function StatusPill({ status }: { status: "Win" | "Lose" }) {
   return (
     <span
-      className={`whitespace-nowrap rounded-[9px] px-2.5 py-1 text-[13px] font-medium ${
+      className={`whitespace-nowrap rounded-[9px] px-2.5 py-1 text-[12px] font-medium ${
         status === "Win" ? "bg-[#f0fdf4] text-[#22c55e]" : "bg-[#fef2f2] text-[#ef4444]"
       }`}
     >
@@ -226,8 +226,8 @@ function DetailTableRow({
             </span>
           ))}
         <span
-          className={`truncate text-sm ${
-            isTotal || isGroup ? "font-semibold text-[#0f172b]" : "text-[#525252]"
+          className={`truncate text-[12px] text-[#050505] ${
+            isTotal || isGroup ? "font-semibold" : "font-normal"
           }`}
         >
           {row.name}
@@ -235,7 +235,7 @@ function DetailTableRow({
       </div>
 
       <div style={{ width: 120 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="text-sm text-[#525252]">{row.valueIndihome}</span>
+        <span className="text-[12px] font-normal text-[#050505]">{row.valueIndihome}</span>
       </div>
 
       <div style={{ width: 70 }} className="flex h-[38px] shrink-0 items-center px-3">
@@ -247,29 +247,29 @@ function DetailTableRow({
       </div>
 
       <div style={{ width: 150 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className={`text-sm font-medium ${BENCHMARK_STYLE[row.benchmarkStatus]}`}>
+        <span className={`text-[12px] font-medium ${BENCHMARK_STYLE[row.benchmarkStatus]}`}>
           {row.benchmarkStatus}
         </span>
       </div>
 
       <div style={{ width: 140 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="truncate text-sm text-[#525252]">{row.nearestCompetitor}</span>
+        <span className="truncate text-[12px] font-normal text-[#050505]">{row.nearestCompetitor}</span>
       </div>
 
       <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="truncate text-sm text-[#525252]">{row.winner}</span>
+        <span className="truncate text-[12px] font-normal text-[#050505]">{row.winner}</span>
       </div>
 
       <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="text-sm text-[#525252]">{row.winnerValue}</span>
+        <span className="text-[12px] font-normal text-[#050505]">{row.winnerValue}</span>
       </div>
 
       <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="text-sm text-[#525252]">{row.gapToWinner}</span>
+        <span className="text-[12px] font-normal text-[#050505]">{row.gapToWinner}</span>
       </div>
 
       <div style={{ width: 160 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="truncate text-sm text-[#525252]">{row.highlight}</span>
+        <span className="truncate text-[12px] font-normal text-[#050505]">{row.highlight}</span>
       </div>
     </div>
   );
@@ -386,7 +386,7 @@ export default function OnxDashboard() {
                               key={col.key}
                               className={`flex h-7 flex-1 items-center px-3 ${col.align}`}
                             >
-                              <span className="whitespace-nowrap text-sm font-medium text-[#9a9a9a]">
+                              <span className="whitespace-nowrap text-[12px] font-medium text-[#050505]">
                                 {col.label}
                               </span>
                             </div>
@@ -407,14 +407,14 @@ export default function OnxDashboard() {
                                   className={`flex h-7 flex-1 items-center px-3 ${col.align}`}
                                 >
                                   {col.key === "metrics" ? (
-                                    <span className="whitespace-nowrap text-sm font-medium text-[#b4b4b4]">
+                                    <span className="whitespace-nowrap text-[12px] font-normal text-[#050505]">
                                       {showMetric ? row.metrics : ""}
                                     </span>
                                   ) : col.key === "wow" ? (
                                     <StatusPill status={row.wow} />
                                   ) : col.key === "highlight" ? (
                                     <span
-                                      className={`whitespace-nowrap text-sm font-medium ${
+                                      className={`whitespace-nowrap text-[12px] font-medium ${
                                         row.highlight === "Good"
                                           ? "text-[#22c55e]"
                                           : "text-[#f97316]"
@@ -423,7 +423,7 @@ export default function OnxDashboard() {
                                       {row.highlight}
                                     </span>
                                   ) : (
-                                    <span className="whitespace-nowrap text-sm text-[#3f3f46]">
+                                    <span className="whitespace-nowrap text-[12px] font-normal text-[#050505]">
                                       {row[col.key as keyof ComparisonRow]}
                                     </span>
                                   )}
@@ -544,7 +544,7 @@ function DetailTable() {
                 style={{ width: col.width }}
                 className="flex h-10 shrink-0 items-center px-3"
               >
-                <span className="whitespace-nowrap text-sm font-semibold text-[#525252]">
+                <span className="whitespace-nowrap text-[12px] font-medium text-[#050505]">
                   {col.label}
                 </span>
               </div>
