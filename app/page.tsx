@@ -113,7 +113,7 @@ export default function Home() {
               <p className="text-sm font-bold text-[#050505]">
                 Explore Dashboards
               </p>
-              <p className="text-base text-[#636363]">
+              <p className="text-[12px] text-[#636363]">
                 Access CNOP, FBB, EBIS, and OLO dashboards from one
                 streamlined workspace.
               </p>
