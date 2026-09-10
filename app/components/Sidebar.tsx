@@ -15,7 +15,7 @@ type SidebarMenuItem = {
 const SIDEBAR_MENU_ITEMS: SidebarMenuItem[] = [
   { key: "fbb", label: "SLA WISA FBB", icon: TrendingUpDown, href: "/fbb" },
   { key: "onx", label: "ONX Dashboard", icon: Router, href: "/onx" },
-  { key: "ookla", label: "Ookla Dashboard", icon: Radio, href: "#" },
+  { key: "ookla", label: "Ookla Dashboard", icon: Radio, href: "/ookla" },
 ];
 
 type SidebarProps = {
