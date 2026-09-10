@@ -66,6 +66,18 @@ export default function Home() {
   const [activeSuggestion, setActiveSuggestion] = useState<Suggestion | null>(
     null
   );
+  const [query, setQuery] = useState("");
+  const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(false);
+
+  const filteredSuggestions = FBB_SUGGESTIONS.filter((suggestion) =>
+    suggestion.title.toLowerCase().includes(query.trim().toLowerCase())
+  );
+
+  const handleSelectSuggestion = (suggestion: Suggestion) => {
+    setQuery(suggestion.title);
+    setIsAutocompleteOpen(false);
+    setActiveSuggestion(suggestion);
+  };
 
   return (
     <div className="relative flex min-h-screen flex-col bg-[#f9f8f7]">
@@ -120,21 +132,62 @@ export default function Home() {
           Welcome to Qosmo 👋
         </h1>
 
-        <form className="flex w-full max-w-[720px] items-center gap-3 rounded-[80px] border border-[#e6e5e3] bg-white px-5 py-4">
-          <Search className="size-5 shrink-0 text-[#636363]" strokeWidth={1.75} />
-          <input
-            type="text"
-            placeholder="Search Insight dashboard.."
-            className="flex-1 bg-transparent text-base text-[#636363] outline-none placeholder:text-[#636363]"
-          />
-          <button
-            type="submit"
-            aria-label="Submit search"
-            className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-[#050505] transition-opacity hover:opacity-90"
+        <div className="relative w-full max-w-[720px]">
+          <form
+            onSubmit={(event) => event.preventDefault()}
+            className="flex w-full items-center gap-3 rounded-[80px] border border-[#e6e5e3] bg-white px-5 py-4"
           >
-            <ArrowUp className="size-5 text-white" strokeWidth={2} />
-          </button>
-        </form>
+            <Search className="size-5 shrink-0 text-[#636363]" strokeWidth={1.75} />
+            <input
+              type="text"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setIsAutocompleteOpen(true);
+              }}
+              onFocus={() => {
+                if (query.trim()) setIsAutocompleteOpen(true);
+              }}
+              onBlur={() => {
+                window.setTimeout(() => setIsAutocompleteOpen(false), 120);
+              }}
+              placeholder="Search Insight dashboard.."
+              className="flex-1 bg-transparent text-base text-[#636363] outline-none placeholder:text-[#636363]"
+            />
+            <button
+              type="submit"
+              aria-label="Submit search"
+              className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-[#050505] transition-opacity hover:opacity-90"
+            >
+              <ArrowUp className="size-5 text-white" strokeWidth={2} />
+            </button>
+          </form>
+
+          {isAutocompleteOpen && query.trim() && (
+            <div className="absolute inset-x-0 top-full z-10 mt-2 overflow-hidden rounded-2xl border border-[#e6e5e3] bg-white shadow-[0px_8px_24px_0px_rgba(0,0,0,0.08)]">
+              {filteredSuggestions.length > 0 ? (
+                filteredSuggestions.map((suggestion) => (
+                  <button
+                    key={suggestion.title}
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => handleSelectSuggestion(suggestion)}
+                    className="flex w-full items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-black/[0.02]"
+                  >
+                    <Search className="size-4 shrink-0 text-[#636363]" strokeWidth={1.75} />
+                    <span className="text-sm text-[#050505]">
+                      {suggestion.title}
+                    </span>
+                  </button>
+                ))
+              ) : (
+                <p className="px-5 py-3 text-sm text-[#636363]">
+                  Tidak ada saran yang cocok.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="flex w-full max-w-[720px] flex-wrap items-center justify-center gap-2">
           {FBB_SUGGESTIONS.map((suggestion) => (
