@@ -219,7 +219,7 @@ export default function RegionMap({ regions = SAMPLE_REGIONS }: RegionMapProps) 
 
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const styleUrl =
-    process.env.NEXT_PUBLIC_MAPBOX_STYLE ?? "mapbox://styles/mapbox/light-v11";
+    process.env.NEXT_PUBLIC_MAPBOX_STYLE ?? "mapbox://styles/obby19/cmiptwz19000c01s6a18ug4td";
 
   useEffect(() => {
     if (!token || !mapContainerRef.current || mapRef.current) return;
