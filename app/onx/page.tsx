@@ -356,7 +356,7 @@ export default function OnxDashboard() {
           {/* Unified card: comparison table + controls + map, sharing one border/radius */}
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[24px] border border-[#e2e8f0] bg-white">
             {/* Comparison table */}
-            <div className="flex shrink-0 items-start gap-3 border-b border-[#e2e8f0] px-4 pb-2.5 pt-2.5">
+            <div className="flex shrink-0 items-start gap-3 border-b border-[#e2e8f0] p-3">
               <div className="flex min-w-0 flex-1 flex-col">
                 {/* Collapsed label */}
                 <div
