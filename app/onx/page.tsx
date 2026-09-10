@@ -8,7 +8,7 @@ import {
   Moon,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
-import RegionMap, { SAMPLE_REGIONS } from "./RegionMap";
+import RegionMap from "./RegionMap";
 
 type ComparisonRow = {
   /** "Metrics" column — constant score type shown for every row */
@@ -40,6 +40,222 @@ const COMPARISON_COLUMNS = [
 ] as const;
 
 const METRIC_OPTIONS = ["TTFB", "Latency", "Jitter", "Packetloss", "Download", "Upload"];
+
+type BenchmarkStatus =
+  | "Consecutive"
+  | "New Lose"
+  | "Degrade"
+  | "Improve"
+  | "Inconsistent Lose";
+
+type DetailRegionRow = {
+  id: string;
+  name: string;
+  status: "Win" | "Lose";
+  valueIndihome: string;
+  trend: "up" | "down";
+  benchmarkStatus: BenchmarkStatus;
+  nearestCompetitor: string;
+  winner: string;
+  winnerValue: string;
+  gapToWinner: string;
+  highlight: string;
+  children?: DetailRegionRow[];
+};
+
+/**
+ * Sample region-breakdown data for the Detail tab. Placeholder figures in
+ * the same spirit as RegionMap's SAMPLE_REGIONS — swap for real figures
+ * whenever they're available. "INNER JABO" is a group row: it aggregates
+ * the five nested DKI Jakarta areas beneath it.
+ */
+const DETAIL_REGIONS: DetailRegionRow[] = [
+  { id: "sumbagut", name: "SUMBAGUT", status: "Win", valueIndihome: "98.20%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Indosat", winner: "Indihome", winnerValue: "98.20%", gapToWinner: "-", highlight: "Strong performance" },
+  { id: "sumbagteng", name: "SUMBAGTENG", status: "Win", valueIndihome: "95.60%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Biznet", winner: "Indihome", winnerValue: "95.60%", gapToWinner: "-", highlight: "Strong performance" },
+  { id: "sumbagsel", name: "SUMBAGSEL", status: "Lose", valueIndihome: "88.40%", trend: "down", benchmarkStatus: "New Lose", nearestCompetitor: "IndosatHifi", winner: "IndosatHifi", winnerValue: "91.70%", gapToWinner: "+3.30%", highlight: "Priority focus" },
+  {
+    id: "inner-jabo",
+    name: "INNER JABO",
+    status: "Win",
+    valueIndihome: "94.80%",
+    trend: "up",
+    benchmarkStatus: "Consecutive",
+    nearestCompetitor: "Biznet",
+    winner: "Indihome",
+    winnerValue: "94.80%",
+    gapToWinner: "-",
+    highlight: "Stable",
+    children: [
+      { id: "kepulauan-seribu", name: "KEPULAUAN SERIBU", status: "Lose", valueIndihome: "90.10%", trend: "down", benchmarkStatus: "Degrade", nearestCompetitor: "XLSMART", winner: "XLSMART", winnerValue: "92.50%", gapToWinner: "+2.40%", highlight: "Needs attention" },
+      { id: "jakarta-pusat", name: "JAKARTA PUSAT", status: "Win", valueIndihome: "97.30%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Biznet", winner: "Indihome", winnerValue: "97.30%", gapToWinner: "-", highlight: "Strong performance" },
+      { id: "jakarta-selatan", name: "JAKARTA SELATAN", status: "Win", valueIndihome: "96.85%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Biznet", winner: "Indihome", winnerValue: "96.85%", gapToWinner: "-", highlight: "Strong performance" },
+      { id: "jakarta-utara", name: "JAKARTA UTARA", status: "Lose", valueIndihome: "93.20%", trend: "down", benchmarkStatus: "Inconsistent Lose", nearestCompetitor: "IndosatHifi", winner: "IndosatHifi", winnerValue: "94.60%", gapToWinner: "+1.40%", highlight: "Monitor" },
+      { id: "jakarta-barat", name: "JAKARTA BARAT", status: "Win", valueIndihome: "95.90%", trend: "up", benchmarkStatus: "Improve", nearestCompetitor: "XLSMART", winner: "Indihome", winnerValue: "95.90%", gapToWinner: "-", highlight: "Improving" },
+    ],
+  },
+  { id: "outer-jabo", name: "OUTER JABO", status: "Win", valueIndihome: "93.75%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Biznet", winner: "Indihome", winnerValue: "93.75%", gapToWinner: "-", highlight: "Stable" },
+  { id: "jabar", name: "JAWA BARAT", status: "Win", valueIndihome: "96.55%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "XLSMART", winner: "Indihome", winnerValue: "96.55%", gapToWinner: "-", highlight: "Strong performance" },
+  { id: "jateng", name: "JAWA TENGAH", status: "Win", valueIndihome: "97.85%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Biznet", winner: "Indihome", winnerValue: "97.85%", gapToWinner: "-", highlight: "Strong performance" },
+  { id: "jatim", name: "JAWA TIMUR", status: "Win", valueIndihome: "96.90%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "IndosatHifi", winner: "Indihome", winnerValue: "96.90%", gapToWinner: "-", highlight: "Strong performance" },
+  { id: "balinusra", name: "BALI NUSRA", status: "Win", valueIndihome: "95.30%", trend: "up", benchmarkStatus: "Improve", nearestCompetitor: "XLHome", winner: "Indihome", winnerValue: "95.30%", gapToWinner: "-", highlight: "Improving" },
+  { id: "kalimantan", name: "KALIMANTAN", status: "Win", valueIndihome: "96.10%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Biznet", winner: "Indihome", winnerValue: "96.10%", gapToWinner: "-", highlight: "Stable" },
+  { id: "sulawesi", name: "SULAWESI", status: "Lose", valueIndihome: "89.75%", trend: "down", benchmarkStatus: "Degrade", nearestCompetitor: "XLSMART", winner: "XLSMART", winnerValue: "92.15%", gapToWinner: "+2.40%", highlight: "Needs attention" },
+  { id: "maluku-papua", name: "MALUKU & PAPUA", status: "Lose", valueIndihome: "87.30%", trend: "down", benchmarkStatus: "New Lose", nearestCompetitor: "IndosatHifi", winner: "IndosatHifi", winnerValue: "90.65%", gapToWinner: "+3.35%", highlight: "Priority focus" },
+];
+
+const NATIONAL_ROW: DetailRegionRow = {
+  id: "national",
+  name: "NATIONAL",
+  status: "Win",
+  valueIndihome: "94.35%",
+  trend: "up",
+  benchmarkStatus: "Consecutive",
+  nearestCompetitor: "-",
+  winner: "Indihome",
+  winnerValue: "94.35%",
+  gapToWinner: "-",
+  highlight: "Overall on track",
+};
+
+const BENCHMARK_STYLE: Record<BenchmarkStatus, string> = {
+  Consecutive: "text-[#525252]",
+  Improve: "text-[#22c55e]",
+  Degrade: "text-[#f97316]",
+  "New Lose": "text-[#ef4444]",
+  "Inconsistent Lose": "text-[#ef4444]",
+};
+
+const DETAIL_COLUMNS: { key: string; label: string; width: number }[] = [
+  { key: "region", label: "Region", width: 220 },
+  { key: "value", label: "Value Indihome", width: 120 },
+  { key: "trend", label: "Trend", width: 70 },
+  { key: "status", label: "Status", width: 90 },
+  { key: "benchmark", label: "Benchmark Status", width: 150 },
+  { key: "competitor", label: "Nearest Competitor", width: 140 },
+  { key: "winner", label: "Winner", width: 110 },
+  { key: "winnerValue", label: "Winner Value", width: 110 },
+  { key: "gap", label: "Gap to Winner", width: 110 },
+  { key: "highlight", label: "Highlight", width: 160 },
+];
+
+const DETAIL_TABLE_WIDTH = DETAIL_COLUMNS.reduce((sum, col) => sum + col.width, 0);
+
+function Sparkline({ trend }: { trend: "up" | "down" }) {
+  const color = trend === "up" ? "#22c55e" : "#ef4444";
+  const points =
+    trend === "up"
+      ? "0,18 8,14 16,16 24,9 32,11 40,3"
+      : "0,3 8,7 16,5 24,12 32,10 40,18";
+
+  return (
+    <svg width="40" height="20" viewBox="0 0 40 20" fill="none" className="shrink-0">
+      <polyline
+        points={points}
+        stroke={color}
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function DetailTableRow({
+  row,
+  indent = false,
+  isGroup = false,
+  isExpanded = false,
+  onToggle,
+  isTotal = false,
+}: {
+  row: DetailRegionRow;
+  indent?: boolean;
+  isGroup?: boolean;
+  isExpanded?: boolean;
+  onToggle?: () => void;
+  isTotal?: boolean;
+}) {
+  return (
+    <div
+      className={`flex border-b border-black/[0.08] last:border-b-0 ${
+        isTotal ? "bg-black/[0.02]" : ""
+      }`}
+    >
+      <div
+        style={{ width: 220, paddingLeft: indent ? 40 : 12 }}
+        className="flex h-[38px] shrink-0 items-center gap-1.5 pr-3"
+      >
+        {isGroup && (
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-label={isExpanded ? `Collapse ${row.name}` : `Expand ${row.name}`}
+            aria-expanded={isExpanded}
+            className="flex size-4 shrink-0 items-center justify-center text-[#525252]"
+          >
+            <ChevronDown
+              className={`size-3.5 transition-transform duration-200 ${
+                isExpanded ? "" : "-rotate-90"
+              }`}
+              strokeWidth={1.75}
+            />
+          </button>
+        )}
+        <span
+          className={`truncate text-sm ${
+            isTotal || isGroup ? "font-semibold text-[#0f172b]" : "text-[#525252]"
+          }`}
+        >
+          {row.name}
+        </span>
+      </div>
+
+      <div style={{ width: 120 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span className="text-sm text-[#525252]">{row.valueIndihome}</span>
+      </div>
+
+      <div style={{ width: 70 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <Sparkline trend={row.trend} />
+      </div>
+
+      <div style={{ width: 90 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span
+          className={`whitespace-nowrap rounded-[9px] px-2.5 py-1 text-[13px] font-medium ${
+            row.status === "Win" ? "bg-[#f0fdf4] text-[#22c55e]" : "bg-[#fef2f2] text-[#ef4444]"
+          }`}
+        >
+          {row.status}
+        </span>
+      </div>
+
+      <div style={{ width: 150 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span className={`text-sm font-medium ${BENCHMARK_STYLE[row.benchmarkStatus]}`}>
+          {row.benchmarkStatus}
+        </span>
+      </div>
+
+      <div style={{ width: 140 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span className="truncate text-sm text-[#525252]">{row.nearestCompetitor}</span>
+      </div>
+
+      <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span className="truncate text-sm text-[#525252]">{row.winner}</span>
+      </div>
+
+      <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span className="text-sm text-[#525252]">{row.winnerValue}</span>
+      </div>
+
+      <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span className="text-sm text-[#525252]">{row.gapToWinner}</span>
+      </div>
+
+      <div style={{ width: 160 }} className="flex h-[38px] shrink-0 items-center px-3">
+        <span className="truncate text-sm text-[#525252]">{row.highlight}</span>
+      </div>
+    </div>
+  );
+}
 
 export default function OnxDashboard() {
   const [activeTab, setActiveTab] = useState<"maps" | "detail">("maps");
@@ -267,48 +483,58 @@ export default function OnxDashboard() {
 }
 
 function DetailTable() {
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    () => new Set(DETAIL_REGIONS.filter((row) => row.children).map((row) => row.id))
+  );
+
+  const toggleGroup = (id: string) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="h-full overflow-auto rounded-[10px] border border-black/[0.08]">
-      <div className="min-w-[560px]">
-        <div className="flex bg-black/[0.04]">
-          <div className="flex h-10 flex-1 items-center px-3">
-            <span className="text-sm font-semibold text-[#525252]">Region</span>
-          </div>
-          <div className="flex h-10 flex-1 items-center px-3">
-            <span className="text-sm font-semibold text-[#525252]">Status</span>
-          </div>
-          <div className="flex h-10 flex-1 items-center px-3">
-            <span className="text-sm font-semibold text-[#525252]">Value Indihome</span>
-          </div>
-          <div className="flex h-10 flex-1 items-center px-3">
-            <span className="text-sm font-semibold text-[#525252]">Nearest Competitor</span>
-          </div>
-        </div>
-
-        {SAMPLE_REGIONS.map((region) => (
-          <div key={region.id} className="flex border-b border-black/[0.08] last:border-b-0">
-            <div className="flex h-[30px] flex-1 items-center px-3">
-              <span className="text-sm text-[#525252]">{region.name}</span>
-            </div>
-            <div className="flex h-[30px] flex-1 items-center px-3">
-              <span
-                className={`whitespace-nowrap rounded-[9px] px-2.5 py-1 text-[13px] font-medium ${
-                  region.status === "win"
-                    ? "bg-[#f0fdf4] text-[#22c55e]"
-                    : "bg-[#fef2f2] text-[#ef4444]"
-                }`}
+      <div className="overflow-x-auto">
+        <div style={{ minWidth: DETAIL_TABLE_WIDTH }}>
+          <div className="flex bg-black/[0.04]">
+            {DETAIL_COLUMNS.map((col) => (
+              <div
+                key={col.key}
+                style={{ width: col.width }}
+                className="flex h-10 shrink-0 items-center px-3"
               >
-                {region.status === "win" ? "Win" : "Lose"}
-              </span>
-            </div>
-            <div className="flex h-[30px] flex-1 items-center px-3">
-              <span className="text-sm text-[#525252]">{region.valuePercent}</span>
-            </div>
-            <div className="flex h-[30px] flex-1 items-center px-3">
-              <span className="text-sm text-[#525252]">{region.nearestCompetitor}</span>
-            </div>
+                <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
+                  {col.label}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
+
+          {DETAIL_REGIONS.map((row) => (
+            <div key={row.id}>
+              <DetailTableRow
+                row={row}
+                isGroup={!!row.children}
+                isExpanded={expandedGroups.has(row.id)}
+                onToggle={() => toggleGroup(row.id)}
+              />
+              {row.children &&
+                expandedGroups.has(row.id) &&
+                row.children.map((child) => (
+                  <DetailTableRow key={child.id} row={child} indent />
+                ))}
+            </div>
+          ))}
+
+          <DetailTableRow row={NATIONAL_ROW} isTotal />
+        </div>
       </div>
     </div>
   );
