@@ -379,7 +379,7 @@ export default function OnxDashboard() {
                               key={col.key}
                               className={`flex h-7 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
                             >
-                              <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
+                              <span className="whitespace-nowrap text-sm font-semibold text-[#525252]">
                                 {col.label}
                               </span>
                             </div>
@@ -397,7 +397,7 @@ export default function OnxDashboard() {
                                 className={`flex h-6 flex-1 items-center px-3 ${col.align}`}
                               >
                                 <span
-                                  className={`whitespace-nowrap text-xs ${
+                                  className={`whitespace-nowrap text-sm ${
                                     col.key === "wow" && row.wow === "Lose"
                                       ? "text-[#ef4444]"
                                       : "text-[#525252]"
@@ -521,7 +521,7 @@ function DetailTable() {
                 style={{ width: col.width }}
                 className="flex h-10 shrink-0 items-center px-3"
               >
-                <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
+                <span className="whitespace-nowrap text-sm font-semibold text-[#525252]">
                   {col.label}
                 </span>
               </div>
