@@ -238,7 +238,7 @@ export default function FbbDashboard() {
           <PanelLeft className="size-[18px]" strokeWidth={1.75} />
         </button>
 
-        <div className={`flex flex-col gap-1 ${sidebarOpen ? "" : "items-center gap-4"}`}>
+        <div className={`flex flex-col gap-4 ${sidebarOpen ? "" : "items-center"}`}>
           {SIDEBAR_MENU_ITEMS.map(({ label, icon: Icon, href, active }) => (
             <Link
               key={label}
