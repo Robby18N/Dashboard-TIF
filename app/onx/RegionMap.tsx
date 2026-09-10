@@ -364,7 +364,7 @@ export default function RegionMap({ regions = SAMPLE_REGIONS }: RegionMapProps) 
       <div ref={mapContainerRef} className="h-full w-full" />
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 flex items-center gap-4 rounded-[24px] border border-[#0505050a] bg-white px-4 py-2">
+      <div className="absolute right-4 top-4 flex items-center gap-4 rounded-[24px] border border-[#0505050a] bg-white px-4 py-2">
         <span className="flex items-center gap-1">
           <span
             className="size-3 rounded-full"
