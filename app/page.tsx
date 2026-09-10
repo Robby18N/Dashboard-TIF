@@ -125,7 +125,7 @@ export default function Home() {
               <Link
                 key={label}
                 href={href}
-                className="flex w-[120px] items-center gap-4 rounded-full border border-[#e6e5e3] bg-white py-2 pl-2 pr-3 transition-colors hover:bg-black/[0.02]"
+                className="flex w-[120px] items-center gap-4 rounded-full border border-[#e6e5e3] bg-white py-1 pl-1 pr-3 transition-colors hover:bg-black/[0.02]"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[rgba(10,18,31,0.08)]">
                   <Icon className="size-4 text-[#050505]" strokeWidth={1.75} />
