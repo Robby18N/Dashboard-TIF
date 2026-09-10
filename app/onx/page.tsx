@@ -5,7 +5,6 @@ import {
   Bell,
   ChevronDown,
   Filter,
-  Maximize2,
   Moon,
 } from "lucide-react";
 import Sidebar from "../components/Sidebar";
@@ -45,6 +44,7 @@ const METRIC_OPTIONS = ["TTFB", "Latency", "Jitter", "Packetloss", "Download", "
 export default function OnxDashboard() {
   const [activeTab, setActiveTab] = useState<"maps" | "detail">("maps");
   const [selectedMetric, setSelectedMetric] = useState("TTFB");
+  const [isTableCollapsed, setIsTableCollapsed] = useState(false);
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#f9f8f7]">
@@ -123,53 +123,68 @@ export default function OnxDashboard() {
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[24px] border border-black/[0.08] bg-white">
             {/* Comparison table */}
             <div className="flex shrink-0 items-start gap-3 border-b border-black/[0.08] px-4 pb-2.5 pt-2.5">
-              <div className="min-w-0 flex-1 overflow-x-auto">
-                <div className="min-w-[640px]">
-                  <div className="flex">
-                    {COMPARISON_COLUMNS.map((col) => (
-                      <div
-                        key={col.key}
-                        className={`flex h-7 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
-                      >
-                        <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
-                          {col.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {COMPARISON_ROWS.map((row, i) => (
-                    <div
-                      key={`${row.kpi}-${i}`}
-                      className="flex border-b border-black/[0.08] last:border-b-0"
-                    >
+              {!isTableCollapsed && (
+                <div className="min-w-0 flex-1 overflow-x-auto">
+                  <div className="min-w-[640px]">
+                    <div className="flex">
                       {COMPARISON_COLUMNS.map((col) => (
                         <div
                           key={col.key}
-                          className={`flex h-6 flex-1 items-center px-3 ${col.align}`}
+                          className={`flex h-7 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
                         >
-                          <span
-                            className={`whitespace-nowrap text-xs ${
-                              col.key === "wow" && row.wow === "Lose"
-                                ? "text-[#ef4444]"
-                                : "text-[#525252]"
-                            }`}
-                          >
-                            {row[col.key as keyof ComparisonRow]}
+                          <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
+                            {col.label}
                           </span>
                         </div>
                       ))}
                     </div>
-                  ))}
+
+                    {COMPARISON_ROWS.map((row, i) => (
+                      <div
+                        key={`${row.kpi}-${i}`}
+                        className="flex border-b border-black/[0.08] last:border-b-0"
+                      >
+                        {COMPARISON_COLUMNS.map((col) => (
+                          <div
+                            key={col.key}
+                            className={`flex h-6 flex-1 items-center px-3 ${col.align}`}
+                          >
+                            <span
+                              className={`whitespace-nowrap text-xs ${
+                                col.key === "wow" && row.wow === "Lose"
+                                  ? "text-[#ef4444]"
+                                  : "text-[#525252]"
+                              }`}
+                            >
+                              {row[col.key as keyof ComparisonRow]}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {isTableCollapsed && (
+                <span className="flex-1 py-1 text-xs font-medium text-[#525252]">
+                  Comparison table collapsed
+                </span>
+              )}
 
               <button
                 type="button"
-                aria-label="Expand table"
+                aria-label={isTableCollapsed ? "Expand table" : "Collapse table"}
+                aria-expanded={!isTableCollapsed}
+                onClick={() => setIsTableCollapsed((collapsed) => !collapsed)}
                 className="flex size-7 shrink-0 items-center justify-center rounded-[10px] border border-[#e6e5e3] bg-white transition-colors hover:bg-black/[0.02]"
               >
-                <Maximize2 className="size-3.5 text-[#3b82f6]" strokeWidth={1.75} />
+                <ChevronDown
+                  className={`size-[18px] text-[#3b82f6] transition-transform ${
+                    isTableCollapsed ? "" : "rotate-180"
+                  }`}
+                  strokeWidth={1.67}
+                />
               </button>
             </div>
 
