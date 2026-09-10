@@ -190,7 +190,7 @@ const TABLE_COLUMNS = [
   { key: "indicator", label: "Performance Indicator", width: "w-[305px]", align: "justify-start text-left" },
   { key: "layanan", label: "Layanan", width: "w-[132px]", align: "justify-start text-left" },
   { key: "satuan", label: "Satuan", width: "w-[78px]", align: "justify-center text-center" },
-  { key: "source", label: "Source Data", width: "w-[263px]", align: "justify-start text-left" },
+  { key: "source", label: "Source Data", width: "w-[190px]", align: "justify-start text-left" },
   { key: "target", label: "Target", width: "w-[75px]", align: "justify-start text-left" },
   { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "w-[171px]", align: "justify-start text-left" },
   { key: "capaian", label: "Capaian W4 Aug‘26", width: "w-[169px]", align: "justify-start text-left" },
@@ -342,7 +342,7 @@ export default function FbbDashboard() {
 
             {/* Table */}
             <div className="flex min-h-0 w-full flex-1 flex-col overflow-auto rounded-b-[24px] border-x border-b border-[#0f0d0a14] bg-white p-4">
-              <div className="min-w-[1343px]">
+              <div className="min-w-[1270px]">
                 <div className="flex">
                   {TABLE_COLUMNS.map((col) => (
                     <div
@@ -381,7 +381,7 @@ export default function FbbDashboard() {
                         {row.satuan}
                       </span>
                     </div>
-                    <div className="flex h-[50px] w-[263px] shrink-0 items-center px-3">
+                    <div className="flex h-[50px] w-[190px] shrink-0 items-center px-3">
                       <span className="whitespace-nowrap text-sm text-[#050505]">
                         {row.source}
                       </span>
