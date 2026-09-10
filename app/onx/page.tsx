@@ -453,7 +453,7 @@ export default function OnxDashboard() {
             </div>
 
             {/* Metric selector + Maps/Detail tabs */}
-            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border border-[#e2e8f0] px-4 py-2">
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-x-0 border-y border-[#e2e8f0] px-4 py-2">
               <div className="relative">
                 <select
                   aria-label="Select metric"
