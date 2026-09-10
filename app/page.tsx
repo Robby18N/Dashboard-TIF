@@ -15,17 +15,19 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 type DashboardShortcut = {
   label: string;
   icon: LucideIcon;
+  href: string;
 };
 
 const DASHBOARD_SHORTCUTS: DashboardShortcut[] = [
-  { label: "CNOP", icon: ChartNoAxesColumn },
-  { label: "FBB", icon: Router },
-  { label: "EBIS", icon: Building2 },
-  { label: "OLO", icon: Network },
+  { label: "CNOP", icon: ChartNoAxesColumn, href: "#" },
+  { label: "FBB", icon: Router, href: "/fbb" },
+  { label: "EBIS", icon: Building2, href: "#" },
+  { label: "OLO", icon: Network, href: "#" },
 ];
 
 export default function Home() {
@@ -117,9 +119,10 @@ export default function Home() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {DASHBOARD_SHORTCUTS.map(({ label, icon: Icon }) => (
-              <button
+            {DASHBOARD_SHORTCUTS.map(({ label, icon: Icon, href }) => (
+              <Link
                 key={label}
+                href={href}
                 className="flex w-[140px] items-center gap-3 rounded-full border border-[#e6e5e3] bg-white py-2 pl-2 pr-3 transition-colors hover:bg-black/[0.02]"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[rgba(10,18,31,0.08)]">
@@ -128,7 +131,7 @@ export default function Home() {
                 <span className="text-lg font-semibold text-[#050505]">
                   {label}
                 </span>
-              </button>
+              </Link>
             ))}
           </div>
         </section>
