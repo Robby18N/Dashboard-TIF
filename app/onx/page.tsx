@@ -118,7 +118,7 @@ export default function OnxDashboard() {
         </header>
 
         {/* Content */}
-        <main className="flex min-h-0 flex-1 flex-col p-5">
+        <main className="flex min-h-0 flex-1 flex-col p-4">
           {/* Unified card: comparison table + controls + map, sharing one border/radius */}
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[24px] border border-black/[0.08] bg-white">
             {/* Comparison table */}
