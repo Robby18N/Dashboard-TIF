@@ -190,13 +190,15 @@ function DetailTableRow({
 }) {
   return (
     <div
-      className={`flex border-b border-l-[3px] border-l-transparent border-black/[0.08] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc] ${
+      className={`group flex border-b border-l-[3px] border-l-transparent border-black/[0.08] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc] ${
         isTotal ? "bg-black/[0.02]" : ""
       }`}
     >
       <div
         style={{ width: 220, paddingLeft: indent ? 40 : 12 }}
-        className="flex h-[38px] shrink-0 items-center gap-2 pr-3"
+        className={`sticky left-0 z-10 flex h-[38px] shrink-0 items-center gap-2 border-l-[3px] border-l-transparent pr-3 transition-colors group-hover:border-l-[#3b82f6] group-hover:bg-[#f8fafc] ${
+          isTotal ? "bg-[#fafafa]" : "bg-white"
+        }`}
       >
         {!indent &&
           (isGroup ? (
@@ -540,7 +542,9 @@ function DetailTable() {
               <div
                 key={col.key}
                 style={{ width: col.width }}
-                className="flex h-10 shrink-0 items-center px-3"
+                className={`flex h-10 shrink-0 items-center px-3 ${
+                  col.key === "region" ? "sticky left-0 z-10 bg-[#f5f5f5]" : ""
+                }`}
               >
                 <span className="whitespace-nowrap text-[12px] font-medium text-[#050505]">
                   {col.label}
