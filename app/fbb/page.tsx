@@ -28,12 +28,10 @@ type SidebarLink = {
   active?: boolean;
 };
 
-const SIDEBAR_LINKS: SidebarLink[] = [
-  { label: "Dashboard", icon: LayoutGrid, href: "/" },
-  { label: "Toggle panel", icon: PanelLeft, href: "#" },
-  { label: "SLA Performance", icon: TrendingUpDown, href: "/fbb", active: true },
-  { label: "Router", icon: Router, href: "#" },
-  { label: "Radio", icon: Radio, href: "#" },
+const SIDEBAR_MENU_ITEMS: SidebarLink[] = [
+  { label: "SLA WISA FBB", icon: TrendingUpDown, href: "/fbb", active: true },
+  { label: "ONX Dashboard", icon: Router, href: "#" },
+  { label: "Ookla Dashboard", icon: Radio, href: "#" },
 ];
 
 type Kpi = {
@@ -198,6 +196,7 @@ const TABLE_COLUMNS = [
 
 export default function FbbDashboard() {
   const [search, setSearch] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const filteredRows = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -212,21 +211,52 @@ export default function FbbDashboard() {
   return (
     <div className="flex min-h-screen bg-[#f9f8f7]">
       {/* Sidebar */}
-      <aside className="flex w-[60px] shrink-0 flex-col items-center gap-4 border-r-[0.5px] border-black/[0.08] bg-[#f5f3f2] py-4">
-        {SIDEBAR_LINKS.map(({ label, icon: Icon, href, active }) => (
-          <Link
-            key={label}
-            href={href}
-            aria-label={label}
-            className={`flex size-9 items-center justify-center rounded-full transition-colors ${
-              active
-                ? "bg-black/[0.04] text-[#050505]"
-                : "bg-[#f9f8f7] text-[#636363] hover:bg-black/[0.04]"
-            }`}
-          >
-            <Icon className="size-[18px]" strokeWidth={1.75} />
-          </Link>
-        ))}
+      <aside
+        className={`flex shrink-0 flex-col gap-4 border-r-[0.5px] border-black/[0.08] bg-[#f5f3f2] py-4 transition-[width] duration-200 ${
+          sidebarOpen ? "w-[220px] items-stretch px-3" : "w-[60px] items-center"
+        }`}
+      >
+        <Link
+          href="/"
+          aria-label="Back to landing page"
+          className="flex size-9 shrink-0 items-center justify-center self-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04]"
+        >
+          <LayoutGrid className="size-[18px]" strokeWidth={1.75} />
+        </Link>
+
+        <button
+          type="button"
+          aria-label={sidebarOpen ? "Hide sidebar menu" : "Show sidebar menu"}
+          aria-expanded={sidebarOpen}
+          onClick={() => setSidebarOpen((prev) => !prev)}
+          className="flex size-9 shrink-0 items-center justify-center self-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04]"
+        >
+          <PanelLeft className="size-[18px]" strokeWidth={1.75} />
+        </button>
+
+        <div className={`flex flex-col gap-1 ${sidebarOpen ? "" : "items-center gap-4"}`}>
+          {SIDEBAR_MENU_ITEMS.map(({ label, icon: Icon, href, active }) => (
+            <Link
+              key={label}
+              href={href}
+              aria-label={label}
+              className={`flex items-center gap-3 transition-colors ${
+                sidebarOpen
+                  ? "rounded-lg px-3 py-2"
+                  : "size-9 justify-center rounded-full"
+              } ${
+                active
+                  ? "bg-black/[0.04] text-[#050505]"
+                  : "bg-[#f9f8f7] text-[#636363] hover:bg-black/[0.04]"
+              }`}
+            >
+              <Icon className="size-[18px] shrink-0" strokeWidth={1.75} />
+              {sidebarOpen && (
+                <span className="truncate text-sm font-medium">{label}</span>
+              )}
+            </Link>
+          ))}
+        </div>
       </aside>
 
       {/* Main column */}
