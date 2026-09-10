@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   Bell,
   ChartNoAxesColumn,
@@ -12,6 +15,7 @@ import {
   Building2,
   Network,
   User,
+  X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
@@ -30,7 +34,39 @@ const DASHBOARD_SHORTCUTS: DashboardShortcut[] = [
   { label: "OLO", icon: Network, href: "#" },
 ];
 
+type Suggestion = {
+  title: string;
+  description: string;
+};
+
+const FBB_SUGGESTIONS: Suggestion[] = [
+  {
+    title: "SLA WISA FBB Agustus 2026",
+    description:
+      "Lihat pencapaian SLA WISA FBB periode terakhir, lengkap dengan indikator yang tercapai dan yang di bawah target.",
+  },
+  {
+    title: "Performa FBB per Region",
+    description:
+      "Bandingkan capaian performance indicator FBB antar region untuk melihat area mana yang butuh perhatian.",
+  },
+  {
+    title: "Segmen dengan SLA Terendah",
+    description:
+      "Cek segmen (Network, Enterprise, Fixed Broadband) dengan capaian SLA paling rendah pada periode berjalan.",
+  },
+  {
+    title: "Pencapaian Target FBB Minggu Ini",
+    description:
+      "Ringkasan jumlah indikator yang tercapai vs tidak tercapai untuk minggu berjalan pada dashboard FBB.",
+  },
+];
+
 export default function Home() {
+  const [activeSuggestion, setActiveSuggestion] = useState<Suggestion | null>(
+    null
+  );
+
   return (
     <div className="relative flex min-h-screen flex-col bg-[#f9f8f7]">
       {/* Fixed top nav with fade-out gradient backdrop */}
@@ -100,6 +136,19 @@ export default function Home() {
           </button>
         </form>
 
+        <div className="flex w-full max-w-[720px] flex-wrap items-center justify-center gap-2">
+          {FBB_SUGGESTIONS.map((suggestion) => (
+            <button
+              key={suggestion.title}
+              type="button"
+              onClick={() => setActiveSuggestion(suggestion)}
+              className="rounded-full border border-[#e6e5e3] bg-white px-4 py-2 text-sm text-[#636363] transition-colors hover:bg-black/[0.02] hover:text-[#050505]"
+            >
+              {suggestion.title}
+            </button>
+          ))}
+        </div>
+
         <section className="flex flex-col items-center gap-5 rounded-2xl border-[0.667px] border-[rgba(15,13,10,0.08)] bg-[#f9f8f7] p-4">
           <div className="flex items-center gap-3">
             <Image
@@ -146,6 +195,46 @@ export default function Home() {
           Service and Privacy Policy.
         </p>
       </footer>
+
+      {/* Suggestion popup */}
+      {activeSuggestion && (
+        <div
+          className="fixed inset-0 z-30 flex items-center justify-center bg-black/40 px-5"
+          onClick={() => setActiveSuggestion(null)}
+        >
+          <div
+            className="relative w-full max-w-[420px] rounded-2xl border border-[#e6e5e3] bg-white p-6 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.12)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              aria-label="Tutup"
+              onClick={() => setActiveSuggestion(null)}
+              className="absolute right-4 top-4 flex size-7 items-center justify-center rounded-full text-[#636363] transition-colors hover:bg-black/[0.04]"
+            >
+              <X className="size-4" strokeWidth={1.75} />
+            </button>
+
+            <span className="flex size-10 items-center justify-center rounded-full bg-[rgba(10,18,31,0.08)]">
+              <Router className="size-5 text-[#050505]" strokeWidth={1.75} />
+            </span>
+
+            <h2 className="mt-4 text-lg font-semibold text-[#050505]">
+              {activeSuggestion.title}
+            </h2>
+            <p className="mt-2 text-sm text-[#636363]">
+              {activeSuggestion.description}
+            </p>
+
+            <Link
+              href="/fbb"
+              className="mt-5 flex w-full items-center justify-center rounded-full bg-[#050505] px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+            >
+              Buka Dashboard
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
