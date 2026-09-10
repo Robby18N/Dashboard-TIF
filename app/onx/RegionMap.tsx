@@ -231,6 +231,13 @@ export default function RegionMap({ regions = SAMPLE_REGIONS }: RegionMapProps) 
       style: styleUrl,
       center: [117.5, -2.2],
       zoom: 3.9,
+      pitch: 0,
+      bearing: 0,
+      // The custom style is built on Mapbox Standard, which defaults to a
+      // 3D globe projection — at this low a zoom that renders as an
+      // abstract dark curve (the globe's horizon) rather than a usable
+      // flat map. Force the classic flat projection instead.
+      projection: "mercator",
       attributionControl: false,
     });
 
