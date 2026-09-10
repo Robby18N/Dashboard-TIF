@@ -219,7 +219,9 @@ export default function FbbDashboard() {
         <Link
           href="/"
           aria-label="Back to landing page"
-          className="flex size-9 shrink-0 items-center justify-center self-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04]"
+          className={`flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
+            sidebarOpen ? "self-start" : "self-center"
+          }`}
         >
           <LayoutGrid className="size-[18px]" strokeWidth={1.75} />
         </Link>
@@ -229,7 +231,9 @@ export default function FbbDashboard() {
           aria-label={sidebarOpen ? "Hide sidebar menu" : "Show sidebar menu"}
           aria-expanded={sidebarOpen}
           onClick={() => setSidebarOpen((prev) => !prev)}
-          className="flex size-9 shrink-0 items-center justify-center self-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04]"
+          className={`flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
+            sidebarOpen ? "self-start" : "self-center"
+          }`}
         >
           <PanelLeft className="size-[18px]" strokeWidth={1.75} />
         </button>
