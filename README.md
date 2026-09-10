@@ -20,6 +20,18 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Environment variables
+
+The ONX Dashboard (`/onx`) renders a live win/lose competitive map using [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/). Create a `.env.local` file in the project root (already ignored by git) with:
+
+```bash
+NEXT_PUBLIC_MAPBOX_TOKEN=your-mapbox-access-token
+# Optional, defaults to mapbox://styles/mapbox/light-v11
+NEXT_PUBLIC_MAPBOX_STYLE=mapbox://styles/mapbox/light-v11
+```
+
+Without `NEXT_PUBLIC_MAPBOX_TOKEN` set, the map area shows a placeholder card instead of failing.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

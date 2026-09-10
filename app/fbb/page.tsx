@@ -1,38 +1,20 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import {
   Bell,
   ChevronDown,
   Download,
   Gauge,
-  LayoutGrid,
   Moon,
   MonitorDown,
-  PanelLeft,
-  Radio,
-  Router,
   Rocket,
   Search,
   TrendingDown,
-  TrendingUpDown,
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-
-type SidebarLink = {
-  label: string;
-  icon: LucideIcon;
-  href: string;
-  active?: boolean;
-};
-
-const SIDEBAR_MENU_ITEMS: SidebarLink[] = [
-  { label: "SLA WISA FBB", icon: TrendingUpDown, href: "/fbb", active: true },
-  { label: "ONX Dashboard", icon: Router, href: "#" },
-  { label: "Ookla Dashboard", icon: Radio, href: "#" },
-];
+import Sidebar from "../components/Sidebar";
 
 type Kpi = {
   label: string;
@@ -196,7 +178,6 @@ const TABLE_COLUMNS = [
 
 export default function FbbDashboard() {
   const [search, setSearch] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const filteredRows = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -210,58 +191,7 @@ export default function FbbDashboard() {
 
   return (
     <div className="flex min-h-screen bg-[#f9f8f7]">
-      {/* Sidebar */}
-      <aside
-        className={`flex shrink-0 flex-col gap-4 border-r-[0.5px] border-black/[0.08] bg-[#f5f3f2] py-4 transition-[width] duration-200 ${
-          sidebarOpen ? "w-[220px] items-stretch px-3" : "w-[60px] items-center"
-        }`}
-      >
-        <Link
-          href="/"
-          aria-label="Back to landing page"
-          className={`flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
-            sidebarOpen ? "self-start" : "self-center"
-          }`}
-        >
-          <LayoutGrid className="size-[18px]" strokeWidth={1.75} />
-        </Link>
-
-        <button
-          type="button"
-          aria-label={sidebarOpen ? "Hide sidebar menu" : "Show sidebar menu"}
-          aria-expanded={sidebarOpen}
-          onClick={() => setSidebarOpen((prev) => !prev)}
-          className={`flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
-            sidebarOpen ? "self-start" : "self-center"
-          }`}
-        >
-          <PanelLeft className="size-[18px]" strokeWidth={1.75} />
-        </button>
-
-        <div className={`flex flex-col gap-4 ${sidebarOpen ? "" : "items-center"}`}>
-          {SIDEBAR_MENU_ITEMS.map(({ label, icon: Icon, href, active }) => (
-            <Link
-              key={label}
-              href={href}
-              aria-label={label}
-              className={`flex items-center gap-3 transition-colors ${
-                sidebarOpen
-                  ? "rounded-lg px-3 py-2"
-                  : "size-9 justify-center rounded-full"
-              } ${
-                active
-                  ? "bg-black/[0.04] text-[#050505]"
-                  : "bg-[#f9f8f7] text-[#636363] hover:bg-black/[0.04]"
-              }`}
-            >
-              <Icon className="size-[18px] shrink-0" strokeWidth={1.75} />
-              {sidebarOpen && (
-                <span className="truncate text-sm font-medium">{label}</span>
-              )}
-            </Link>
-          ))}
-        </div>
-      </aside>
+      <Sidebar activeKey="fbb" />
 
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
