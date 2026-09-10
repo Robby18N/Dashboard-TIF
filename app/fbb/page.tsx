@@ -1,7 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import {
   Bell,
-  CalendarDays,
   ChevronDown,
   Download,
   Gauge,
@@ -15,6 +17,7 @@ import {
   Search,
   TrendingDown,
   TrendingUpDown,
+  X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -194,6 +197,8 @@ const TABLE_COLUMNS = [
 ] as const;
 
 export default function FbbDashboard() {
+  const [search, setSearch] = useState("");
+
   return (
     <div className="flex min-h-screen bg-[#f9f8f7]">
       {/* Sidebar */}
@@ -274,25 +279,45 @@ export default function FbbDashboard() {
           </div>
 
           {/* Filters + actions */}
-          <div className="flex items-center gap-3">
-            <div className="flex w-[220px] items-center gap-2 rounded-full border border-[#e6e5e3] bg-white px-3 py-2">
-              <Search className="size-4 shrink-0 text-[#636363]" strokeWidth={1.75} />
+          <div className="flex items-center justify-between gap-3">
+            <div className="relative h-[40px] w-full max-w-[360px] shrink-0">
+              <Search
+                className="pointer-events-none absolute left-[14px] top-1/2 size-4 -translate-y-1/2 text-[#636363]"
+                strokeWidth={1.75}
+              />
               <input
                 type="text"
-                placeholder="Search..."
-                className="w-full bg-transparent text-sm text-[#636363] outline-none placeholder:text-[#636363]"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search.."
+                className="h-full w-full rounded-full border border-[#e6e5e3] bg-white py-1 pl-9 pr-8 text-sm text-[#050505] outline-none placeholder:text-[#636363]"
               />
+              {search && (
+                <button
+                  type="button"
+                  aria-label="Clear search"
+                  onClick={() => setSearch("")}
+                  className="absolute right-[14px] top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#636363] hover:text-[#050505]"
+                >
+                  <X className="size-4" strokeWidth={1.75} />
+                </button>
+              )}
             </div>
-            <div className="flex items-center gap-2 rounded-full border border-[#e6e5e3] bg-white px-3 py-2 text-sm text-[#636363]">
-              <CalendarDays className="size-4" strokeWidth={1.75} />
-              Week 32
-              <ChevronDown className="size-4" strokeWidth={1.75} />
+
+            <div className="flex shrink-0 items-center gap-3">
+              <button className="flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-black/[0.08] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                Select Region
+                <ChevronDown className="size-4" strokeWidth={1.75} />
+              </button>
+              <button className="flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-black/[0.08] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                Select Week
+                <ChevronDown className="size-4" strokeWidth={1.75} />
+              </button>
+              <button className="flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                <Download className="size-4" strokeWidth={1.75} />
+                Export file
+              </button>
             </div>
-            <div className="flex-1" />
-            <button className="flex items-center gap-2 rounded-full bg-[#3b82f6] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90">
-              <Download className="size-4" strokeWidth={1.75} />
-              Export file
-            </button>
           </div>
 
           {/* Data table */}
