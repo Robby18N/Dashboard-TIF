@@ -186,7 +186,7 @@ const SLA_ROWS: SlaRow[] = [
 ];
 
 const TABLE_COLUMNS = [
-  { key: "segmen", label: "Segmen", width: "w-[107px]", align: "justify-center text-center" },
+  { key: "segmen", label: "Segmen", width: "w-[150px]", align: "justify-start text-left" },
   { key: "indicator", label: "Performance Indicator", width: "w-[305px]", align: "justify-start text-left" },
   { key: "layanan", label: "Layanan", width: "w-[132px]", align: "justify-start text-left" },
   { key: "satuan", label: "Satuan", width: "w-[78px]", align: "justify-center text-center" },
@@ -342,7 +342,7 @@ export default function FbbDashboard() {
 
             {/* Table */}
             <div className="flex min-h-0 w-full flex-1 flex-col overflow-auto rounded-b-[24px] border-x border-b border-[#0f0d0a14] bg-white p-4">
-              <div className="min-w-[1300px]">
+              <div className="min-w-[1343px]">
                 <div className="flex">
                   {TABLE_COLUMNS.map((col) => (
                     <div
@@ -361,7 +361,7 @@ export default function FbbDashboard() {
                     key={row.indicator}
                     className="flex border-b border-[#0f0d0a14] last:border-b-0"
                   >
-                    <div className="flex h-[50px] w-[107px] shrink-0 items-center justify-center px-3">
+                    <div className="flex h-[50px] w-[150px] shrink-0 items-center justify-start px-3">
                       <span className="whitespace-nowrap rounded-[9px] bg-[#f5f3f2] px-2.5 py-1 text-[13px] font-medium text-[#050505]">
                         {row.segmen}
                       </span>
