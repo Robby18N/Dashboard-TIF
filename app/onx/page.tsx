@@ -160,6 +160,19 @@ function Sparkline({ trend }: { trend: "up" | "down" }) {
   );
 }
 
+/** Shared Win/Lose pill, used by both the Metrics and Detail tables. */
+function StatusPill({ status }: { status: "Win" | "Lose" }) {
+  return (
+    <span
+      className={`whitespace-nowrap rounded-[9px] px-2.5 py-1 text-[13px] font-medium ${
+        status === "Win" ? "bg-[#f0fdf4] text-[#22c55e]" : "bg-[#fef2f2] text-[#ef4444]"
+      }`}
+    >
+      {status}
+    </span>
+  );
+}
+
 function DetailTableRow({
   row,
   indent = false,
@@ -230,13 +243,7 @@ function DetailTableRow({
       </div>
 
       <div style={{ width: 90 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span
-          className={`whitespace-nowrap rounded-[9px] px-2.5 py-1 text-[13px] font-medium ${
-            row.status === "Win" ? "bg-[#f0fdf4] text-[#22c55e]" : "bg-[#fef2f2] text-[#ef4444]"
-          }`}
-        >
-          {row.status}
-        </span>
+        <StatusPill status={row.status} />
       </div>
 
       <div style={{ width: 150 }} className="flex h-[38px] shrink-0 items-center px-3">
@@ -373,42 +380,58 @@ export default function OnxDashboard() {
                   <div className="overflow-hidden">
                     <div className="overflow-x-auto">
                       <div className="min-w-[640px]">
-                        <div className="flex">
+                        <div className="flex items-center border-b border-l-[3px] border-l-transparent border-black/[0.06]">
                           {COMPARISON_COLUMNS.map((col) => (
                             <div
                               key={col.key}
-                              className={`flex h-7 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
+                              className={`flex h-9 flex-1 items-center px-3 ${col.align}`}
                             >
-                              <span className="whitespace-nowrap text-sm font-semibold text-[#525252]">
+                              <span className="whitespace-nowrap text-sm font-medium text-[#9a9a9a]">
                                 {col.label}
                               </span>
                             </div>
                           ))}
                         </div>
 
-                        {COMPARISON_ROWS.map((row, i) => (
-                          <div
-                            key={`${row.kpi}-${i}`}
-                            className="flex border-b border-black/[0.08] last:border-b-0"
-                          >
-                            {COMPARISON_COLUMNS.map((col) => (
-                              <div
-                                key={col.key}
-                                className={`flex h-6 flex-1 items-center px-3 ${col.align}`}
-                              >
-                                <span
-                                  className={`whitespace-nowrap text-sm ${
-                                    col.key === "wow" && row.wow === "Lose"
-                                      ? "text-[#ef4444]"
-                                      : "text-[#525252]"
-                                  }`}
+                        {COMPARISON_ROWS.map((row, i) => {
+                          const showMetric =
+                            i === 0 || COMPARISON_ROWS[i - 1].metrics !== row.metrics;
+                          return (
+                            <div
+                              key={`${row.kpi}-${i}`}
+                              className="flex items-center border-b border-l-[3px] border-l-transparent border-black/[0.04] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc]"
+                            >
+                              {COMPARISON_COLUMNS.map((col) => (
+                                <div
+                                  key={col.key}
+                                  className={`flex h-10 flex-1 items-center px-3 ${col.align}`}
                                 >
-                                  {row[col.key as keyof ComparisonRow]}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        ))}
+                                  {col.key === "metrics" ? (
+                                    <span className="whitespace-nowrap text-sm font-medium text-[#b4b4b4]">
+                                      {showMetric ? row.metrics : ""}
+                                    </span>
+                                  ) : col.key === "wow" ? (
+                                    <StatusPill status={row.wow} />
+                                  ) : col.key === "highlight" ? (
+                                    <span
+                                      className={`whitespace-nowrap text-sm font-medium ${
+                                        row.highlight === "Good"
+                                          ? "text-[#22c55e]"
+                                          : "text-[#f97316]"
+                                      }`}
+                                    >
+                                      {row.highlight}
+                                    </span>
+                                  ) : (
+                                    <span className="whitespace-nowrap text-sm text-[#3f3f46]">
+                                      {row[col.key as keyof ComparisonRow]}
+                                    </span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
