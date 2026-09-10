@@ -177,7 +177,7 @@ function DetailTableRow({
 }) {
   return (
     <div
-      className={`flex border-b border-black/[0.08] last:border-b-0 ${
+      className={`flex border-b border-l-[3px] border-l-transparent border-black/[0.08] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc] ${
         isTotal ? "bg-black/[0.02]" : ""
       }`}
     >
