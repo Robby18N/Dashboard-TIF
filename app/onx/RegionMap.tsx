@@ -370,14 +370,14 @@ export default function RegionMap({ regions = SAMPLE_REGIONS }: RegionMapProps) 
             className="size-3 rounded-full"
             style={{ backgroundColor: "#22c55e33", outline: "1px solid #22c55e", outlineOffset: "-0.5px" }}
           />
-          <span className="text-xs text-[#0f172a]">Win</span>
+          <span className="text-xs text-[#050505]">Win</span>
         </span>
         <span className="flex items-center gap-1">
           <span
             className="size-3 rounded-full"
             style={{ backgroundColor: "#c2383733", outline: "1px solid #c23837", outlineOffset: "-0.5px" }}
           />
-          <span className="text-xs text-[#0f172a]">Lose</span>
+          <span className="text-xs text-[#050505]">Lose</span>
         </span>
       </div>
     </div>

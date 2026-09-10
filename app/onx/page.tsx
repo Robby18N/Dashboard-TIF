@@ -326,7 +326,7 @@ export default function OnxDashboard() {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
         <header className="flex h-16 shrink-0 items-center justify-between border-b border-black/[0.08] bg-white px-6">
-          <h1 className="text-lg font-bold text-[#0f172b]">ONX Dashboard</h1>
+          <h1 className="text-lg font-bold text-[#050505]">ONX Dashboard</h1>
 
           <div className="flex items-center gap-3">
             <button
@@ -342,7 +342,7 @@ export default function OnxDashboard() {
               <Bell className="size-4 text-[#62748e]" strokeWidth={1.333} />
             </button>
             <button className="flex items-center gap-2 rounded-full py-0.5 pl-0.5 pr-2 transition-colors hover:bg-black/[0.04]">
-              <span className="flex size-[30px] items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
+              <span className="flex size-[30px] items-center justify-center rounded-full bg-[#3b82f6] text-xs font-medium text-white">
                 UN
               </span>
               <span className="text-sm font-medium text-[#314158]">username</span>
@@ -380,58 +380,56 @@ export default function OnxDashboard() {
                   <div className="overflow-hidden">
                     <div className="overflow-x-auto">
                       <div className="min-w-[640px]">
-                        <div className="flex items-center border-b border-l-[3px] border-l-transparent border-black/[0.06]">
+                        <div className="flex items-center border-b border-l-[3px] border-l-transparent border-black/[0.06] bg-[#0505050a]">
                           {COMPARISON_COLUMNS.map((col) => (
                             <div
                               key={col.key}
-                              className={`flex h-7 flex-1 items-center px-3 ${col.align}`}
+                              className={`flex h-[30px] flex-1 items-center px-3 ${col.align}`}
                             >
-                              <span className="whitespace-nowrap text-[12px] font-medium text-[#050505]">
+                              <span className="whitespace-nowrap text-[14px] font-semibold leading-[20px] text-[#050505]">
                                 {col.label}
                               </span>
                             </div>
                           ))}
                         </div>
 
-                        {COMPARISON_ROWS.map((row, i) => {
-                          const showMetric =
-                            i === 0 || COMPARISON_ROWS[i - 1].metrics !== row.metrics;
-                          return (
-                            <div
-                              key={`${row.kpi}-${i}`}
-                              className="flex items-center border-b border-l-[3px] border-l-transparent border-black/[0.04] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc]"
-                            >
-                              {COMPARISON_COLUMNS.map((col) => (
-                                <div
-                                  key={col.key}
-                                  className={`flex h-7 flex-1 items-center px-3 ${col.align}`}
-                                >
-                                  {col.key === "metrics" ? (
-                                    <span className="whitespace-nowrap text-[12px] font-normal text-[#050505]">
-                                      {showMetric ? row.metrics : ""}
-                                    </span>
-                                  ) : col.key === "wow" ? (
-                                    <StatusPill status={row.wow} />
-                                  ) : col.key === "highlight" ? (
-                                    <span
-                                      className={`whitespace-nowrap text-[12px] font-medium ${
-                                        row.highlight === "Good"
-                                          ? "text-[#22c55e]"
-                                          : "text-[#f97316]"
-                                      }`}
-                                    >
-                                      {row.highlight}
-                                    </span>
-                                  ) : (
-                                    <span className="whitespace-nowrap text-[12px] font-normal text-[#050505]">
-                                      {row[col.key as keyof ComparisonRow]}
-                                    </span>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          );
-                        })}
+                        {COMPARISON_ROWS.map((row, i) => (
+                          <div
+                            key={`${row.kpi}-${i}`}
+                            className="flex items-center border-b border-l-[3px] border-l-transparent border-black/[0.04] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc]"
+                          >
+                            {COMPARISON_COLUMNS.map((col) => (
+                              <div
+                                key={col.key}
+                                className={`flex h-[30px] flex-1 items-center px-3 ${col.align}`}
+                              >
+                                {col.key === "wow" ? (
+                                  <span
+                                    className={`whitespace-nowrap text-[14px] font-normal leading-[20px] ${
+                                      row.wow === "Lose" ? "text-[#ef4444]" : "text-[#050505]"
+                                    }`}
+                                  >
+                                    {row.wow}
+                                  </span>
+                                ) : col.key === "highlight" ? (
+                                  <span
+                                    className={`whitespace-nowrap text-[14px] font-normal leading-[20px] ${
+                                      row.highlight === "Need Improve"
+                                        ? "text-[#ef4444]"
+                                        : "text-[#050505]"
+                                    }`}
+                                  >
+                                    {row.highlight}
+                                  </span>
+                                ) : (
+                                  <span className="whitespace-nowrap text-[14px] font-normal leading-[20px] text-[#050505]">
+                                    {row[col.key as keyof ComparisonRow]}
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -455,13 +453,13 @@ export default function OnxDashboard() {
             </div>
 
             {/* Metric selector + Maps/Detail tabs */}
-            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] px-4 py-1.5">
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-[#e2e8f0] px-4 py-1.5">
               <div className="relative">
                 <select
                   aria-label="Select metric"
                   value={selectedMetric}
                   onChange={(e) => setSelectedMetric(e.target.value)}
-                  className="h-8 w-[150px] appearance-none rounded-xl border border-black/[0.08] bg-white py-1 pl-3 pr-8 text-sm font-medium text-[#525252] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
+                  className="h-8 w-[150px] appearance-none rounded-xl border border-[#e2e8f0] bg-white py-1 pl-3 pr-8 text-sm font-medium text-[#525252] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
                 >
                   {METRIC_OPTIONS.map((option) => (
                     <option key={option} value={option}>
@@ -479,10 +477,10 @@ export default function OnxDashboard() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("maps")}
-                  className={`rounded-3xl px-4 py-1 text-sm font-medium text-[#525252] transition-colors ${
+                  className={`rounded-3xl px-4 py-1 text-sm font-medium transition-colors ${
                     activeTab === "maps"
-                      ? "border border-black/[0.08] bg-white shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
-                      : ""
+                      ? "border border-[#e2e8f0] bg-white text-[#050505] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
+                      : "text-[#636363]"
                   }`}
                 >
                   Maps
@@ -490,10 +488,10 @@ export default function OnxDashboard() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("detail")}
-                  className={`rounded-3xl px-4 py-1 text-sm font-medium text-[#525252] transition-colors ${
+                  className={`rounded-3xl px-4 py-1 text-sm font-medium transition-colors ${
                     activeTab === "detail"
-                      ? "border border-black/[0.08] bg-white shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
-                      : ""
+                      ? "border border-[#e2e8f0] bg-white text-[#050505] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
+                      : "text-[#636363]"
                   }`}
                 >
                   Detail
