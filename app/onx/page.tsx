@@ -384,7 +384,7 @@ export default function OnxDashboard() {
                           {COMPARISON_COLUMNS.map((col) => (
                             <div
                               key={col.key}
-                              className={`flex h-9 flex-1 items-center px-3 ${col.align}`}
+                              className={`flex h-7 flex-1 items-center px-3 ${col.align}`}
                             >
                               <span className="whitespace-nowrap text-sm font-medium text-[#9a9a9a]">
                                 {col.label}
@@ -404,7 +404,7 @@ export default function OnxDashboard() {
                               {COMPARISON_COLUMNS.map((col) => (
                                 <div
                                   key={col.key}
-                                  className={`flex h-10 flex-1 items-center px-3 ${col.align}`}
+                                  className={`flex h-7 flex-1 items-center px-3 ${col.align}`}
                                 >
                                   {col.key === "metrics" ? (
                                     <span className="whitespace-nowrap text-sm font-medium text-[#b4b4b4]">
