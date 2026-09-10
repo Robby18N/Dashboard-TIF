@@ -210,14 +210,9 @@ function buildPopupContent(region: Region): HTMLDivElement {
 
 type RegionMapProps = {
   regions?: Region[];
-  /** region id whose hover card opens once the map first loads, mirroring the Figma callout */
-  initialSelectedId?: string;
 };
 
-export default function RegionMap({
-  regions = SAMPLE_REGIONS,
-  initialSelectedId = "sumbagut",
-}: RegionMapProps) {
+export default function RegionMap({ regions = SAMPLE_REGIONS }: RegionMapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -277,11 +272,14 @@ export default function RegionMap({
     const map = mapRef.current;
     if (!map || !mapReady) return;
 
+    // No fixed `anchor` here on purpose: letting Mapbox auto-pick the anchor
+    // keeps the card fully inside the map's own bounds (it flips to
+    // top/left/right as needed) instead of always opening above the point,
+    // which clipped the card whenever a marker sat near the map's edge.
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false,
       offset: 16,
-      anchor: "bottom",
       className: "region-popup",
     });
 
@@ -336,15 +334,14 @@ export default function RegionMap({
       markers.push(marker);
     });
 
-    const initialRegion = regions.find((region) => region.id === initialSelectedId);
-    if (initialRegion) showRegion(initialRegion);
-
+    // No card on initial load — it only opens once the user actually hovers
+    // (or focuses) a marker.
     return () => {
       cancelHide();
       popup.remove();
       markers.forEach((marker) => marker.remove());
     };
-  }, [regions, mapReady, initialSelectedId]);
+  }, [regions, mapReady]);
 
   if (!token) {
     return (
