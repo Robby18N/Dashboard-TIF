@@ -32,52 +32,54 @@ const DASHBOARD_SHORTCUTS: DashboardShortcut[] = [
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#f9f8f7]">
-      {/* Top nav */}
-      <header className="flex w-full items-start justify-between px-5 py-5">
-        <div className="flex items-center gap-2 rounded-full border-[0.667px] border-black/8 bg-white px-2.5 py-2">
-          <span className="flex size-5 items-center justify-center rounded-[10px] bg-[#050505]/8">
-            <Sun className="size-4 text-[#050505]" strokeWidth={1.75} />
-          </span>
-          <span className="flex size-5 items-center justify-center p-0.5">
-            <Moon className="size-4 text-[#050505]" strokeWidth={1.75} />
-          </span>
+    <div className="relative flex min-h-screen flex-col bg-[#f9f8f7]">
+      {/* Fixed top nav with fade-out gradient backdrop */}
+      <div className="fixed inset-x-0 top-0 z-20 bg-[linear-gradient(180deg,_#f9f8f7_0%,_#f9f8f7_25%,_rgba(249,248,247,0.86)_35.7%,_rgba(249,248,247,0.71)_46.4%,_rgba(249,248,247,0.57)_57.1%,_rgba(249,248,247,0.43)_67.9%,_rgba(249,248,247,0.29)_78.6%,_rgba(249,248,247,0.14)_89.3%,_rgba(249,248,247,0)_100%)] px-5 py-5">
+        <div className="flex w-full items-start justify-between">
+          <div className="flex items-center gap-2 rounded-full border-[0.667px] border-black/8 bg-white px-2.5 py-2">
+            <span className="flex size-5 items-center justify-center rounded-[10px] bg-[#050505]/8">
+              <Sun className="size-4 text-[#050505]" strokeWidth={1.75} />
+            </span>
+            <span className="flex size-5 items-center justify-center p-0.5">
+              <Moon className="size-4 text-[#050505]" strokeWidth={1.75} />
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button className="flex items-center gap-2 rounded-full border border-black/8 bg-white px-4 py-2 transition-colors hover:bg-black/[0.02]">
+              <Sparkles className="size-4 text-[#8b8994]" strokeWidth={1.75} />
+              <span className="text-sm font-medium text-[#8b8994]">
+                First Insight
+              </span>
+            </button>
+
+            <button
+              aria-label="Settings"
+              className="flex items-center justify-center rounded-full border border-black/8 bg-white p-2 transition-colors hover:bg-black/[0.02]"
+            >
+              <Settings className="size-4 text-[#050505]" strokeWidth={1.75} />
+            </button>
+
+            <button className="flex items-center gap-2 rounded-full border-[0.667px] border-black/8 bg-white px-2.5 py-2 transition-colors hover:bg-black/[0.02]">
+              <Bell className="size-4 text-[#636363]" strokeWidth={1.75} />
+              <span className="text-sm tracking-[-0.2px] text-[#636363]">
+                Notifikasi
+              </span>
+            </button>
+
+            <button className="flex items-center gap-2 rounded-full border border-black/8 bg-white py-2 pl-4 pr-2 transition-colors hover:bg-black/[0.02]">
+              <User className="size-4 text-[#636363]" strokeWidth={1.75} />
+              <span className="text-sm tracking-[-0.2px] text-[#636363]">
+                Nationwide
+              </span>
+              <ChevronDown className="size-4 text-[#636363]" strokeWidth={1.75} />
+            </button>
+          </div>
         </div>
-
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 rounded-full border border-black/8 bg-white px-4 py-2 transition-colors hover:bg-black/[0.02]">
-            <Sparkles className="size-4 text-[#8b8994]" strokeWidth={1.75} />
-            <span className="text-sm font-medium text-[#8b8994]">
-              First Insight
-            </span>
-          </button>
-
-          <button
-            aria-label="Settings"
-            className="flex items-center justify-center rounded-full border border-black/8 bg-white p-2 transition-colors hover:bg-black/[0.02]"
-          >
-            <Settings className="size-4 text-[#050505]" strokeWidth={1.75} />
-          </button>
-
-          <button className="flex items-center gap-2 rounded-full border-[0.667px] border-black/8 bg-white px-2.5 py-2 transition-colors hover:bg-black/[0.02]">
-            <Bell className="size-4 text-[#636363]" strokeWidth={1.75} />
-            <span className="text-sm tracking-[-0.2px] text-[#636363]">
-              Notifikasi
-            </span>
-          </button>
-
-          <button className="flex items-center gap-2 rounded-full border border-black/8 bg-white py-2 pl-4 pr-2 transition-colors hover:bg-black/[0.02]">
-            <User className="size-4 text-[#636363]" strokeWidth={1.75} />
-            <span className="text-sm tracking-[-0.2px] text-[#636363]">
-              Nationwide
-            </span>
-            <ChevronDown className="size-4 text-[#636363]" strokeWidth={1.75} />
-          </button>
-        </div>
-      </header>
+      </div>
 
       {/* Hero + content */}
-      <main className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-10">
+      <main className="flex flex-1 flex-col items-center justify-center gap-4 px-5 pb-10 pt-32">
         <h1 className="text-center text-[32px] font-semibold tracking-[-0.48px] text-[#050505]">
           Welcome to Qosmo 👋
         </h1>
@@ -123,7 +125,7 @@ export default function Home() {
               <Link
                 key={label}
                 href={href}
-                className="flex w-[140px] items-center gap-3 rounded-full border border-[#e6e5e3] bg-white py-2 pl-2 pr-3 transition-colors hover:bg-black/[0.02]"
+                className="flex w-[120px] items-center gap-4 rounded-full border border-[#e6e5e3] bg-white py-2 pl-2 pr-3 transition-colors hover:bg-black/[0.02]"
               >
                 <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[rgba(10,18,31,0.08)]">
                   <Icon className="size-4 text-[#050505]" strokeWidth={1.75} />
@@ -140,25 +142,8 @@ export default function Home() {
       {/* Footer */}
       <footer className="flex w-full items-center justify-center border-t border-black/8 bg-[#f9f8f7] px-5 py-3">
         <p className="text-center text-xs text-[#636363]">
-          © 2026 Qosmo · Quality Service Monitoring, you agree to our{" "}
-          <a
-            href="https://example.com/terms"
-            target="_blank"
-            rel="noreferrer"
-            className="text-black underline decoration-solid underline-offset-2"
-          >
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://example.com/privacy"
-            target="_blank"
-            rel="noreferrer"
-            className="text-black underline decoration-solid underline-offset-2"
-          >
-            Privacy Policy
-          </a>
-          .
+          © 2026 Qosmo · Quality Service Monitoring, you agree to our Terms of
+          Service and Privacy Policy.
         </p>
       </footer>
     </div>
