@@ -35,11 +35,12 @@ export default function Sidebar({ activeKey }: SidebarProps) {
       <Link
         href="/"
         aria-label="Back to landing page"
-        className={`flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
+        className={`group relative flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
           sidebarOpen ? "self-start" : "self-center"
         }`}
       >
         <LayoutGrid className="size-[18px]" strokeWidth={1.75} />
+        <SidebarTooltip label="Back to landing page" />
       </Link>
 
       <button
@@ -47,11 +48,12 @@ export default function Sidebar({ activeKey }: SidebarProps) {
         aria-label={sidebarOpen ? "Hide sidebar menu" : "Show sidebar menu"}
         aria-expanded={sidebarOpen}
         onClick={() => setSidebarOpen((prev) => !prev)}
-        className={`flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
+        className={`group relative flex size-9 shrink-0 items-center justify-center rounded-full bg-[#f9f8f7] text-[#636363] transition-colors hover:bg-black/[0.04] ${
           sidebarOpen ? "self-start" : "self-center"
         }`}
       >
         <PanelLeft className="size-[18px]" strokeWidth={1.75} />
+        <SidebarTooltip label={sidebarOpen ? "Hide sidebar menu" : "Show sidebar menu"} />
       </button>
 
       <div className={`flex flex-col gap-4 ${sidebarOpen ? "" : "items-center"}`}>
@@ -62,7 +64,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
               key={key}
               href={href}
               aria-label={label}
-              className={`flex items-center gap-3 transition-colors ${
+              className={`group relative flex items-center gap-3 transition-colors ${
                 sidebarOpen
                   ? "rounded-lg px-3 py-2"
                   : "size-9 justify-center rounded-full"
@@ -76,10 +78,26 @@ export default function Sidebar({ activeKey }: SidebarProps) {
               {sidebarOpen && (
                 <span className="truncate text-sm font-medium">{label}</span>
               )}
+              {/* Labels are already visible when the sidebar is expanded, so
+                  the tooltip only needs to appear in the collapsed, icon-only
+                  state. */}
+              {!sidebarOpen && <SidebarTooltip label={label} />}
             </Link>
           );
         })}
       </div>
     </aside>
+  );
+}
+
+/** Small floating name tag shown on hover, anchored to the right of a sidebar icon. */
+function SidebarTooltip({ label }: { label: string }) {
+  return (
+    <span
+      role="tooltip"
+      className="pointer-events-none absolute left-full top-1/2 z-50 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-[#0f172a] px-2 py-1 text-xs font-medium text-white opacity-0 shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)] transition-opacity duration-150 group-hover:opacity-100"
+    >
+      {label}
+    </span>
   );
 }
