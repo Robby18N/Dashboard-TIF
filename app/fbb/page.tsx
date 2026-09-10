@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
   Bell,
@@ -186,18 +186,28 @@ const SLA_ROWS: SlaRow[] = [
 ];
 
 const TABLE_COLUMNS = [
-  { key: "segmen", label: "Segmen", width: "w-[160px]" },
-  { key: "indicator", label: "Performance Indicator", width: "w-[320px]" },
-  { key: "layanan", label: "Layanan", width: "w-[120px]" },
-  { key: "satuan", label: "Satuan", width: "w-[80px]" },
-  { key: "source", label: "Source Data", width: "w-[200px]" },
-  { key: "target", label: "Target", width: "w-[80px]" },
-  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1" },
-  { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1" },
+  { key: "segmen", label: "Segmen", width: "w-[107px]", align: "justify-center text-center" },
+  { key: "indicator", label: "Performance Indicator", width: "w-[305px]", align: "justify-start text-left" },
+  { key: "layanan", label: "Layanan", width: "w-[132px]", align: "justify-start text-left" },
+  { key: "satuan", label: "Satuan", width: "w-[78px]", align: "justify-center text-center" },
+  { key: "source", label: "Source Data", width: "w-[263px]", align: "justify-start text-left" },
+  { key: "target", label: "Target", width: "w-[75px]", align: "justify-start text-left" },
+  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "w-[171px]", align: "justify-start text-left" },
+  { key: "capaian", label: "Capaian W4 Aug‘26", width: "w-[169px]", align: "justify-start text-left" },
 ] as const;
 
 export default function FbbDashboard() {
   const [search, setSearch] = useState("");
+
+  const filteredRows = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return SLA_ROWS;
+    return SLA_ROWS.filter((row) =>
+      [row.segmen, row.indicator, row.layanan, row.source].some((field) =>
+        field.toLowerCase().includes(query)
+      )
+    );
+  }, [search]);
 
   return (
     <div className="flex min-h-screen bg-[#f9f8f7]">
@@ -278,103 +288,133 @@ export default function FbbDashboard() {
             ))}
           </div>
 
-          {/* Filters + actions */}
-          <div className="flex items-center justify-between gap-3">
-            <div className="relative h-[40px] w-full max-w-[360px] shrink-0">
-              <Search
-                className="pointer-events-none absolute left-[14px] top-1/2 size-4 -translate-y-1/2 text-[#636363]"
-                strokeWidth={1.75}
-              />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search.."
-                className="h-full w-full rounded-full border border-[#e6e5e3] bg-white py-1 pl-9 pr-8 text-sm text-[#050505] outline-none placeholder:text-[#636363]"
-              />
-              {search && (
-                <button
-                  type="button"
-                  aria-label="Clear search"
-                  onClick={() => setSearch("")}
-                  className="absolute right-[14px] top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#636363] hover:text-[#050505]"
-                >
-                  <X className="size-4" strokeWidth={1.75} />
-                </button>
-              )}
-            </div>
-
-            <div className="flex shrink-0 items-center gap-3">
-              <button className="flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-black/[0.08] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
-                Select Region
-                <ChevronDown className="size-4" strokeWidth={1.75} />
-              </button>
-              <button className="flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-black/[0.08] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
-                Select Week
-                <ChevronDown className="size-4" strokeWidth={1.75} />
-              </button>
-              <button className="flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border border-black/[0.08] bg-white px-3 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
-                <Download className="size-4" strokeWidth={1.75} />
-                Export file
-              </button>
-            </div>
-          </div>
-
-          {/* Data table */}
-          <div className="flex-1 overflow-auto rounded-2xl border border-[#e6e5e3] bg-white">
-            <table className="w-full min-w-[1100px] border-collapse text-left">
-              <thead>
-                <tr className="border-b border-[#e2e8f0]">
-                  {TABLE_COLUMNS.map((col) => (
-                    <th
-                      key={col.key}
-                      className={`whitespace-nowrap px-4 py-3 text-sm font-normal text-[#636363] ${col.width}`}
+          {/* Filters + table card */}
+          <div className="flex min-h-0 flex-1 flex-col">
+            {/* Filters */}
+            <div className="flex w-full shrink-0 flex-col gap-4 rounded-t-[24px] border border-[#0f0d0a14] bg-white p-4">
+              <div className="flex w-full flex-wrap items-center justify-between gap-4">
+                <div className="relative h-9 w-full max-w-[360px] shrink-0">
+                  <span className="pointer-events-none absolute left-[14px] top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#050505]">
+                    <Search className="size-4" strokeWidth={1.333} />
+                  </span>
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search.."
+                    className="h-10 w-full rounded-[24px] border border-[#e6e5e3] bg-white py-1 pl-9 pr-8 text-sm text-[#636363] outline-none placeholder:text-[#636363]"
+                  />
+                  {search && (
+                    <button
+                      type="button"
+                      aria-label="Clear search"
+                      onClick={() => setSearch("")}
+                      className="absolute right-[14px] top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#050505] hover:opacity-70"
                     >
-                      {col.label}
-                    </th>
+                      <X className="size-4" strokeWidth={1.333} />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex shrink-0 items-center gap-3">
+                  <button className="flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#0f0d0a14] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                    Select Region
+                    <ChevronDown className="size-4" strokeWidth={1} />
+                  </button>
+                  <button className="flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#0f0d0a14] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                    Select Week
+                    <ChevronDown className="size-4" strokeWidth={1} />
+                  </button>
+                  <button className="flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#0f0d0a14] bg-white px-3 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                    <Download className="size-4" strokeWidth={1} />
+                    Export file
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Entries count */}
+            <div className="flex w-full shrink-0 items-center justify-between border-x border-b border-[#0f0d0a14] bg-white px-4 py-2">
+              <span className="rounded-full bg-black/[0.04] px-4 py-1.5 text-sm text-[#636363]">
+                Showing {filteredRows.length} of {SLA_ROWS.length} entries
+              </span>
+            </div>
+
+            {/* Table */}
+            <div className="flex min-h-0 w-full flex-1 flex-col overflow-auto rounded-b-[24px] border-x border-b border-[#0f0d0a14] bg-white p-4">
+              <div className="min-w-[1300px]">
+                <div className="flex">
+                  {TABLE_COLUMNS.map((col) => (
+                    <div
+                      key={col.key}
+                      className={`flex h-[54px] shrink-0 items-center gap-2.5 bg-black/[0.04] px-3 ${col.width} ${col.align}`}
+                    >
+                      <span className="whitespace-nowrap text-sm font-semibold text-[#050505]">
+                        {col.label}
+                      </span>
+                    </div>
                   ))}
-                </tr>
-              </thead>
-              <tbody>
-                {SLA_ROWS.map((row) => (
-                  <tr
+                </div>
+
+                {filteredRows.map((row) => (
+                  <div
                     key={row.indicator}
-                    className="border-b border-[#e2e8f0] last:border-b-0"
+                    className="flex border-b border-[#0f0d0a14] last:border-b-0"
                   >
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[#050505]">
-                      {row.segmen}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-[#050505]">
-                      {row.indicator}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[#050505]">
-                      {row.layanan}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[#050505]">
-                      {row.satuan}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[#050505]">
-                      {row.source}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-sm text-[#050505]">
-                      {row.target}
-                    </td>
-                    <td className="whitespace-nowrap p-3 text-sm text-[#050505]">
-                      {row.realisasi}
-                    </td>
-                    <td className="whitespace-nowrap p-3 text-sm">
+                    <div className="flex h-[50px] w-[107px] shrink-0 items-center justify-center px-3">
+                      <span className="whitespace-nowrap rounded-[9px] bg-[#f5f3f2] px-2.5 py-1 text-[13px] font-medium text-[#050505]">
+                        {row.segmen}
+                      </span>
+                    </div>
+                    <div className="flex h-[50px] w-[305px] shrink-0 items-center px-3">
+                      <span className="text-sm text-[#050505]">
+                        {row.indicator}
+                      </span>
+                    </div>
+                    <div className="flex h-[50px] w-[132px] shrink-0 items-center px-3">
+                      <span className="whitespace-nowrap text-sm text-[#050505]">
+                        {row.layanan}
+                      </span>
+                    </div>
+                    <div className="flex h-[50px] w-[78px] shrink-0 items-center justify-center px-3">
+                      <span className="whitespace-nowrap text-sm text-[#050505]">
+                        {row.satuan}
+                      </span>
+                    </div>
+                    <div className="flex h-[50px] w-[263px] shrink-0 items-center px-3">
+                      <span className="whitespace-nowrap text-sm text-[#050505]">
+                        {row.source}
+                      </span>
+                    </div>
+                    <div className="flex h-[50px] w-[75px] shrink-0 items-center px-3">
+                      <span className="whitespace-nowrap text-sm text-[#050505]">
+                        {row.target}
+                      </span>
+                    </div>
+                    <div className="flex h-[50px] w-[171px] shrink-0 items-center px-3">
+                      <span className="whitespace-nowrap text-sm text-[#050505]">
+                        {row.realisasi}
+                      </span>
+                    </div>
+                    <div className="flex h-[50px] w-[169px] shrink-0 items-center px-3">
                       <span
-                        className={`font-bold underline ${
-                          row.achieved ? "text-[#21a647]" : "text-[#c23837]"
+                        className={`whitespace-nowrap text-sm ${
+                          row.achieved ? "text-[#050505]" : "text-[#c23837]"
                         }`}
                       >
                         {row.capaian}
                       </span>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+
+                {filteredRows.length === 0 && (
+                  <div className="flex h-[100px] items-center justify-center text-sm text-[#636363]">
+                    Tidak ada data yang cocok dengan pencarian.
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </main>
       </div>
