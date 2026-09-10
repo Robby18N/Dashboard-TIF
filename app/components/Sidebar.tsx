@@ -28,7 +28,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
 
   return (
     <aside
-      className={`flex shrink-0 flex-col gap-4 border-r-[0.5px] border-black/[0.08] bg-[#f5f3f2] py-4 transition-[width] duration-200 ${
+      className={`flex shrink-0 flex-col gap-4 border-r-[0.5px] border-[#e2e8f0] bg-[#f5f3f2] py-4 transition-[width] duration-200 ${
         sidebarOpen ? "w-[220px] items-stretch px-3" : "w-[60px] items-center"
       }`}
     >
