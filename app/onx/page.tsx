@@ -123,54 +123,70 @@ export default function OnxDashboard() {
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[24px] border border-black/[0.08] bg-white">
             {/* Comparison table */}
             <div className="flex shrink-0 items-start gap-3 border-b border-black/[0.08] px-4 pb-2.5 pt-2.5">
-              {!isTableCollapsed && (
-                <div className="min-w-0 flex-1 overflow-x-auto">
-                  <div className="min-w-[640px]">
-                    <div className="flex">
-                      {COMPARISON_COLUMNS.map((col) => (
-                        <div
-                          key={col.key}
-                          className={`flex h-7 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
-                        >
-                          <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
-                            {col.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+              <div className="flex min-w-0 flex-1 flex-col">
+                {/* Collapsed label */}
+                <div
+                  className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+                    isTableCollapsed ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <span className="block py-1 text-xs font-medium text-[#525252]">
+                      Details Metrics
+                    </span>
+                  </div>
+                </div>
 
-                    {COMPARISON_ROWS.map((row, i) => (
-                      <div
-                        key={`${row.kpi}-${i}`}
-                        className="flex border-b border-black/[0.08] last:border-b-0"
-                      >
-                        {COMPARISON_COLUMNS.map((col) => (
-                          <div
-                            key={col.key}
-                            className={`flex h-6 flex-1 items-center px-3 ${col.align}`}
-                          >
-                            <span
-                              className={`whitespace-nowrap text-xs ${
-                                col.key === "wow" && row.wow === "Lose"
-                                  ? "text-[#ef4444]"
-                                  : "text-[#525252]"
-                              }`}
+                {/* Table content */}
+                <div
+                  className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+                    isTableCollapsed ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="overflow-x-auto">
+                      <div className="min-w-[640px]">
+                        <div className="flex">
+                          {COMPARISON_COLUMNS.map((col) => (
+                            <div
+                              key={col.key}
+                              className={`flex h-7 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
                             >
-                              {row[col.key as keyof ComparisonRow]}
-                            </span>
+                              <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
+                                {col.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {COMPARISON_ROWS.map((row, i) => (
+                          <div
+                            key={`${row.kpi}-${i}`}
+                            className="flex border-b border-black/[0.08] last:border-b-0"
+                          >
+                            {COMPARISON_COLUMNS.map((col) => (
+                              <div
+                                key={col.key}
+                                className={`flex h-6 flex-1 items-center px-3 ${col.align}`}
+                              >
+                                <span
+                                  className={`whitespace-nowrap text-xs ${
+                                    col.key === "wow" && row.wow === "Lose"
+                                      ? "text-[#ef4444]"
+                                      : "text-[#525252]"
+                                  }`}
+                                >
+                                  {row[col.key as keyof ComparisonRow]}
+                                </span>
+                              </div>
+                            ))}
                           </div>
                         ))}
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </div>
-              )}
-
-              {isTableCollapsed && (
-                <span className="flex-1 py-1 text-xs font-medium text-[#525252]">
-                  Comparison table collapsed
-                </span>
-              )}
+              </div>
 
               <button
                 type="button"
@@ -180,7 +196,7 @@ export default function OnxDashboard() {
                 className="flex size-7 shrink-0 items-center justify-center rounded-[10px] border border-[#e6e5e3] bg-white transition-colors hover:bg-black/[0.02]"
               >
                 <ChevronDown
-                  className={`size-[18px] text-[#3b82f6] transition-transform ${
+                  className={`size-[18px] text-[#3b82f6] transition-transform duration-300 ${
                     isTableCollapsed ? "" : "rotate-180"
                   }`}
                   strokeWidth={1.67}

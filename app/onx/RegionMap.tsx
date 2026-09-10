@@ -173,6 +173,22 @@ export default function RegionMap({
     };
   }, [token, styleUrl]);
 
+  // Mapbox GL doesn't observe its own container, so when the layout around
+  // it changes size (e.g. collapsing a panel above it, which animates over
+  // time), the map canvas would otherwise stay locked to its old size.
+  // Watch the container and keep the canvas in sync on every resize frame.
+  useEffect(() => {
+    const container = mapContainerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      mapRef.current?.resize();
+    });
+    resizeObserver.observe(container);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
