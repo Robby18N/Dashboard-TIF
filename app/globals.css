@@ -24,3 +24,17 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Region hover card on the ONX Dashboard map: the card's own Tailwind
+   classes (in RegionMap.tsx) provide all the visual styling, so strip
+   Mapbox's default popup chrome (background, padding, shadow, tip arrow). */
+.mapboxgl-popup.region-popup .mapboxgl-popup-tip {
+  display: none;
+}
+
+.mapboxgl-popup.region-popup .mapboxgl-popup-content {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}

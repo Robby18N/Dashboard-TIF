@@ -15,6 +15,9 @@ export type Region = {
   valueLabel: string;
   valuePercent: string;
   nearestCompetitor: string;
+  winner: string;
+  gapToWinner: string;
+  highlight: string;
 };
 
 /**
@@ -32,8 +35,11 @@ export const SAMPLE_REGIONS: Region[] = [
     status: "win",
     coordinates: [98.6722, 3.5952],
     valueLabel: "Value Indihome",
-    valuePercent: "98.20%",
-    nearestCompetitor: "XLSMART",
+    valuePercent: "37 ms",
+    nearestCompetitor: "Indosat",
+    winner: "Indihome",
+    gapToWinner: "-",
+    highlight: "Improve",
   },
   {
     id: "sumbagsel",
@@ -43,6 +49,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "91.40%",
     nearestCompetitor: "IndosatHifi",
+    winner: "IndosatHifi",
+    gapToWinner: "+3ms",
+    highlight: "Need Improve",
   },
   {
     id: "jabodetabek",
@@ -52,6 +61,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "97.10%",
     nearestCompetitor: "Biznet",
+    winner: "Indihome",
+    gapToWinner: "-2ms",
+    highlight: "Good",
   },
   {
     id: "jabar",
@@ -61,6 +73,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "96.55%",
     nearestCompetitor: "XLSMART",
+    winner: "Indihome",
+    gapToWinner: "-1ms",
+    highlight: "Good",
   },
   {
     id: "jateng",
@@ -70,6 +85,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "97.85%",
     nearestCompetitor: "Biznet",
+    winner: "Indihome",
+    gapToWinner: "-1ms",
+    highlight: "Good",
   },
   {
     id: "jatim",
@@ -79,6 +97,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "96.90%",
     nearestCompetitor: "IndosatHifi",
+    winner: "Indihome",
+    gapToWinner: "-2ms",
+    highlight: "Good",
   },
   {
     id: "balinusra",
@@ -88,6 +109,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "95.30%",
     nearestCompetitor: "XLHome",
+    winner: "Indihome",
+    gapToWinner: "-1ms",
+    highlight: "Good",
   },
   {
     id: "kalimantan",
@@ -97,6 +121,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "96.10%",
     nearestCompetitor: "Biznet",
+    winner: "Indihome",
+    gapToWinner: "-1ms",
+    highlight: "Good",
   },
   {
     id: "sulawesi",
@@ -106,6 +133,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "95.75%",
     nearestCompetitor: "XLSMART",
+    winner: "Indihome",
+    gapToWinner: "-2ms",
+    highlight: "Good",
   },
   {
     id: "puma",
@@ -115,6 +145,9 @@ export const SAMPLE_REGIONS: Region[] = [
     valueLabel: "Value Indihome",
     valuePercent: "94.65%",
     nearestCompetitor: "IndosatHifi",
+    winner: "Indihome",
+    gapToWinner: "-1ms",
+    highlight: "Good",
   },
 ];
 
@@ -123,9 +156,61 @@ const STATUS_COLOR: Record<RegionStatus, string> = {
   lose: "#ef4444",
 };
 
+/** Builds the hover-card DOM content for a region, handed to a mapboxgl.Popup. */
+function buildPopupContent(region: Region): HTMLDivElement {
+  const wrapper = document.createElement("div");
+  wrapper.className =
+    "flex flex-col gap-2.5 rounded-xl bg-white/[0.66] p-3 backdrop-blur-[8.75px]";
+
+  const header = document.createElement("div");
+  header.className = "flex items-center gap-2.5";
+
+  const name = document.createElement("p");
+  name.className = "whitespace-nowrap text-sm font-semibold leading-5 text-[#050505]";
+  name.textContent = region.name;
+
+  const badge = document.createElement("span");
+  badge.className =
+    "shrink-0 whitespace-nowrap rounded-[80px] px-2.5 py-0.5 text-[12px] font-medium text-white";
+  badge.style.backgroundColor = STATUS_COLOR[region.status];
+  badge.textContent = region.status === "win" ? "Win" : "Lose";
+
+  header.append(name, badge);
+
+  const details = document.createElement("div");
+  details.className = "flex w-[208px] flex-col gap-0.5";
+
+  const rows: [string, string][] = [
+    [region.valueLabel, region.valuePercent],
+    ["Nearest Competitor", region.nearestCompetitor],
+    ["Winner", region.winner],
+    ["Gap to Winner", region.gapToWinner],
+    ["Highlight", region.highlight],
+  ];
+
+  rows.forEach(([label, value]) => {
+    const row = document.createElement("div");
+    row.className = "flex w-full items-center gap-2";
+
+    const labelEl = document.createElement("p");
+    labelEl.className = "w-[120px] shrink-0 text-xs leading-[18px] text-[#636363]";
+    labelEl.textContent = label;
+
+    const valueEl = document.createElement("p");
+    valueEl.className = "w-20 shrink-0 text-xs leading-[18px] text-[#050505]";
+    valueEl.textContent = value;
+
+    row.append(labelEl, valueEl);
+    details.appendChild(row);
+  });
+
+  wrapper.append(header, details);
+  return wrapper;
+}
+
 type RegionMapProps = {
   regions?: Region[];
-  /** region id selected/highlighted by default, mirroring the Figma callout */
+  /** region id whose hover card opens once the map first loads, mirroring the Figma callout */
   initialSelectedId?: string;
 };
 
@@ -135,9 +220,6 @@ export default function RegionMap({
 }: RegionMapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(
-    initialSelectedId
-  );
   const [mapReady, setMapReady] = useState(false);
 
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -164,7 +246,6 @@ export default function RegionMap({
     map.scrollZoom.disable();
 
     map.on("load", () => setMapReady(true));
-    map.on("click", () => setSelectedId(null));
     mapRef.current = map;
 
     return () => {
@@ -189,9 +270,46 @@ export default function RegionMap({
     return () => resizeObserver.disconnect();
   }, []);
 
+  // Markers + hover card. The card is a native mapboxgl.Popup (not a React
+  // node) so it stays correctly anchored to the marker's map coordinates
+  // through panning and zooming, and shows on hover instead of click.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
+
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 16,
+      anchor: "bottom",
+      className: "region-popup",
+    });
+
+    let hideTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const cancelHide = () => {
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+        hideTimeout = null;
+      }
+    };
+
+    const scheduleHide = () => {
+      cancelHide();
+      hideTimeout = setTimeout(() => {
+        popup.remove();
+      }, 120);
+    };
+
+    const showRegion = (region: Region) => {
+      cancelHide();
+      popup.setLngLat(region.coordinates).setDOMContent(buildPopupContent(region));
+      popup.addTo(map);
+
+      const popupEl = popup.getElement();
+      popupEl?.addEventListener("mouseenter", cancelHide);
+      popupEl?.addEventListener("mouseleave", scheduleHide);
+    };
 
     const markers: mapboxgl.Marker[] = [];
 
@@ -206,10 +324,11 @@ export default function RegionMap({
       el.style.boxShadow = "0 1px 3px rgba(0,0,0,0.25)";
       el.style.background = STATUS_COLOR[region.status];
       el.style.cursor = "pointer";
-      el.addEventListener("click", (event) => {
-        event.stopPropagation();
-        setSelectedId(region.id);
-      });
+
+      el.addEventListener("mouseenter", () => showRegion(region));
+      el.addEventListener("mouseleave", scheduleHide);
+      el.addEventListener("focus", () => showRegion(region));
+      el.addEventListener("blur", scheduleHide);
 
       const marker = new mapboxgl.Marker({ element: el })
         .setLngLat(region.coordinates)
@@ -217,12 +336,15 @@ export default function RegionMap({
       markers.push(marker);
     });
 
+    const initialRegion = regions.find((region) => region.id === initialSelectedId);
+    if (initialRegion) showRegion(initialRegion);
+
     return () => {
+      cancelHide();
+      popup.remove();
       markers.forEach((marker) => marker.remove());
     };
-  }, [regions, mapReady]);
-
-  const selectedRegion = regions.find((region) => region.id === selectedId);
+  }, [regions, mapReady, initialSelectedId]);
 
   if (!token) {
     return (
@@ -243,55 +365,6 @@ export default function RegionMap({
   return (
     <div className="relative h-full w-full overflow-hidden rounded-[10px]">
       <div ref={mapContainerRef} className="h-full w-full" />
-
-      {/* Region detail card, styled after the Figma callout */}
-      {selectedRegion && (
-        <div className="absolute left-[17px] top-[23px] flex w-[272px] flex-col items-center">
-          <div
-            onClick={(event) => event.stopPropagation()}
-            className="mb-[-3px] flex w-full flex-col gap-2.5 rounded-xl bg-white/[0.66] p-3 backdrop-blur-[8.75px]"
-          >
-            <div className="flex items-center gap-2.5">
-              <p className="whitespace-nowrap text-sm font-semibold text-[#525252]">
-                {selectedRegion.name}
-              </p>
-              <span
-                className={`shrink-0 rounded-[9px] px-2.5 py-1 text-[13px] font-medium ${
-                  selectedRegion.status === "win"
-                    ? "bg-[#f0fdf4] text-[#22c55e]"
-                    : "bg-[#fef2f2] text-[#ef4444]"
-                }`}
-              >
-                {selectedRegion.status === "win" ? "Win" : "Lose"}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 text-xs">
-              <div className="flex items-center gap-2">
-                <p className="w-[120px] shrink-0 text-[#525252]">
-                  {selectedRegion.valueLabel}
-                </p>
-                <p className="text-[#525252]">{selectedRegion.valuePercent}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="w-[120px] shrink-0 text-[#525252]">
-                  Nearest Competitor
-                </p>
-                <p className="text-[#525252]">
-                  {selectedRegion.nearestCompetitor}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            className="h-0 w-0"
-            style={{
-              borderLeft: "9px solid transparent",
-              borderRight: "9px solid transparent",
-              borderTop: "8px solid #f5f3f2",
-            }}
-          />
-        </div>
-      )}
 
       {/* Legend */}
       <div className="absolute bottom-4 left-4 flex items-center gap-4 rounded-[24px] border border-[#f1f5f9] bg-white px-4 py-2">
