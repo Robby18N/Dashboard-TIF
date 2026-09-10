@@ -164,6 +164,7 @@ export default function RegionMap({
     map.scrollZoom.disable();
 
     map.on("load", () => setMapReady(true));
+    map.on("click", () => setSelectedId(null));
     mapRef.current = map;
 
     return () => {
@@ -189,7 +190,10 @@ export default function RegionMap({
       el.style.boxShadow = "0 1px 3px rgba(0,0,0,0.25)";
       el.style.background = STATUS_COLOR[region.status];
       el.style.cursor = "pointer";
-      el.addEventListener("click", () => setSelectedId(region.id));
+      el.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setSelectedId(region.id);
+      });
 
       const marker = new mapboxgl.Marker({ element: el })
         .setLngLat(region.coordinates)
@@ -227,9 +231,12 @@ export default function RegionMap({
       {/* Region detail card, styled after the Figma callout */}
       {selectedRegion && (
         <div className="absolute left-[17px] top-[23px] flex w-[272px] flex-col items-center">
-          <div className="mb-[-3px] flex w-full flex-col gap-2.5 rounded-xl bg-white/[0.66] p-3 backdrop-blur-[10px]">
+          <div
+            onClick={(event) => event.stopPropagation()}
+            className="mb-[-3px] flex w-full flex-col gap-2.5 rounded-xl bg-white/[0.66] p-3 backdrop-blur-[8.75px]"
+          >
             <div className="flex items-center gap-2.5">
-              <p className="whitespace-nowrap text-sm font-semibold text-[#050505]">
+              <p className="whitespace-nowrap text-sm font-semibold text-[#525252]">
                 {selectedRegion.name}
               </p>
               <span
@@ -241,27 +248,19 @@ export default function RegionMap({
               >
                 {selectedRegion.status === "win" ? "Win" : "Lose"}
               </span>
-              <button
-                type="button"
-                aria-label="Tutup"
-                onClick={() => setSelectedId(null)}
-                className="ml-auto text-[#636363] hover:text-[#050505]"
-              >
-                ×
-              </button>
             </div>
             <div className="flex flex-col gap-1 text-xs">
               <div className="flex items-center gap-2">
-                <p className="w-[120px] shrink-0 text-[#636363]">
+                <p className="w-[120px] shrink-0 text-[#525252]">
                   {selectedRegion.valueLabel}
                 </p>
-                <p className="text-[#050505]">{selectedRegion.valuePercent}</p>
+                <p className="text-[#525252]">{selectedRegion.valuePercent}</p>
               </div>
               <div className="flex items-center gap-2">
-                <p className="w-[120px] shrink-0 text-[#636363]">
+                <p className="w-[120px] shrink-0 text-[#525252]">
                   Nearest Competitor
                 </p>
-                <p className="text-[#050505]">
+                <p className="text-[#525252]">
                   {selectedRegion.nearestCompetitor}
                 </p>
               </div>
@@ -272,20 +271,26 @@ export default function RegionMap({
             style={{
               borderLeft: "9px solid transparent",
               borderRight: "9px solid transparent",
-              borderTop: "8px solid rgba(255,255,255,0.66)",
+              borderTop: "8px solid #f5f3f2",
             }}
           />
         </div>
       )}
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 flex items-center gap-4 rounded-[24px] border border-[#f1f5f9] bg-white px-4 py-2 shadow-sm">
+      <div className="absolute bottom-4 left-4 flex items-center gap-4 rounded-[24px] border border-[#f1f5f9] bg-white px-4 py-2">
         <span className="flex items-center gap-1">
-          <span className="size-3 rounded-full bg-[#22c55e]" />
+          <span
+            className="size-3 rounded-full"
+            style={{ backgroundColor: "#22c55e33", outline: "1px solid #22c55e", outlineOffset: "-0.5px" }}
+          />
           <span className="text-xs text-[#0f172a]">Win</span>
         </span>
         <span className="flex items-center gap-1">
-          <span className="size-3 rounded-full bg-[#ef4444]" />
+          <span
+            className="size-3 rounded-full"
+            style={{ backgroundColor: "#c2383733", outline: "1px solid #c23837", outlineOffset: "-0.5px" }}
+          />
           <span className="text-xs text-[#0f172a]">Lose</span>
         </span>
       </div>
