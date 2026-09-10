@@ -122,16 +122,16 @@ export default function OnxDashboard() {
           {/* Unified card: comparison table + controls + map, sharing one border/radius */}
           <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[24px] border border-black/[0.08] bg-white">
             {/* Comparison table */}
-            <div className="flex shrink-0 items-start gap-4 border-b border-black/[0.08] px-4 pb-5 pt-5">
+            <div className="flex shrink-0 items-start gap-3 border-b border-black/[0.08] px-4 pb-2.5 pt-2.5">
               <div className="min-w-0 flex-1 overflow-x-auto">
                 <div className="min-w-[640px]">
                   <div className="flex">
                     {COMPARISON_COLUMNS.map((col) => (
                       <div
                         key={col.key}
-                        className={`flex h-10 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
+                        className={`flex h-7 flex-1 items-center bg-black/[0.04] px-3 ${col.align}`}
                       >
-                        <span className="whitespace-nowrap text-sm font-semibold text-[#525252]">
+                        <span className="whitespace-nowrap text-xs font-semibold text-[#525252]">
                           {col.label}
                         </span>
                       </div>
@@ -146,10 +146,10 @@ export default function OnxDashboard() {
                       {COMPARISON_COLUMNS.map((col) => (
                         <div
                           key={col.key}
-                          className={`flex h-[30px] flex-1 items-center px-3 ${col.align}`}
+                          className={`flex h-6 flex-1 items-center px-3 ${col.align}`}
                         >
                           <span
-                            className={`whitespace-nowrap text-sm ${
+                            className={`whitespace-nowrap text-xs ${
                               col.key === "wow" && row.wow === "Lose"
                                 ? "text-[#ef4444]"
                                 : "text-[#525252]"
@@ -167,20 +167,20 @@ export default function OnxDashboard() {
               <button
                 type="button"
                 aria-label="Expand table"
-                className="flex size-8 shrink-0 items-center justify-center rounded-[10px] border border-[#e6e5e3] bg-white transition-colors hover:bg-black/[0.02]"
+                className="flex size-7 shrink-0 items-center justify-center rounded-[10px] border border-[#e6e5e3] bg-white transition-colors hover:bg-black/[0.02]"
               >
-                <Maximize2 className="size-4 text-[#3b82f6]" strokeWidth={1.75} />
+                <Maximize2 className="size-3.5 text-[#3b82f6]" strokeWidth={1.75} />
               </button>
             </div>
 
             {/* Metric selector + Maps/Detail tabs */}
-            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] px-4 py-2">
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-black/[0.08] px-4 py-1.5">
               <div className="relative">
                 <select
                   aria-label="Select metric"
                   value={selectedMetric}
                   onChange={(e) => setSelectedMetric(e.target.value)}
-                  className="h-9 w-[150px] appearance-none rounded-xl border border-black/[0.08] bg-white py-1.5 pl-3 pr-8 text-sm font-medium text-[#525252] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
+                  className="h-8 w-[150px] appearance-none rounded-xl border border-black/[0.08] bg-white py-1 pl-3 pr-8 text-sm font-medium text-[#525252] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
                 >
                   {METRIC_OPTIONS.map((option) => (
                     <option key={option} value={option}>
@@ -198,7 +198,7 @@ export default function OnxDashboard() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("maps")}
-                  className={`rounded-3xl px-4 py-1.5 text-sm font-medium text-[#525252] transition-colors ${
+                  className={`rounded-3xl px-4 py-1 text-sm font-medium text-[#525252] transition-colors ${
                     activeTab === "maps"
                       ? "border border-black/[0.08] bg-white shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
                       : ""
@@ -209,7 +209,7 @@ export default function OnxDashboard() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("detail")}
-                  className={`rounded-3xl px-4 py-1.5 text-sm font-medium text-[#525252] transition-colors ${
+                  className={`rounded-3xl px-4 py-1 text-sm font-medium text-[#525252] transition-colors ${
                     activeTab === "detail"
                       ? "border border-black/[0.08] bg-white shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
                       : ""
