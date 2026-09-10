@@ -183,24 +183,35 @@ function DetailTableRow({
     >
       <div
         style={{ width: 220, paddingLeft: indent ? 40 : 12 }}
-        className="flex h-[38px] shrink-0 items-center gap-1.5 pr-3"
+        className="flex h-[38px] shrink-0 items-center gap-2 pr-3"
       >
-        {isGroup && (
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-label={isExpanded ? `Collapse ${row.name}` : `Expand ${row.name}`}
-            aria-expanded={isExpanded}
-            className="flex size-4 shrink-0 items-center justify-center text-[#525252]"
-          >
-            <ChevronDown
-              className={`size-3.5 transition-transform duration-200 ${
-                isExpanded ? "" : "-rotate-90"
-              }`}
-              strokeWidth={1.75}
-            />
-          </button>
-        )}
+        {!indent &&
+          (isGroup ? (
+            <button
+              type="button"
+              onClick={onToggle}
+              aria-label={isExpanded ? `Collapse ${row.name}` : `Expand ${row.name}`}
+              aria-expanded={isExpanded}
+              className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#e6e5e3] bg-white transition-colors hover:bg-black/[0.02]"
+            >
+              <ChevronDown
+                className={`size-4 text-[#525252] transition-transform duration-200 ${
+                  isExpanded ? "" : "-rotate-90"
+                }`}
+                strokeWidth={1.67}
+              />
+            </button>
+          ) : (
+            // No sub-regions yet for this row — the button is shown for visual
+            // consistency across all regions, but stays inert until nested
+            // data exists for it too.
+            <span
+              aria-hidden="true"
+              className="flex size-6 shrink-0 cursor-default items-center justify-center overflow-hidden rounded-full border border-[#e6e5e3] bg-white opacity-60"
+            >
+              <ChevronDown className="size-4 -rotate-90 text-[#525252]" strokeWidth={1.67} />
+            </span>
+          ))}
         <span
           className={`truncate text-sm ${
             isTotal || isGroup ? "font-semibold text-[#0f172b]" : "text-[#525252]"
