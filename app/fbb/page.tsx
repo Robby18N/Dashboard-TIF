@@ -3,14 +3,13 @@
 import { useMemo, useState } from "react";
 import {
   ArrowDownWideNarrow,
-  Bell,
+  CalendarDays,
   ChevronDown,
-  Download,
   Gauge,
-  Moon,
   MonitorCheck,
   MonitorX,
   Search,
+  Upload,
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -232,42 +231,45 @@ export default function FbbDashboard() {
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
-        <header className="flex items-center justify-between border-b-[0.5px] border-black/[0.08] bg-white px-6 py-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-bold text-[#0f172b]">SLA WISA FBB</h1>
-            <span className="rounded-full bg-black/[0.04] px-3 py-1 text-sm text-[#636363]">
+        <div className="relative flex shrink-0 flex-wrap items-start justify-between gap-4 bg-[#f1f5f9] px-6 pb-10 pt-6">
+          {/* Period pill */}
+          <div className="flex h-11 shrink-0 items-center gap-2 rounded-full bg-white px-4 shadow-[0px_1px_2px_0px_rgba(15,23,42,0.06)]">
+            <CalendarDays className="size-5 shrink-0 text-[#64748b]" strokeWidth={1.75} />
+            <span className="whitespace-nowrap text-sm font-medium text-[#64748b]">
               Pencapaian Terakhir Period W4{" "}
-              <span className="text-[#050505]">(Agu 2026 - 27 Agu 2026)</span>
+              <span className="text-[#0f172a]">(Agu 2026 - 27 Agu 2026)</span>
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              aria-label="Toggle theme"
-              className="flex size-[30px] items-center justify-center rounded-full bg-black/[0.04] transition-colors hover:bg-black/[0.08]"
-            >
-              <Moon className="size-4 text-[#050505]" strokeWidth={1.75} />
-            </button>
-            <button
-              aria-label="Notifications"
-              className="flex size-[30px] items-center justify-center rounded-full bg-black/[0.04] transition-colors hover:bg-black/[0.08]"
-            >
-              <Bell className="size-4 text-[#050505]" strokeWidth={1.75} />
-            </button>
-            <button className="flex items-center gap-2 rounded-full py-0.5 pl-0.5 pr-2 transition-colors hover:bg-black/[0.04]">
-              <span className="flex size-[30px] items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
-                UN
-              </span>
-              <span className="text-sm font-medium text-[#314158]">
-                username
-              </span>
-              <ChevronDown className="size-4 text-[#314158]" strokeWidth={1.75} />
-            </button>
+          {/* Title bump */}
+          <div className="absolute left-1/2 top-0 -translate-x-1/2 rounded-b-[28px] bg-white px-10 py-4 shadow-[0px_2px_6px_0px_rgba(15,23,42,0.08)]">
+            <h1 className="whitespace-nowrap text-lg font-semibold text-[#020617]">
+              SLA WISA FBB
+            </h1>
           </div>
-        </header>
+
+          {/* Region / Week / Export / avatar */}
+          <div className="flex h-11 shrink-0 items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-1.5">
+            <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[#f8fafc] px-3 text-sm font-medium text-[#0f172a] outline outline-1 outline-[#e2e8f0] transition-colors hover:bg-[#eef2f6]">
+              Select Region
+              <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.5} />
+            </button>
+            <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[#f8fafc] px-3 text-sm font-medium text-[#0f172a] outline outline-1 outline-[#e2e8f0] transition-colors hover:bg-[#eef2f6]">
+              Select Week
+              <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.5} />
+            </button>
+            <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-4 text-sm font-semibold text-white transition-opacity hover:opacity-90">
+              <Upload className="size-4" strokeWidth={1.75} />
+              Export
+            </button>
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
+              UN
+            </span>
+          </div>
+        </div>
 
         {/* Content */}
-        <main className="flex flex-1 flex-col p-6">
+        <main className="flex flex-1 flex-col px-6 pb-6">
           {/* Outer card */}
           <div className="flex min-h-0 flex-1 flex-col gap-4 rounded-[36px] border border-[#e2e8f0] bg-white p-4">
             {/* KPI row */}
@@ -319,24 +321,7 @@ export default function FbbDashboard() {
                   )}
                 </div>
 
-                <div className="flex shrink-0 flex-wrap items-center gap-3">
-                  <button className="flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#e2e8f0] bg-[#f8fafc] px-4 py-2 text-sm font-medium text-[#0f172a] transition-colors hover:bg-[#eef2f6]">
-                    Select Region
-                    <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.5} />
-                  </button>
-                  <button className="flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#e2e8f0] bg-[#f8fafc] px-4 py-2 text-sm font-medium text-[#0f172a] transition-colors hover:bg-[#eef2f6]">
-                    Select Week
-                    <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.5} />
-                  </button>
-                  <button className="flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-[100px] bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90">
-                    <Download className="size-4" strokeWidth={1.75} />
-                    Export
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex w-full shrink-0 items-center justify-end">
-                <span className="rounded-full bg-[#f1f5f9] px-4 py-2 text-sm font-medium text-[#64748b]">
+                <span className="shrink-0 rounded-full bg-[#f1f5f9] px-4 py-2 text-sm font-medium text-[#64748b]">
                   Showing {filteredRows.length} of {SLA_ROWS.length} entries
                 </span>
               </div>
