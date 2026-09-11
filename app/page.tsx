@@ -2,9 +2,10 @@ import {
   Bell,
   ChevronDown,
   Moon,
+  Settings,
+  Sparkles,
   Sun,
   User,
-  Settings,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -79,31 +80,36 @@ export default function Home() {
               <Sun className="size-4 text-[#050505]" strokeWidth={1.75} />
             </span>
             <span className="flex size-5 items-center justify-center p-0.5">
-              <Moon className="size-4 text-[#050505]" strokeWidth={1.75} />
+              <Moon className="size-4 text-[#858585]" strokeWidth={1.75} />
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              aria-label="Settings"
-              className="flex items-center justify-center rounded-full border border-black/8 bg-white p-2 transition-colors hover:bg-black/[0.02]"
-            >
-              <Settings className="size-4 text-[#636363]" strokeWidth={1.75} />
+            <button className="flex h-full items-center gap-2 rounded-full border border-black/8 bg-white px-4 py-2 transition-colors hover:bg-black/[0.02]">
+              <Sparkles className="size-4 text-[#050505]" strokeWidth={1.75} />
+              <span className="text-sm text-[#050505]">First Insight</span>
             </button>
 
             <button className="flex items-center gap-2 rounded-full border-[0.667px] border-black/8 bg-white px-2.5 py-2 transition-colors hover:bg-black/[0.02]">
-              <Bell className="size-4 text-[#636363]" strokeWidth={1.75} />
-              <span className="text-sm tracking-[-0.2px] text-[#636363]">
+              <Bell className="size-4 text-[#050505]" strokeWidth={1.75} />
+              <span className="text-sm tracking-[-0.2px] text-[#050505]">
                 Notifikasi
               </span>
             </button>
 
             <button className="flex items-center gap-2 rounded-full border border-black/8 bg-white py-2 pl-4 pr-2 transition-colors hover:bg-black/[0.02]">
-              <User className="size-4 text-[#636363]" strokeWidth={1.75} />
-              <span className="text-sm tracking-[-0.2px] text-[#636363]">
+              <User className="size-4 text-[#050505]" strokeWidth={1.75} />
+              <span className="text-sm tracking-[-0.2px] text-[#050505]">
                 Nationwide
               </span>
               <ChevronDown className="size-4 text-[#525252]" strokeWidth={1.75} />
+            </button>
+
+            <button
+              aria-label="Settings"
+              className="flex items-center justify-center rounded-full border border-black/8 bg-white p-2 transition-colors hover:bg-black/[0.02]"
+            >
+              <Settings className="size-4 text-[#050505]" strokeWidth={1.75} />
             </button>
           </div>
         </div>
