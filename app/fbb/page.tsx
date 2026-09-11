@@ -2,15 +2,15 @@
 
 import { useMemo, useState } from "react";
 import {
+  ArrowDownWideNarrow,
   Bell,
   ChevronDown,
   Download,
   Gauge,
   Moon,
-  MonitorDown,
-  Rocket,
+  MonitorCheck,
+  MonitorX,
   Search,
-  TrendingDown,
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -20,13 +20,34 @@ type Kpi = {
   label: string;
   value: string;
   icon: LucideIcon;
+  valueColor: string;
 };
 
 const KPIS: Kpi[] = [
-  { label: "Total Performance Indicator", value: "11", icon: Gauge },
-  { label: "Indicators Achieved", value: "9", icon: Rocket },
-  { label: "Indicators Not Achieved", value: "2", icon: MonitorDown },
-  { label: "Lowest Achievement", value: "94%", icon: TrendingDown },
+  {
+    label: "Total Performance Indicator",
+    value: "11",
+    icon: Gauge,
+    valueColor: "text-[#050505]",
+  },
+  {
+    label: "Indicators Achieved",
+    value: "9",
+    icon: MonitorCheck,
+    valueColor: "text-[#21a647]",
+  },
+  {
+    label: "Indicators Not Achieved",
+    value: "2",
+    icon: MonitorX,
+    valueColor: "text-[#c23837]",
+  },
+  {
+    label: "Lowest Achievement",
+    value: "94%",
+    icon: ArrowDownWideNarrow,
+    valueColor: "text-[#c23837]",
+  },
 ];
 
 type SlaRow = {
@@ -166,15 +187,17 @@ const SLA_ROWS: SlaRow[] = [
 ];
 
 const TABLE_COLUMNS = [
-  { key: "segmen", label: "Segmen", width: "w-[150px]", align: "justify-start text-left" },
-  { key: "indicator", label: "Performance Indicator", width: "w-[305px]", align: "justify-start text-left" },
-  { key: "layanan", label: "Layanan", width: "w-[132px]", align: "justify-start text-left" },
-  { key: "satuan", label: "Satuan", width: "w-[78px]", align: "justify-center text-center" },
-  { key: "source", label: "Source Data", width: "w-[190px]", align: "justify-start text-left" },
-  { key: "target", label: "Target", width: "w-[75px]", align: "justify-start text-left" },
-  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "w-[171px]", align: "justify-start text-left" },
-  { key: "capaian", label: "Capaian W4 Aug‘26", width: "w-[169px]", align: "justify-start text-left" },
+  { key: "segmen", label: "Segmen", width: "w-[200px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "indicator", label: "Performance Indicator", width: "w-[360px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "layanan", label: "Layanan", width: "w-[160px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "satuan", label: "Satuan", width: "w-[120px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "source", label: "Source Data", width: "w-[200px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "target", label: "Target", width: "w-[160px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#3b82f6]" },
+  { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#3b82f6]" },
 ] as const;
+
+type RowGroup = { segmen: string; rows: SlaRow[] };
 
 export default function FbbDashboard() {
   const [search, setSearch] = useState("");
@@ -189,8 +212,21 @@ export default function FbbDashboard() {
     );
   }, [search]);
 
+  const groupedRows = useMemo(() => {
+    const groups: RowGroup[] = [];
+    filteredRows.forEach((row) => {
+      const last = groups[groups.length - 1];
+      if (last && last.segmen === row.segmen) {
+        last.rows.push(row);
+      } else {
+        groups.push({ segmen: row.segmen, rows: [row] });
+      }
+    });
+    return groups;
+  }, [filteredRows]);
+
   return (
-    <div className="flex min-h-screen bg-[#f9f8f7]">
+    <div className="flex min-h-screen bg-[#f1f5f9]">
       <Sidebar activeKey="fbb" />
 
       {/* Main column */}
@@ -231,152 +267,169 @@ export default function FbbDashboard() {
         </header>
 
         {/* Content */}
-        <main className="flex flex-1 flex-col gap-5 p-6">
-          {/* KPI row */}
-          <div className="flex flex-wrap gap-3">
-            {KPIS.map(({ label, value, icon: Icon }) => (
-              <div
-                key={label}
-                className="flex h-[46px] min-w-[220px] flex-1 items-center gap-2.5 rounded-2xl border border-[#e6e5e3] bg-white px-4"
-              >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-[#f5f3f2]">
-                  <Icon className="size-4 text-[#050505]" strokeWidth={1.75} />
-                </span>
-                <span className="flex-1 truncate text-sm font-semibold text-[#050505]">
-                  {label}
-                </span>
-                <span className="shrink-0 rounded-full bg-black/[0.08] px-2 py-0.5 text-xs font-semibold text-[#636363]">
-                  {value}
-                </span>
-              </div>
-            ))}
-          </div>
+        <main className="flex flex-1 flex-col p-6">
+          {/* Outer card */}
+          <div className="flex min-h-0 flex-1 flex-col gap-4 rounded-[36px] border border-[#e2e8f0] bg-white p-4">
+            {/* KPI row */}
+            <div className="flex shrink-0 flex-wrap gap-4">
+              {KPIS.map(({ label, value, icon: Icon, valueColor }) => (
+                <div
+                  key={label}
+                  className="flex h-20 min-w-[240px] flex-1 items-stretch overflow-hidden rounded-2xl border border-[#e2e8f0]"
+                >
+                  <div className="flex flex-1 items-center gap-3 border-r border-[#e2e8f0] px-4">
+                    <Icon className="size-6 shrink-0 text-[#334155]" strokeWidth={1.75} />
+                    <span className="truncate text-base font-semibold text-[#0f172a]">
+                      {label}
+                    </span>
+                  </div>
+                  <div className="flex w-28 shrink-0 items-center justify-center px-4">
+                    <span className={`text-[28px] font-bold leading-none ${valueColor}`}>
+                      {value}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-          {/* Filters + table card */}
-          <div className="flex min-h-0 flex-1 flex-col">
-            {/* Filters */}
-            <div className="flex w-full shrink-0 flex-col gap-4 rounded-t-[24px] border border-[#0f0d0a14] bg-white p-4">
-              <div className="flex w-full flex-wrap items-center justify-between gap-4">
-                <div className="relative h-9 w-full max-w-[360px] shrink-0">
-                  <span className="pointer-events-none absolute left-[14px] top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#050505]">
-                    <Search className="size-4" strokeWidth={1.333} />
+            {/* Filters + table container */}
+            <div className="flex min-h-0 flex-1 flex-col gap-4 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
+              {/* Filters */}
+              <div className="flex w-full flex-wrap items-center justify-between gap-3">
+                <div className="relative h-11 w-full max-w-[320px] shrink-0">
+                  <span className="pointer-events-none absolute left-3.5 top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#737373]">
+                    <Search className="size-4" strokeWidth={1.5} />
                   </span>
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search.."
-                    className="h-10 w-full rounded-[24px] border border-[#e6e5e3] bg-white py-1 pl-9 pr-8 text-sm text-[#636363] outline-none placeholder:text-[#636363]"
+                    placeholder="Search"
+                    className="h-11 w-full rounded-[24px] border border-[#e2e8f0] bg-white py-1 pl-9 pr-8 text-sm text-[#0f172a] outline-none placeholder:text-[#64748b]"
                   />
                   {search && (
                     <button
                       type="button"
                       aria-label="Clear search"
                       onClick={() => setSearch("")}
-                      className="absolute right-[14px] top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#050505] hover:opacity-70"
+                      className="absolute right-3.5 top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#64748b] hover:opacity-70"
                     >
                       <X className="size-4" strokeWidth={1.333} />
                     </button>
                   )}
                 </div>
 
-                <div className="flex shrink-0 items-center gap-3">
-                  <button className="flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#0f0d0a14] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                <div className="flex shrink-0 flex-wrap items-center gap-3">
+                  <button className="flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#e2e8f0] bg-[#f8fafc] px-4 py-2 text-sm font-medium text-[#0f172a] transition-colors hover:bg-[#eef2f6]">
                     Select Region
-                    <ChevronDown className="size-4" strokeWidth={1} />
+                    <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.5} />
                   </button>
-                  <button className="flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#0f0d0a14] bg-white px-2.5 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
+                  <button className="flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#e2e8f0] bg-[#f8fafc] px-4 py-2 text-sm font-medium text-[#0f172a] transition-colors hover:bg-[#eef2f6]">
                     Select Week
-                    <ChevronDown className="size-4" strokeWidth={1} />
+                    <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.5} />
                   </button>
-                  <button className="flex h-9 items-center justify-center gap-1.5 whitespace-nowrap rounded-[24px] border border-[#0f0d0a14] bg-white px-3 py-1.5 text-sm font-medium text-[#636363] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-black/[0.02]">
-                    <Download className="size-4" strokeWidth={1} />
-                    Export file
+                  <button className="flex h-10 items-center justify-center gap-1.5 whitespace-nowrap rounded-[100px] bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90">
+                    <Download className="size-4" strokeWidth={1.75} />
+                    Export
                   </button>
                 </div>
               </div>
-            </div>
 
-            {/* Entries count */}
-            <div className="flex w-full shrink-0 items-center justify-between border-x border-b border-[#0f0d0a14] bg-white px-4 py-2">
-              <span className="rounded-full bg-black/[0.04] px-4 py-1.5 text-sm text-[#636363]">
-                Showing {filteredRows.length} of {SLA_ROWS.length} entries
-              </span>
-            </div>
+              <div className="flex w-full shrink-0 items-center justify-end">
+                <span className="rounded-full bg-[#f1f5f9] px-4 py-2 text-sm font-medium text-[#64748b]">
+                  Showing {filteredRows.length} of {SLA_ROWS.length} entries
+                </span>
+              </div>
 
-            {/* Table */}
-            <div className="flex min-h-0 w-full flex-1 flex-col overflow-auto rounded-b-[24px] border-x border-b border-[#0f0d0a14] bg-white p-4">
-              <div className="min-w-[1270px]">
-                <div className="flex">
-                  {TABLE_COLUMNS.map((col) => (
-                    <div
-                      key={col.key}
-                      className={`flex h-[54px] shrink-0 items-center gap-2.5 bg-black/[0.04] px-3 ${col.width} ${col.align}`}
-                    >
-                      <span className="whitespace-nowrap text-sm font-semibold text-[#050505]">
-                        {col.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {filteredRows.map((row) => (
-                  <div
-                    key={row.indicator}
-                    className="flex border-b border-[#0f0d0a14] last:border-b-0"
-                  >
-                    <div className="flex h-[50px] w-[150px] shrink-0 items-center justify-start px-3">
-                      <span className="whitespace-nowrap rounded-[9px] bg-[#f5f3f2] px-2.5 py-1 text-[13px] font-medium text-[#050505]">
-                        {row.segmen}
-                      </span>
-                    </div>
-                    <div className="flex h-[50px] w-[305px] shrink-0 items-center px-3">
-                      <span className="text-sm text-[#050505]">
-                        {row.indicator}
-                      </span>
-                    </div>
-                    <div className="flex h-[50px] w-[132px] shrink-0 items-center px-3">
-                      <span className="whitespace-nowrap text-sm text-[#050505]">
-                        {row.layanan}
-                      </span>
-                    </div>
-                    <div className="flex h-[50px] w-[78px] shrink-0 items-center justify-center px-3">
-                      <span className="whitespace-nowrap text-sm text-[#050505]">
-                        {row.satuan}
-                      </span>
-                    </div>
-                    <div className="flex h-[50px] w-[190px] shrink-0 items-center px-3">
-                      <span className="whitespace-nowrap text-sm text-[#050505]">
-                        {row.source}
-                      </span>
-                    </div>
-                    <div className="flex h-[50px] w-[75px] shrink-0 items-center px-3">
-                      <span className="whitespace-nowrap text-sm text-[#050505]">
-                        {row.target}
-                      </span>
-                    </div>
-                    <div className="flex h-[50px] w-[171px] shrink-0 items-center px-3">
-                      <span className="whitespace-nowrap text-sm text-[#050505]">
-                        {row.realisasi}
-                      </span>
-                    </div>
-                    <div className="flex h-[50px] w-[169px] shrink-0 items-center px-3">
-                      <span
-                        className={`whitespace-nowrap text-sm ${
-                          row.achieved ? "text-[#050505]" : "text-[#c23837]"
+              {/* Table */}
+              <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-[#e2e8f0] shadow-[0px_1px_1.75px_-1px_rgba(0,0,0,0.1),0px_1px_2.625px_0px_rgba(0,0,0,0.1)]">
+                <div className="min-w-[1400px]">
+                  {/* Header */}
+                  <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
+                    {TABLE_COLUMNS.map((col, idx) => (
+                      <div
+                        key={col.key}
+                        className={`flex h-full items-center gap-2.5 px-4 ${col.width} ${col.align} ${
+                          idx !== TABLE_COLUMNS.length - 1 ? "border-r border-[#e2e8f0]" : ""
                         }`}
                       >
-                        {row.capaian}
-                      </span>
-                    </div>
+                        <span className={`whitespace-nowrap text-xs font-semibold ${col.headerColor}`}>
+                          {col.label}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
 
-                {filteredRows.length === 0 && (
-                  <div className="flex h-[100px] items-center justify-center text-sm text-[#636363]">
-                    Tidak ada data yang cocok dengan pencarian.
-                  </div>
-                )}
+                  {/* Grouped rows */}
+                  {groupedRows.map((group) => (
+                    <div
+                      key={`${group.segmen}-${group.rows[0].indicator}`}
+                      className="flex border-b border-[#e2e8f0] last:border-b-0"
+                    >
+                      <div className="flex w-[200px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-4 py-2 text-center">
+                        <span className="text-sm font-medium text-[#020617]">
+                          {group.segmen}
+                        </span>
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col">
+                        {group.rows.map((row, idx) => (
+                          <div
+                            key={row.indicator}
+                            className={`flex h-12 items-stretch ${
+                              idx !== group.rows.length - 1 ? "border-b border-[#e2e8f0]" : ""
+                            }`}
+                          >
+                            <div className="flex h-full w-[360px] shrink-0 items-center border-r border-[#e2e8f0] px-4">
+                              <span className="text-sm font-medium text-[#020617]">
+                                {row.indicator}
+                              </span>
+                            </div>
+                            <div className="flex h-full w-[160px] shrink-0 items-center border-r border-[#e2e8f0] px-4">
+                              <span className="whitespace-nowrap text-sm font-medium text-[#020617]">
+                                {row.layanan}
+                              </span>
+                            </div>
+                            <div className="flex h-full w-[120px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3">
+                              <span className="text-sm font-medium text-[#020617]">
+                                {row.satuan}
+                              </span>
+                            </div>
+                            <div className="flex h-full w-[200px] shrink-0 items-center border-r border-[#e2e8f0] px-4">
+                              <span className="whitespace-nowrap text-sm font-medium text-[#020617]">
+                                {row.source}
+                              </span>
+                            </div>
+                            <div className="flex h-full w-[160px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3">
+                              <span className="text-sm font-medium text-[#020617]">
+                                {row.target}
+                              </span>
+                            </div>
+                            <div className="flex h-full flex-1 items-center justify-center border-r border-[#e2e8f0] px-3">
+                              <span className="text-sm font-medium text-[#020617]">
+                                {row.realisasi}
+                              </span>
+                            </div>
+                            <div className="flex h-full flex-1 items-center justify-center px-3">
+                              <span
+                                className={`text-sm font-bold ${
+                                  row.achieved ? "text-[#21a647]" : "text-[#c23837]"
+                                }`}
+                              >
+                                {row.capaian}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+
+                  {groupedRows.length === 0 && (
+                    <div className="flex h-[100px] items-center justify-center text-sm text-[#64748b]">
+                      Tidak ada data yang cocok dengan pencarian.
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
