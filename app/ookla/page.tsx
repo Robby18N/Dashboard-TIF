@@ -375,7 +375,7 @@ export default function OoklaDashboard() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <span className="block py-1 text-xs font-medium text-[#525252]">
+                    <span className="block py-1 text-[14px] font-medium text-[#525252]">
                       Details Metrics
                     </span>
                   </div>
