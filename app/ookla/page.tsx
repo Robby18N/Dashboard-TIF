@@ -354,9 +354,17 @@ export default function OoklaDashboard() {
         </header>
 
         {/* Content */}
-        <main className="flex min-h-0 flex-1 flex-col bg-[#0505050a] p-4">
-          {/* Unified card: comparison table + controls + map, sharing one border/radius */}
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[24px] border border-[#e2e8f0] bg-white">
+        <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#0505050a] p-4">
+          {/* Unified card: comparison table + controls + map, sharing one border/radius.
+              The Maps tab needs a fixed, viewport-filling height (the map has no
+              intrinsic content height), but the Detail tab should never clip its
+              rows — so only the Maps tab stretches to fill/min-h-0; on Detail the
+              card grows to fit its content and this <main> scrolls instead. */}
+          <div
+            className={`flex flex-col rounded-[24px] border border-[#e2e8f0] bg-white ${
+              activeTab === "maps" ? "min-h-0 flex-1 overflow-hidden" : "overflow-visible"
+            }`}
+          >
             {/* Comparison table */}
             <div className="flex shrink-0 items-start gap-3 border-b border-[#e2e8f0] p-3">
               <div className="flex min-w-0 flex-1 flex-col">
@@ -502,7 +510,7 @@ export default function OoklaDashboard() {
             </div>
 
             {/* Maps / Detail area */}
-            <div className="min-h-0 flex-1 p-3">
+            <div className={`p-3 ${activeTab === "maps" ? "min-h-0 flex-1" : ""}`}>
               {activeTab === "maps" ? (
                 <RegionMap />
               ) : (
@@ -534,7 +542,7 @@ function DetailTable() {
   };
 
   return (
-    <div className="h-full overflow-auto rounded-[10px] border border-black/[0.08]">
+    <div className="overflow-x-auto overflow-y-visible rounded-[10px] border border-black/[0.08]">
       <div className="overflow-x-auto">
         <div style={{ minWidth: DETAIL_TABLE_WIDTH }}>
           <div className="flex bg-black/[0.04]">
