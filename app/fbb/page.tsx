@@ -236,11 +236,11 @@ export default function FbbDashboard() {
         {/* Header */}
         <div className="relative shrink-0 bg-[#f1f5f9]">
           {/* Decorative scalloped bar, edge-to-edge across the main column */}
-          <div className="relative h-[73px] w-full">
+          <div className="relative h-[52px] w-full drop-shadow-[0_4px_20px_rgba(0,0,0,0.05)]">
             <svg
               viewBox="0 0 1920 56"
               preserveAspectRatio="none"
-              className="absolute left-0 top-0 h-[56px] w-full"
+              className="absolute left-0 top-0 h-[40px] w-full"
             >
               <defs>
                 <mask id="fbb-header-bar-mask">
@@ -262,7 +262,7 @@ export default function FbbDashboard() {
             </svg>
 
             {/* Title tab, centered and scaled to match the bar's notch */}
-            <div className="absolute left-1/2 top-0 h-[73px] w-[28.5417%] min-w-[300px] max-w-[548px] -translate-x-1/2">
+            <div className="absolute left-1/2 top-0 h-[52px] w-[28.5417%] min-w-[280px] max-w-[500px] -translate-x-1/2">
               <svg
                 viewBox="0 0 548 73"
                 preserveAspectRatio="none"
@@ -277,16 +277,16 @@ export default function FbbDashboard() {
                   fill="#17171714"
                 />
               </svg>
-              <h1 className="absolute left-1/2 top-[22px] -translate-x-1/2 whitespace-nowrap text-[20px] font-semibold text-[#020617]">
+              <h1 className="absolute left-1/2 top-[15px] -translate-x-1/2 whitespace-nowrap text-[16px] font-semibold text-[#020617]">
                 SLA WISA FBB
               </h1>
             </div>
           </div>
 
           {/* Period + Region/Week/Export/avatar row, sitting just below the bar */}
-          <div className="flex flex-wrap items-start justify-between gap-4 px-6 pb-6 pt-2">
+          <div className="flex flex-wrap items-start justify-between gap-4 px-6 pb-4 pt-2">
             {/* Period pill */}
-            <div className="flex h-11 shrink-0 items-center gap-2 rounded-full bg-white px-4 shadow-[0px_1px_2px_0px_rgba(15,23,42,0.06)]">
+            <div className="flex h-10 shrink-0 items-center gap-2 rounded-full bg-white px-4 shadow-[0px_1px_2px_0px_rgba(15,23,42,0.06)]">
               <CalendarDays className="size-5 shrink-0 text-[#64748b]" strokeWidth={1.75} />
               <span className="whitespace-nowrap text-sm font-medium text-[#64748b]">
                 Pencapaian Terakhir Period W4{" "}
@@ -295,7 +295,7 @@ export default function FbbDashboard() {
             </div>
 
             {/* Region / Week / Export / avatar */}
-            <div className="flex h-11 shrink-0 items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-1.5">
+            <div className="flex h-10 shrink-0 items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-1">
               <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[#f8fafc] px-3 text-sm font-medium text-[#0f172a] outline outline-1 outline-[#e2e8f0] transition-colors hover:bg-[#eef2f6]">
                 Select Region
                 <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.5} />
