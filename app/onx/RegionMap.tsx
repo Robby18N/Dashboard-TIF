@@ -6,12 +6,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 export type RegionStatus = "win" | "lose";
 
-export type Region = {
-  id: string;
+export type RegionMetrics = {
   name: string;
   status: RegionStatus;
-  /** [longitude, latitude] */
-  coordinates: [number, number];
   valueLabel: string;
   valuePercent: string;
   /** e.g. "20 from 25" — how many comparison points this region won out of the total. */
@@ -23,153 +20,163 @@ export type Region = {
 };
 
 /**
- * Sample regional data for the win/lose competitive map. "SUMBAGUT" mirrors
- * the exact figures shown in the Figma design; the remaining regions are
- * representative placeholders (using Telkom's usual SUMBAGUT/SUMBAGSEL/
- * JABAR/JATENG/JATIM/BALINUSRA/KALIMANTAN/SULAWESI/PUMA regional grouping)
- * so the map has something to render — swap these for real figures whenever
- * they're available.
+ * Region metrics keyed by the "REGION_ID" property carried on every polygon
+ * feature in /public/data/telkom-regions.json — Telkom's actual regional
+ * boundary data (12 regions), supplied directly by the user and simplified
+ * for the web (mapshaper, ~8% of the original vertex count).
+ *
+ * These ids mirror the Detail tab's DETAIL_REGIONS ids one-to-one, and the
+ * figures below mirror those exact rows, so the map and the Detail table
+ * never disagree — update both together whenever real figures land.
  */
-export const SAMPLE_REGIONS: Region[] = [
-  {
-    id: "sumbagut",
+export const REGION_METRICS: Record<string, RegionMetrics> = {
+  sumbagut: {
     name: "SUMBAGUT",
     status: "win",
-    coordinates: [98.6722, 3.5952],
     valueLabel: "Value Indihome",
-    valuePercent: "37 ms",
-    winRecord: "20 from 25",
+    valuePercent: "98.20%",
+    winRecord: "22 from 25",
     nearestCompetitor: "Indosat",
     winner: "Indihome",
     gapToWinner: "-",
-    highlight: "Improve",
+    highlight: "Strong performance",
   },
-  {
-    id: "sumbagsel",
+  sumbagteng: {
+    name: "SUMBAGTENG",
+    status: "win",
+    valueLabel: "Value Indihome",
+    valuePercent: "95.60%",
+    winRecord: "20 from 25",
+    nearestCompetitor: "Biznet",
+    winner: "Indihome",
+    gapToWinner: "-",
+    highlight: "Strong performance",
+  },
+  sumbagsel: {
     name: "SUMBAGSEL",
     status: "lose",
-    coordinates: [104.7458, -2.9909],
     valueLabel: "Value Indihome",
-    valuePercent: "91.40%",
+    valuePercent: "88.40%",
     winRecord: "10 from 25",
     nearestCompetitor: "IndosatHifi",
     winner: "IndosatHifi",
-    gapToWinner: "+3ms",
-    highlight: "Need Improve",
+    gapToWinner: "+3.30%",
+    highlight: "Priority focus",
   },
-  {
-    id: "jabodetabek",
-    name: "JABODETABEK",
+  "inner-jabo": {
+    name: "INNER JABOTABEK",
     status: "win",
-    coordinates: [106.8456, -6.2088],
     valueLabel: "Value Indihome",
-    valuePercent: "97.10%",
-    winRecord: "22 from 25",
+    valuePercent: "94.80%",
+    winRecord: "19 from 25",
     nearestCompetitor: "Biznet",
     winner: "Indihome",
-    gapToWinner: "-2ms",
-    highlight: "Good",
+    gapToWinner: "-",
+    highlight: "Stable",
   },
-  {
-    id: "jabar",
+  "outer-jabo": {
+    name: "OUTER JABOTABEK",
+    status: "win",
+    valueLabel: "Value Indihome",
+    valuePercent: "93.75%",
+    winRecord: "18 from 25",
+    nearestCompetitor: "Biznet",
+    winner: "Indihome",
+    gapToWinner: "-",
+    highlight: "Stable",
+  },
+  jabar: {
     name: "JABAR",
     status: "win",
-    coordinates: [107.6191, -6.9175],
     valueLabel: "Value Indihome",
     valuePercent: "96.55%",
     winRecord: "19 from 25",
     nearestCompetitor: "XLSMART",
     winner: "Indihome",
-    gapToWinner: "-1ms",
-    highlight: "Good",
+    gapToWinner: "-",
+    highlight: "Strong performance",
   },
-  {
-    id: "jateng",
-    name: "JATENG & DIY",
+  jateng: {
+    name: "JATENG-DIY",
     status: "win",
-    coordinates: [110.4203, -7.1006],
     valueLabel: "Value Indihome",
     valuePercent: "97.85%",
     winRecord: "21 from 25",
     nearestCompetitor: "Biznet",
     winner: "Indihome",
-    gapToWinner: "-1ms",
-    highlight: "Good",
+    gapToWinner: "-",
+    highlight: "Strong performance",
   },
-  {
-    id: "jatim",
+  jatim: {
     name: "JATIM",
     status: "win",
-    coordinates: [112.7521, -7.2575],
     valueLabel: "Value Indihome",
     valuePercent: "96.90%",
     winRecord: "20 from 25",
     nearestCompetitor: "IndosatHifi",
     winner: "Indihome",
-    gapToWinner: "-2ms",
-    highlight: "Good",
+    gapToWinner: "-",
+    highlight: "Strong performance",
   },
-  {
-    id: "balinusra",
+  balinusra: {
     name: "BALI NUSRA",
     status: "win",
-    coordinates: [115.1889, -8.4095],
     valueLabel: "Value Indihome",
     valuePercent: "95.30%",
     winRecord: "18 from 25",
     nearestCompetitor: "XLHome",
     winner: "Indihome",
-    gapToWinner: "-1ms",
-    highlight: "Good",
+    gapToWinner: "-",
+    highlight: "Improving",
   },
-  {
-    id: "kalimantan",
+  kalimantan: {
     name: "KALIMANTAN",
     status: "win",
-    coordinates: [114.5921, -1.6815],
     valueLabel: "Value Indihome",
     valuePercent: "96.10%",
     winRecord: "19 from 25",
     nearestCompetitor: "Biznet",
     winner: "Indihome",
-    gapToWinner: "-1ms",
-    highlight: "Good",
+    gapToWinner: "-",
+    highlight: "Stable",
   },
-  {
-    id: "sulawesi",
+  sulawesi: {
     name: "SULAWESI",
-    status: "win",
-    coordinates: [119.4327, -4.5586],
+    status: "lose",
     valueLabel: "Value Indihome",
-    valuePercent: "95.75%",
-    winRecord: "18 from 25",
+    valuePercent: "89.75%",
+    winRecord: "12 from 25",
     nearestCompetitor: "XLSMART",
-    winner: "Indihome",
-    gapToWinner: "-2ms",
-    highlight: "Good",
+    winner: "XLSMART",
+    gapToWinner: "+2.40%",
+    highlight: "Needs attention",
   },
-  {
-    id: "puma",
-    name: "PUMA",
-    status: "win",
-    coordinates: [138.0804, -3.3667],
+  "maluku-papua": {
+    name: "MALUKU & PAPUA",
+    status: "lose",
     valueLabel: "Value Indihome",
-    valuePercent: "94.65%",
-    winRecord: "17 from 25",
+    valuePercent: "87.30%",
+    winRecord: "9 from 25",
     nearestCompetitor: "IndosatHifi",
-    winner: "Indihome",
-    gapToWinner: "-1ms",
-    highlight: "Good",
+    winner: "IndosatHifi",
+    gapToWinner: "+3.35%",
+    highlight: "Priority focus",
   },
-];
+};
 
 const STATUS_COLOR: Record<RegionStatus, string> = {
   win: "#22c55e",
   lose: "#ef4444",
 };
 
+const REGIONS_SOURCE_ID = "telkom-regions";
+const REGIONS_FILL_LAYER_ID = "telkom-regions-fill";
+const REGIONS_OUTLINE_LAYER_ID = "telkom-regions-outline";
+/** Served from /public/data — see that file's header comment for provenance. */
+const REGIONS_GEOJSON_URL = "/data/telkom-regions.json";
+
 /** Builds the hover-card DOM content for a region, handed to a mapboxgl.Popup. */
-function buildPopupContent(region: Region): HTMLDivElement {
+function buildPopupContent(metrics: RegionMetrics): HTMLDivElement {
   const wrapper = document.createElement("div");
   wrapper.className =
     "flex flex-col gap-2.5 rounded-xl bg-white/[0.66] p-3 backdrop-blur-[8.75px]";
@@ -179,13 +186,13 @@ function buildPopupContent(region: Region): HTMLDivElement {
 
   const name = document.createElement("p");
   name.className = "whitespace-nowrap text-sm font-semibold leading-5 text-[#050505]";
-  name.textContent = region.name;
+  name.textContent = metrics.name;
 
   const badge = document.createElement("span");
   badge.className =
     "shrink-0 whitespace-nowrap rounded-[80px] px-2.5 py-0.5 text-[12px] font-medium text-white";
-  badge.style.backgroundColor = STATUS_COLOR[region.status];
-  badge.textContent = region.status === "win" ? "Win" : "Lose";
+  badge.style.backgroundColor = STATUS_COLOR[metrics.status];
+  badge.textContent = metrics.status === "win" ? "Win" : "Lose";
 
   header.append(name, badge);
 
@@ -193,12 +200,12 @@ function buildPopupContent(region: Region): HTMLDivElement {
   details.className = "flex w-[208px] flex-col gap-0.5";
 
   const rows: [string, string][] = [
-    [region.valueLabel, region.valuePercent],
-    ["Win", region.winRecord],
-    ["Nearest Competitor", region.nearestCompetitor],
-    ["Winner", region.winner],
-    ["Gap to Winner", region.gapToWinner],
-    ["Highlight", region.highlight],
+    [metrics.valueLabel, metrics.valuePercent],
+    ["Win", metrics.winRecord],
+    ["Nearest Competitor", metrics.nearestCompetitor],
+    ["Winner", metrics.winner],
+    ["Gap to Winner", metrics.gapToWinner],
+    ["Highlight", metrics.highlight],
   ];
 
   rows.forEach(([label, value]) => {
@@ -221,11 +228,7 @@ function buildPopupContent(region: Region): HTMLDivElement {
   return wrapper;
 }
 
-type RegionMapProps = {
-  regions?: Region[];
-};
-
-export default function RegionMap({ regions = SAMPLE_REGIONS }: RegionMapProps) {
+export default function RegionMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -285,83 +288,116 @@ export default function RegionMap({ regions = SAMPLE_REGIONS }: RegionMapProps) 
     return () => resizeObserver.disconnect();
   }, []);
 
-  // Markers + hover card. The card is a native mapboxgl.Popup (not a React
-  // node) so it stays correctly anchored to the marker's map coordinates
-  // through panning and zooming, and shows on hover instead of click.
+  // Choropleth: one filled polygon per Telkom region (real boundary data),
+  // colored by win/lose status, with a hover highlight + popup driven by
+  // whichever polygon is actually under the cursor — replacing the earlier
+  // fixed-point markers now that real region shapes are available.
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !mapReady) return;
 
-    // No fixed `anchor` here on purpose: letting Mapbox auto-pick the anchor
-    // keeps the card fully inside the map's own bounds (it flips to
-    // top/left/right as needed) instead of always opening above the point,
-    // which clipped the card whenever a marker sat near the map's edge.
+    // Mapbox "match" expressions are a flat [key, value, key, value, ...,
+    // fallback] array — build it from REGION_METRICS so the fill color
+    // always tracks each region's status without hardcoding ids twice.
+    const fillColorExpression: mapboxgl.Expression = [
+      "match",
+      ["get", "REGION_ID"],
+      ...Object.entries(REGION_METRICS).flatMap(([id, metrics]) => [
+        id,
+        STATUS_COLOR[metrics.status],
+      ]),
+      "#cbd5e1", // fallback for any polygon without a matching region id
+    ];
+
+    map.addSource(REGIONS_SOURCE_ID, {
+      type: "geojson",
+      data: REGIONS_GEOJSON_URL,
+      // Feature-state (used for the hover highlight below) is keyed by
+      // numeric feature id; the source GeoJSON has none, so let Mapbox
+      // assign one per feature.
+      generateId: true,
+    });
+
+    map.addLayer({
+      id: REGIONS_FILL_LAYER_ID,
+      type: "fill",
+      source: REGIONS_SOURCE_ID,
+      paint: {
+        "fill-color": fillColorExpression,
+        "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.75, 0.5],
+      },
+    });
+
+    map.addLayer({
+      id: REGIONS_OUTLINE_LAYER_ID,
+      type: "line",
+      source: REGIONS_SOURCE_ID,
+      paint: {
+        "line-color": "#ffffff",
+        "line-width": 1,
+      },
+    });
+
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false,
-      offset: 16,
+      offset: 12,
       className: "region-popup",
     });
 
-    let hideTimeout: ReturnType<typeof setTimeout> | null = null;
+    let hoveredFeatureId: number | undefined;
 
-    const cancelHide = () => {
-      if (hideTimeout) {
-        clearTimeout(hideTimeout);
-        hideTimeout = null;
+    const clearHover = () => {
+      if (hoveredFeatureId !== undefined) {
+        map.setFeatureState({ source: REGIONS_SOURCE_ID, id: hoveredFeatureId }, { hover: false });
       }
+      hoveredFeatureId = undefined;
     };
 
-    const scheduleHide = () => {
-      cancelHide();
-      hideTimeout = setTimeout(() => {
+    const handleMouseMove = (e: mapboxgl.MapLayerMouseEvent) => {
+      const feature = e.features?.[0];
+      if (!feature) return;
+
+      map.getCanvas().style.cursor = "pointer";
+
+      if (feature.id !== hoveredFeatureId) {
+        clearHover();
+        if (typeof feature.id === "number") {
+          hoveredFeatureId = feature.id;
+          map.setFeatureState({ source: REGIONS_SOURCE_ID, id: hoveredFeatureId }, { hover: true });
+        }
+      }
+
+      const regionId = feature.properties?.REGION_ID as string | undefined;
+      const metrics = regionId ? REGION_METRICS[regionId] : undefined;
+      if (!metrics) {
         popup.remove();
-      }, 120);
-    };
+        return;
+      }
 
-    const showRegion = (region: Region) => {
-      cancelHide();
-      popup.setLngLat(region.coordinates).setDOMContent(buildPopupContent(region));
+      popup.setLngLat(e.lngLat).setDOMContent(buildPopupContent(metrics));
       popup.addTo(map);
-
-      const popupEl = popup.getElement();
-      popupEl?.addEventListener("mouseenter", cancelHide);
-      popupEl?.addEventListener("mouseleave", scheduleHide);
     };
 
-    const markers: mapboxgl.Marker[] = [];
-
-    regions.forEach((region) => {
-      const el = document.createElement("button");
-      el.type = "button";
-      el.setAttribute("aria-label", region.name);
-      el.style.width = "16px";
-      el.style.height = "16px";
-      el.style.borderRadius = "9999px";
-      el.style.border = "2px solid white";
-      el.style.boxShadow = "0 1px 3px rgba(0,0,0,0.25)";
-      el.style.background = STATUS_COLOR[region.status];
-      el.style.cursor = "pointer";
-
-      el.addEventListener("mouseenter", () => showRegion(region));
-      el.addEventListener("mouseleave", scheduleHide);
-      el.addEventListener("focus", () => showRegion(region));
-      el.addEventListener("blur", scheduleHide);
-
-      const marker = new mapboxgl.Marker({ element: el })
-        .setLngLat(region.coordinates)
-        .addTo(map);
-      markers.push(marker);
-    });
-
-    // No card on initial load — it only opens once the user actually hovers
-    // (or focuses) a marker.
-    return () => {
-      cancelHide();
+    const handleMouseLeave = () => {
+      map.getCanvas().style.cursor = "";
+      clearHover();
       popup.remove();
-      markers.forEach((marker) => marker.remove());
     };
-  }, [regions, mapReady]);
+
+    map.on("mousemove", REGIONS_FILL_LAYER_ID, handleMouseMove);
+    map.on("mouseleave", REGIONS_FILL_LAYER_ID, handleMouseLeave);
+
+    return () => {
+      map.off("mousemove", REGIONS_FILL_LAYER_ID, handleMouseMove);
+      map.off("mouseleave", REGIONS_FILL_LAYER_ID, handleMouseLeave);
+      popup.remove();
+
+      if (map.getLayer(REGIONS_OUTLINE_LAYER_ID)) map.removeLayer(REGIONS_OUTLINE_LAYER_ID);
+      if (map.getLayer(REGIONS_FILL_LAYER_ID)) map.removeLayer(REGIONS_FILL_LAYER_ID);
+      if (map.getSource(REGIONS_SOURCE_ID)) map.removeSource(REGIONS_SOURCE_ID);
+    };
+  }, [mapReady]);
 
   if (!token) {
     return (

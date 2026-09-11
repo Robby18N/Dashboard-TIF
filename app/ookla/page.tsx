@@ -65,9 +65,10 @@ type DetailRegionRow = {
 
 /**
  * Sample region-breakdown data for the Detail tab. Placeholder figures in
- * the same spirit as RegionMap's SAMPLE_REGIONS — swap for real figures
- * whenever they're available. "INNER JABO" is a group row: it aggregates
- * the five nested DKI Jakarta areas beneath it.
+ * the same spirit as RegionMap's REGION_METRICS (the map's ids mirror these
+ * ids one-to-one) — swap both together whenever real figures are available.
+ * "INNER JABO" is a group row: it aggregates the five nested DKI Jakarta
+ * areas beneath it.
  */
 const DETAIL_REGIONS: DetailRegionRow[] = [
   { id: "sumbagut", name: "SUMBAGUT", status: "Win", valueIndihome: "98.20%", trend: "up", benchmarkStatus: "Consecutive", nearestCompetitor: "Indosat", winner: "Indihome", winnerValue: "98.20%", gapToWinner: "-", highlight: "Strong performance" },
