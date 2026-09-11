@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -231,12 +231,19 @@ function buildPopupContent(metrics: RegionMetrics): HTMLDivElement {
 export default function RegionMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const [mapReady, setMapReady] = useState(false);
 
   const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
   const styleUrl =
     process.env.NEXT_PUBLIC_MAPBOX_STYLE ?? "mapbox://styles/obby19/cmiptwz19000c01s6a18ug4td";
 
+  // Map creation AND the choropleth layer/hover setup live in one effect so
+  // teardown order is guaranteed: unregister handlers, remove the popup,
+  // *then* call map.remove() — all in one synchronous cleanup function.
+  // (Splitting this across separate effects previously crashed the tab on
+  // switching away from Maps: React doesn't guarantee which sibling
+  // effect's cleanup runs first, so the layer/source cleanup could run
+  // *after* another effect had already called map.remove(), and touching a
+  // removed mapboxgl.Map instance throws.)
   useEffect(() => {
     if (!token || !mapContainerRef.current || mapRef.current) return;
 
@@ -262,11 +269,123 @@ export default function RegionMap() {
       "bottom-right"
     );
     map.scrollZoom.disable();
-
-    map.on("load", () => setMapReady(true));
     mapRef.current = map;
 
+    // Choropleth: one filled polygon per Telkom region (real boundary
+    // data), colored by win/lose status, with a hover highlight + popup
+    // driven by whichever polygon is actually under the cursor — replacing
+    // the earlier fixed-point markers now that real region shapes are
+    // available. Added once the style has finished loading.
+    let popup: mapboxgl.Popup | null = null;
+    let handleMouseMove: ((e: mapboxgl.MapLayerMouseEvent) => void) | null = null;
+    let handleMouseLeave: (() => void) | null = null;
+
+    const setupChoropleth = () => {
+      // Mapbox "match" expressions are a flat [key, value, key, value, ...,
+      // fallback] array — build it from REGION_METRICS so the fill color
+      // always tracks each region's status without hardcoding ids twice.
+      const fillColorExpression: mapboxgl.Expression = [
+        "match",
+        ["get", "REGION_ID"],
+        ...Object.entries(REGION_METRICS).flatMap(([id, metrics]) => [
+          id,
+          STATUS_COLOR[metrics.status],
+        ]),
+        "#cbd5e1", // fallback for any polygon without a matching region id
+      ];
+
+      map.addSource(REGIONS_SOURCE_ID, {
+        type: "geojson",
+        data: REGIONS_GEOJSON_URL,
+        // Feature-state (used for the hover highlight below) is keyed by
+        // numeric feature id; the source GeoJSON has none, so let Mapbox
+        // assign one per feature.
+        generateId: true,
+      });
+
+      map.addLayer({
+        id: REGIONS_FILL_LAYER_ID,
+        type: "fill",
+        source: REGIONS_SOURCE_ID,
+        paint: {
+          "fill-color": fillColorExpression,
+          "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.75, 0.5],
+        },
+      });
+
+      map.addLayer({
+        id: REGIONS_OUTLINE_LAYER_ID,
+        type: "line",
+        source: REGIONS_SOURCE_ID,
+        paint: {
+          "line-color": "#ffffff",
+          "line-width": 1,
+        },
+      });
+
+      popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        offset: 12,
+        className: "region-popup",
+      });
+
+      let hoveredFeatureId: number | undefined;
+
+      const clearHover = () => {
+        if (hoveredFeatureId !== undefined) {
+          map.setFeatureState({ source: REGIONS_SOURCE_ID, id: hoveredFeatureId }, { hover: false });
+        }
+        hoveredFeatureId = undefined;
+      };
+
+      handleMouseMove = (e) => {
+        const feature = e.features?.[0];
+        if (!feature) return;
+
+        map.getCanvas().style.cursor = "pointer";
+
+        if (feature.id !== hoveredFeatureId) {
+          clearHover();
+          if (typeof feature.id === "number") {
+            hoveredFeatureId = feature.id;
+            map.setFeatureState({ source: REGIONS_SOURCE_ID, id: hoveredFeatureId }, { hover: true });
+          }
+        }
+
+        const regionId = feature.properties?.REGION_ID as string | undefined;
+        const metrics = regionId ? REGION_METRICS[regionId] : undefined;
+        if (!metrics) {
+          popup?.remove();
+          return;
+        }
+
+        popup?.setLngLat(e.lngLat).setDOMContent(buildPopupContent(metrics));
+        popup?.addTo(map);
+      };
+
+      handleMouseLeave = () => {
+        map.getCanvas().style.cursor = "";
+        clearHover();
+        popup?.remove();
+      };
+
+      map.on("mousemove", REGIONS_FILL_LAYER_ID, handleMouseMove);
+      map.on("mouseleave", REGIONS_FILL_LAYER_ID, handleMouseLeave);
+    };
+
+    map.on("load", setupChoropleth);
+
     return () => {
+      map.off("load", setupChoropleth);
+      if (handleMouseMove) map.off("mousemove", REGIONS_FILL_LAYER_ID, handleMouseMove);
+      if (handleMouseLeave) map.off("mouseleave", REGIONS_FILL_LAYER_ID, handleMouseLeave);
+      popup?.remove();
+
+      // map.remove() below tears down the whole style (sources, layers,
+      // and all) in one go, so explicit layer/source removal isn't
+      // strictly required — but the important part is that it happens
+      // strictly *before* map.remove(), in this same cleanup function.
       map.remove();
       mapRef.current = null;
     };
@@ -287,117 +406,6 @@ export default function RegionMap() {
 
     return () => resizeObserver.disconnect();
   }, []);
-
-  // Choropleth: one filled polygon per Telkom region (real boundary data),
-  // colored by win/lose status, with a hover highlight + popup driven by
-  // whichever polygon is actually under the cursor — replacing the earlier
-  // fixed-point markers now that real region shapes are available.
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !mapReady) return;
-
-    // Mapbox "match" expressions are a flat [key, value, key, value, ...,
-    // fallback] array — build it from REGION_METRICS so the fill color
-    // always tracks each region's status without hardcoding ids twice.
-    const fillColorExpression: mapboxgl.Expression = [
-      "match",
-      ["get", "REGION_ID"],
-      ...Object.entries(REGION_METRICS).flatMap(([id, metrics]) => [
-        id,
-        STATUS_COLOR[metrics.status],
-      ]),
-      "#cbd5e1", // fallback for any polygon without a matching region id
-    ];
-
-    map.addSource(REGIONS_SOURCE_ID, {
-      type: "geojson",
-      data: REGIONS_GEOJSON_URL,
-      // Feature-state (used for the hover highlight below) is keyed by
-      // numeric feature id; the source GeoJSON has none, so let Mapbox
-      // assign one per feature.
-      generateId: true,
-    });
-
-    map.addLayer({
-      id: REGIONS_FILL_LAYER_ID,
-      type: "fill",
-      source: REGIONS_SOURCE_ID,
-      paint: {
-        "fill-color": fillColorExpression,
-        "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.75, 0.5],
-      },
-    });
-
-    map.addLayer({
-      id: REGIONS_OUTLINE_LAYER_ID,
-      type: "line",
-      source: REGIONS_SOURCE_ID,
-      paint: {
-        "line-color": "#ffffff",
-        "line-width": 1,
-      },
-    });
-
-    const popup = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      offset: 12,
-      className: "region-popup",
-    });
-
-    let hoveredFeatureId: number | undefined;
-
-    const clearHover = () => {
-      if (hoveredFeatureId !== undefined) {
-        map.setFeatureState({ source: REGIONS_SOURCE_ID, id: hoveredFeatureId }, { hover: false });
-      }
-      hoveredFeatureId = undefined;
-    };
-
-    const handleMouseMove = (e: mapboxgl.MapLayerMouseEvent) => {
-      const feature = e.features?.[0];
-      if (!feature) return;
-
-      map.getCanvas().style.cursor = "pointer";
-
-      if (feature.id !== hoveredFeatureId) {
-        clearHover();
-        if (typeof feature.id === "number") {
-          hoveredFeatureId = feature.id;
-          map.setFeatureState({ source: REGIONS_SOURCE_ID, id: hoveredFeatureId }, { hover: true });
-        }
-      }
-
-      const regionId = feature.properties?.REGION_ID as string | undefined;
-      const metrics = regionId ? REGION_METRICS[regionId] : undefined;
-      if (!metrics) {
-        popup.remove();
-        return;
-      }
-
-      popup.setLngLat(e.lngLat).setDOMContent(buildPopupContent(metrics));
-      popup.addTo(map);
-    };
-
-    const handleMouseLeave = () => {
-      map.getCanvas().style.cursor = "";
-      clearHover();
-      popup.remove();
-    };
-
-    map.on("mousemove", REGIONS_FILL_LAYER_ID, handleMouseMove);
-    map.on("mouseleave", REGIONS_FILL_LAYER_ID, handleMouseLeave);
-
-    return () => {
-      map.off("mousemove", REGIONS_FILL_LAYER_ID, handleMouseMove);
-      map.off("mouseleave", REGIONS_FILL_LAYER_ID, handleMouseLeave);
-      popup.remove();
-
-      if (map.getLayer(REGIONS_OUTLINE_LAYER_ID)) map.removeLayer(REGIONS_OUTLINE_LAYER_ID);
-      if (map.getLayer(REGIONS_FILL_LAYER_ID)) map.removeLayer(REGIONS_FILL_LAYER_ID);
-      if (map.getSource(REGIONS_SOURCE_ID)) map.removeSource(REGIONS_SOURCE_ID);
-    };
-  }, [mapReady]);
 
   if (!token) {
     return (
