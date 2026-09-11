@@ -14,6 +14,8 @@ export type Region = {
   coordinates: [number, number];
   valueLabel: string;
   valuePercent: string;
+  /** e.g. "20 from 25" — how many comparison points this region won out of the total. */
+  winRecord: string;
   nearestCompetitor: string;
   winner: string;
   gapToWinner: string;
@@ -36,6 +38,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [98.6722, 3.5952],
     valueLabel: "Value Indihome",
     valuePercent: "37 ms",
+    winRecord: "20 from 25",
     nearestCompetitor: "Indosat",
     winner: "Indihome",
     gapToWinner: "-",
@@ -48,6 +51,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [104.7458, -2.9909],
     valueLabel: "Value Indihome",
     valuePercent: "91.40%",
+    winRecord: "10 from 25",
     nearestCompetitor: "IndosatHifi",
     winner: "IndosatHifi",
     gapToWinner: "+3ms",
@@ -60,6 +64,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [106.8456, -6.2088],
     valueLabel: "Value Indihome",
     valuePercent: "97.10%",
+    winRecord: "22 from 25",
     nearestCompetitor: "Biznet",
     winner: "Indihome",
     gapToWinner: "-2ms",
@@ -72,6 +77,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [107.6191, -6.9175],
     valueLabel: "Value Indihome",
     valuePercent: "96.55%",
+    winRecord: "19 from 25",
     nearestCompetitor: "XLSMART",
     winner: "Indihome",
     gapToWinner: "-1ms",
@@ -84,6 +90,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [110.4203, -7.1006],
     valueLabel: "Value Indihome",
     valuePercent: "97.85%",
+    winRecord: "21 from 25",
     nearestCompetitor: "Biznet",
     winner: "Indihome",
     gapToWinner: "-1ms",
@@ -96,6 +103,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [112.7521, -7.2575],
     valueLabel: "Value Indihome",
     valuePercent: "96.90%",
+    winRecord: "20 from 25",
     nearestCompetitor: "IndosatHifi",
     winner: "Indihome",
     gapToWinner: "-2ms",
@@ -108,6 +116,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [115.1889, -8.4095],
     valueLabel: "Value Indihome",
     valuePercent: "95.30%",
+    winRecord: "18 from 25",
     nearestCompetitor: "XLHome",
     winner: "Indihome",
     gapToWinner: "-1ms",
@@ -120,6 +129,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [114.5921, -1.6815],
     valueLabel: "Value Indihome",
     valuePercent: "96.10%",
+    winRecord: "19 from 25",
     nearestCompetitor: "Biznet",
     winner: "Indihome",
     gapToWinner: "-1ms",
@@ -132,6 +142,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [119.4327, -4.5586],
     valueLabel: "Value Indihome",
     valuePercent: "95.75%",
+    winRecord: "18 from 25",
     nearestCompetitor: "XLSMART",
     winner: "Indihome",
     gapToWinner: "-2ms",
@@ -144,6 +155,7 @@ export const SAMPLE_REGIONS: Region[] = [
     coordinates: [138.0804, -3.3667],
     valueLabel: "Value Indihome",
     valuePercent: "94.65%",
+    winRecord: "17 from 25",
     nearestCompetitor: "IndosatHifi",
     winner: "Indihome",
     gapToWinner: "-1ms",
@@ -182,6 +194,7 @@ function buildPopupContent(region: Region): HTMLDivElement {
 
   const rows: [string, string][] = [
     [region.valueLabel, region.valuePercent],
+    ["Win", region.winRecord],
     ["Nearest Competitor", region.nearestCompetitor],
     ["Winner", region.winner],
     ["Gap to Winner", region.gapToWinner],
