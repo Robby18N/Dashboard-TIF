@@ -185,13 +185,16 @@ const SLA_ROWS: SlaRow[] = [
   },
 ];
 
+// Column widths are narrower by default so the table fits laptop-class
+// screens (~1440px) without a horizontal scrollbar, and widen back out to
+// the original design sizing at 2xl (>=1536px) for larger monitors.
 const TABLE_COLUMNS = [
-  { key: "segmen", label: "Segmen", width: "w-[200px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
-  { key: "indicator", label: "Performance Indicator", width: "w-[360px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
-  { key: "layanan", label: "Layanan", width: "w-[160px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
-  { key: "satuan", label: "Satuan", width: "w-[120px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
-  { key: "source", label: "Source Data", width: "w-[200px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
-  { key: "target", label: "Target", width: "w-[160px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "segmen", label: "Segmen", width: "w-[140px] 2xl:w-[200px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "indicator", label: "Performance Indicator", width: "w-[300px] 2xl:w-[360px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "layanan", label: "Layanan", width: "w-[120px] 2xl:w-[160px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "satuan", label: "Satuan", width: "w-[90px] 2xl:w-[120px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "source", label: "Source Data", width: "w-[150px] 2xl:w-[200px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "target", label: "Target", width: "w-[100px] 2xl:w-[160px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
   { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#3b82f6]" },
   { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#3b82f6]" },
 ] as const;
@@ -279,7 +282,7 @@ export default function FbbDashboard() {
                   key={label}
                   className="flex h-20 min-w-[240px] flex-1 items-stretch overflow-hidden rounded-2xl border border-[#e2e8f0]"
                 >
-                  <div className="flex flex-1 items-center gap-3 border-r border-[#e2e8f0] px-4">
+                  <div className="flex min-w-0 flex-1 items-center gap-3 border-r border-[#e2e8f0] px-4">
                     <Icon className="size-6 shrink-0 text-[#334155]" strokeWidth={1.75} />
                     <span className="truncate text-base font-semibold text-[#0f172a]">
                       {label}
@@ -328,7 +331,7 @@ export default function FbbDashboard() {
 
               {/* Table */}
               <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-[#e2e8f0] shadow-[0px_1px_1.75px_-1px_rgba(0,0,0,0.1),0px_1px_2.625px_0px_rgba(0,0,0,0.1)]">
-                <div className="min-w-[1400px]">
+                <div className="min-w-[900px] 2xl:min-w-[1400px]">
                   {/* Header */}
                   <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
                     {TABLE_COLUMNS.map((col, idx) => (
@@ -351,7 +354,7 @@ export default function FbbDashboard() {
                       key={`${group.segmen}-${group.rows[0].indicator}`}
                       className="flex border-b border-[#e2e8f0] last:border-b-0"
                     >
-                      <div className="flex w-[200px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-4 py-2 text-center">
+                      <div className="flex w-[140px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-4 py-2 text-center 2xl:w-[200px]">
                         <span className="text-sm font-medium text-[#020617]">
                           {group.segmen}
                         </span>
@@ -360,31 +363,37 @@ export default function FbbDashboard() {
                         {group.rows.map((row, idx) => (
                           <div
                             key={row.indicator}
-                            className={`flex h-12 items-stretch ${
+                            className={`flex min-h-[48px] items-stretch ${
                               idx !== group.rows.length - 1 ? "border-b border-[#e2e8f0]" : ""
                             }`}
                           >
-                            <div className="flex h-full w-[360px] shrink-0 items-center border-r border-[#e2e8f0] px-4">
+                            <div className="flex h-full w-[300px] shrink-0 items-center border-r border-[#e2e8f0] px-4 py-2 2xl:w-[360px]">
                               <span className="text-sm font-medium text-[#020617]">
                                 {row.indicator}
                               </span>
                             </div>
-                            <div className="flex h-full w-[160px] shrink-0 items-center border-r border-[#e2e8f0] px-4">
-                              <span className="whitespace-nowrap text-sm font-medium text-[#020617]">
+                            <div className="flex h-full w-[120px] shrink-0 items-center border-r border-[#e2e8f0] px-4 2xl:w-[160px]">
+                              <span
+                                title={row.layanan}
+                                className="truncate text-sm font-medium text-[#020617]"
+                              >
                                 {row.layanan}
                               </span>
                             </div>
-                            <div className="flex h-full w-[120px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3">
+                            <div className="flex h-full w-[90px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 2xl:w-[120px]">
                               <span className="text-sm font-medium text-[#020617]">
                                 {row.satuan}
                               </span>
                             </div>
-                            <div className="flex h-full w-[200px] shrink-0 items-center border-r border-[#e2e8f0] px-4">
-                              <span className="whitespace-nowrap text-sm font-medium text-[#020617]">
+                            <div className="flex h-full w-[150px] shrink-0 items-center border-r border-[#e2e8f0] px-4 2xl:w-[200px]">
+                              <span
+                                title={row.source}
+                                className="truncate text-sm font-medium text-[#020617]"
+                              >
                                 {row.source}
                               </span>
                             </div>
-                            <div className="flex h-full w-[160px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3">
+                            <div className="flex h-full w-[100px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 2xl:w-[160px]">
                               <span className="text-sm font-medium text-[#020617]">
                                 {row.target}
                               </span>
