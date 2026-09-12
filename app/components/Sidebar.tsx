@@ -75,7 +75,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
 
         {/* Navigation */}
         <div className="flex w-full flex-col gap-5 p-4">
-          <div className="flex w-full flex-col items-center gap-1.5">
+          <div className="flex w-full flex-col items-center gap-4">
             <Link
               href="/"
               aria-label="Back to landing page"
