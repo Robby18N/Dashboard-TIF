@@ -45,7 +45,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
   // Visual-only theme switch to match the design; the app has no dark theme
   // wired up yet, so this doesn't change anything else on the page.
   const [isDark, setIsDark] = useState(false);
-  // The chevron button toggles between the compact icon-only rail (72px,
+  // The chevron button toggles between the compact icon-only rail (60px,
   // labels shown as hover tooltips) and the open rail (208px, labels shown
   // inline next to each icon).
   const [open, setOpen] = useState(false);
@@ -60,7 +60,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
               type="button"
               aria-label="Collapse sidebar"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-2 text-[#334155] transition-colors hover:bg-[#eef2f6]"
+              className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] text-[#334155] transition-colors hover:bg-[#eef2f6]"
             >
               <ChevronLeft className="size-4" strokeWidth={1.75} />
             </button>
@@ -72,9 +72,9 @@ export default function Sidebar({ activeKey }: SidebarProps) {
               <Link
                 href="/"
                 aria-label="Back to landing page"
-                className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
+                className="flex size-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
               >
-                <LayoutDashboard className="size-5" strokeWidth={1.75} />
+                <LayoutDashboard className="size-4" strokeWidth={1.75} />
               </Link>
 
               {SIDEBAR_MENU_ITEMS.map(({ key, label, icon: Icon, href }) => {
@@ -84,13 +84,13 @@ export default function Sidebar({ activeKey }: SidebarProps) {
                     key={key}
                     href={href}
                     aria-label={label}
-                    className={`flex w-full items-center gap-3 rounded-[14px] p-3 transition-colors ${
+                    className={`flex w-full items-center gap-3 rounded-[14px] p-2 transition-colors ${
                       active
                         ? ACTIVE_ITEM_CLASSES
                         : "text-[#334155] hover:bg-[#f8fafc]"
                     }`}
                   >
-                    <Icon className="size-5 shrink-0" strokeWidth={1.75} />
+                    <Icon className="size-4 shrink-0" strokeWidth={1.75} />
                     <span className="whitespace-nowrap text-sm font-medium">
                       {label}
                     </span>
@@ -110,7 +110,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
     // The full-width decorative header bar now lives above this sidebar (as
     // a page-level sibling), so the sidebar itself just needs its own
     // rounded top-right corner marking where it begins, right under that bar.
-    <aside className="flex w-[72px] shrink-0 flex-col items-center justify-between rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px] transition-[width] duration-300 ease-in-out">
+    <aside className="flex w-[60px] shrink-0 flex-col items-center justify-between rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px] transition-[width] duration-300 ease-in-out">
       <div className="flex w-full flex-col items-center">
         {/* Open-sidebar toggle */}
         <div className="flex w-full flex-col items-center gap-4 border-b border-[#e2e8f0] p-4">
@@ -118,7 +118,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
             type="button"
             aria-label="Expand sidebar"
             onClick={() => setOpen(true)}
-            className="flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-2 text-[#334155] transition-colors hover:bg-[#eef2f6]"
+            className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] text-[#334155] transition-colors hover:bg-[#eef2f6]"
           >
             <ChevronRight className="size-4" strokeWidth={1.75} />
           </button>
@@ -130,9 +130,9 @@ export default function Sidebar({ activeKey }: SidebarProps) {
             <Link
               href="/"
               aria-label="Back to landing page"
-              className="group relative flex size-10 items-center justify-center rounded-xl bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
+              className="group relative flex size-6 shrink-0 items-center justify-center rounded-lg bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
             >
-              <LayoutDashboard className="size-5" strokeWidth={1.75} />
+              <LayoutDashboard className="size-4" strokeWidth={1.75} />
               <SidebarTooltip label="Back to landing page" />
             </Link>
 
@@ -143,13 +143,13 @@ export default function Sidebar({ activeKey }: SidebarProps) {
                   key={key}
                   href={href}
                   aria-label={label}
-                  className={`group relative flex size-10 items-center justify-center rounded-xl transition-colors ${
+                  className={`group relative flex size-6 shrink-0 items-center justify-center rounded-lg transition-colors ${
                     active
                       ? "bg-[linear-gradient(180deg,#86b4ff_0%,#0661f7_100%)] text-white shadow-[0px_4px_10px_0px_rgba(11,87,208,0.35)]"
                       : "bg-white text-[#334155] hover:bg-[#f8fafc]"
                   }`}
                 >
-                  <Icon className="size-5" strokeWidth={1.75} />
+                  <Icon className="size-4" strokeWidth={1.75} />
                   <SidebarTooltip label={label} />
                 </Link>
               );
@@ -172,17 +172,17 @@ function ThemeToggle({ isDark, onToggle }: { isDark: boolean; onToggle: () => vo
       aria-checked={isDark}
       aria-label="Toggle light/dark theme"
       onClick={onToggle}
-      className="relative flex h-8 w-14 shrink-0 items-center rounded-full border border-[#e2e8f0] bg-white p-1"
+      className="relative flex h-6 w-10 shrink-0 items-center rounded-full border border-[#e2e8f0] bg-white p-0.5"
     >
       <span
-        className={`flex size-6 items-center justify-center rounded-full transition-transform ${
-          isDark ? "translate-x-6 bg-[#334155]" : "translate-x-0 bg-[#ffaa04]"
+        className={`flex size-5 items-center justify-center rounded-full transition-transform ${
+          isDark ? "translate-x-4 bg-[#334155]" : "translate-x-0 bg-[#ffaa04]"
         }`}
       >
         {isDark ? (
-          <Moon className="size-3.5 text-white" strokeWidth={2} />
+          <Moon className="size-3 text-white" strokeWidth={2} />
         ) : (
-          <Sun className="size-3.5 text-white" strokeWidth={2} />
+          <Sun className="size-3 text-white" strokeWidth={2} />
         )}
       </span>
     </button>
