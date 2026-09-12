@@ -320,20 +320,20 @@ export default function FbbDashboard() {
           {/* Outer card */}
           <div className="flex min-h-0 flex-1 flex-col gap-4 rounded-[36px] border border-[#e2e8f0] bg-white p-4">
             {/* KPI row */}
-            <div className="flex shrink-0 flex-wrap gap-4">
+            <div className="flex shrink-0 flex-wrap gap-3">
               {KPIS.map(({ label, value, icon: Icon, valueColor }) => (
                 <div
                   key={label}
-                  className="flex h-20 min-w-[240px] flex-1 items-stretch overflow-hidden rounded-2xl border border-[#e2e8f0]"
+                  className="flex h-14 min-w-[200px] flex-1 items-stretch overflow-hidden rounded-xl border border-[#e2e8f0]"
                 >
-                  <div className="flex min-w-0 flex-1 items-center gap-3 border-r border-[#e2e8f0] px-4">
-                    <Icon className="size-6 shrink-0 text-[#334155]" strokeWidth={1.75} />
-                    <span className="truncate text-base font-semibold text-[#0f172a]">
+                  <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-[#e2e8f0] px-3">
+                    <Icon className="size-4 shrink-0 text-[#334155]" strokeWidth={1.75} />
+                    <span className="truncate text-sm font-semibold text-[#0f172a]">
                       {label}
                     </span>
                   </div>
-                  <div className="flex w-28 shrink-0 items-center justify-center px-4">
-                    <span className={`text-[28px] font-bold leading-none ${valueColor}`}>
+                  <div className="flex w-20 shrink-0 items-center justify-center px-3">
+                    <span className={`text-xl font-bold leading-none ${valueColor}`}>
                       {value}
                     </span>
                   </div>
