@@ -75,13 +75,13 @@ export default function Sidebar({ activeKey }: SidebarProps) {
 
         {/* Navigation */}
         <div className="flex w-full flex-col gap-5 p-4">
-          <div className="flex w-full flex-col items-center gap-2">
+          <div className="flex w-full flex-col items-center gap-1.5">
             <Link
               href="/"
               aria-label="Back to landing page"
-              className="group relative flex size-12 items-center justify-center rounded-2xl bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
+              className="group relative flex size-10 items-center justify-center rounded-xl bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
             >
-              <LayoutDashboard className="size-6" strokeWidth={1.75} />
+              <LayoutDashboard className="size-5" strokeWidth={1.75} />
               <SidebarTooltip label="Back to landing page" />
             </Link>
 
@@ -92,13 +92,13 @@ export default function Sidebar({ activeKey }: SidebarProps) {
                   key={key}
                   href={href}
                   aria-label={label}
-                  className={`group relative flex size-12 items-center justify-center rounded-2xl transition-colors ${
+                  className={`group relative flex size-10 items-center justify-center rounded-xl transition-colors ${
                     active
                       ? "bg-[linear-gradient(180deg,#86b4ff_0%,#0661f7_100%)] text-white shadow-[0px_4px_10px_0px_rgba(11,87,208,0.35)]"
                       : "bg-white text-[#334155] hover:bg-[#f8fafc]"
                   }`}
                 >
-                  <Icon className="size-6" strokeWidth={1.75} />
+                  <Icon className="size-5" strokeWidth={1.75} />
                   <SidebarTooltip label={label} />
                 </Link>
               );
