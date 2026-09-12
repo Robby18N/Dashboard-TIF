@@ -56,7 +56,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
   }
 
   return (
-    <aside className="flex w-[83px] shrink-0 flex-col items-center justify-between overflow-hidden rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[108px]">
+    <aside className="flex w-[83px] shrink-0 flex-col items-center justify-between border-r border-[#e2e8f0] bg-white pb-[108px]">
       <div className="flex w-full flex-col items-center">
         {/* Show/hide sidebar toggle */}
         <div className="flex w-full flex-col items-center gap-4 border-b border-[#e2e8f0] p-4">
