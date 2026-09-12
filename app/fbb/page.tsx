@@ -189,12 +189,12 @@ const SLA_ROWS: SlaRow[] = [
 // screens (~1440px) without a horizontal scrollbar, and widen back out to
 // the original design sizing at 2xl (>=1536px) for larger monitors.
 const TABLE_COLUMNS = [
-  { key: "segmen", label: "Segmen", width: "w-[140px] 2xl:w-[200px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
-  { key: "indicator", label: "Performance Indicator", width: "w-[300px] 2xl:w-[360px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
-  { key: "layanan", label: "Layanan", width: "w-[120px] 2xl:w-[160px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
-  { key: "satuan", label: "Satuan", width: "w-[90px] 2xl:w-[120px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
-  { key: "source", label: "Source Data", width: "w-[150px] 2xl:w-[200px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
-  { key: "target", label: "Target", width: "w-[100px] 2xl:w-[160px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "segmen", label: "Segmen", width: "w-[140px] @[1500px]:w-[200px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "indicator", label: "Performance Indicator", width: "w-[300px] @[1500px]:w-[360px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "layanan", label: "Layanan", width: "w-[120px] @[1500px]:w-[160px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "satuan", label: "Satuan", width: "w-[90px] @[1500px]:w-[120px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "source", label: "Source Data", width: "w-[150px] @[1500px]:w-[200px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
+  { key: "target", label: "Target", width: "w-[100px] @[1500px]:w-[160px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
   { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#334155]" },
   { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#334155]" },
 ] as const;
@@ -339,8 +339,13 @@ export default function FbbDashboard() {
               ))}
             </div>
 
-            {/* Filters + table container */}
-            <div className="flex min-h-0 flex-1 flex-col gap-4 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
+            {/* Filters + table container. `@container` makes the table's
+                compact/spacious column widths below respond to this
+                container's actual available width (via the `@[1500px]:`
+                variants) instead of the viewport — so the table adapts
+                correctly when the sidebar opens/closes and eats into this
+                space, not just when the browser window itself is resized. */}
+            <div className="@container flex min-h-0 flex-1 flex-col gap-4 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
               {/* Filters */}
               <div className="flex w-full flex-wrap items-center justify-between gap-3">
                 <div className="relative h-9 w-full max-w-[260px] shrink-0">
@@ -373,7 +378,7 @@ export default function FbbDashboard() {
 
               {/* Table */}
               <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-[#e2e8f0]">
-                <div className="min-w-[900px] 2xl:min-w-[1400px]">
+                <div className="min-w-[900px] @[1500px]:min-w-[1400px]">
                   {/* Header */}
                   <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
                     {TABLE_COLUMNS.map((col, idx) => (
@@ -396,7 +401,7 @@ export default function FbbDashboard() {
                     return (
                       <div key={`${group.segmen}-${group.rows[0].indicator}`} className="flex">
                         <div
-                          className={`flex w-[140px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-4 py-2 text-center 2xl:w-[200px] ${
+                          className={`flex w-[140px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-4 py-2 text-center @[1500px]:w-[200px] ${
                             isLastGroup ? "" : "border-b"
                           }`}
                         >
@@ -411,14 +416,14 @@ export default function FbbDashboard() {
                             return (
                               <div key={row.indicator} className="flex min-h-[48px] items-stretch">
                                 <div
-                                  className={`flex h-full w-[300px] shrink-0 items-center border-r border-[#e2e8f0] px-4 py-2 2xl:w-[360px] ${rowBorderB}`}
+                                  className={`flex h-full w-[300px] shrink-0 items-center border-r border-[#e2e8f0] px-4 py-2 @[1500px]:w-[360px] ${rowBorderB}`}
                                 >
                                   <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                     {row.indicator}
                                   </span>
                                 </div>
                                 <div
-                                  className={`flex h-full w-[120px] shrink-0 items-center border-r border-[#e2e8f0] px-4 2xl:w-[160px] ${rowBorderB}`}
+                                  className={`flex h-full w-[120px] shrink-0 items-center border-r border-[#e2e8f0] px-4 @[1500px]:w-[160px] ${rowBorderB}`}
                                 >
                                   <span
                                     title={row.layanan}
@@ -428,14 +433,14 @@ export default function FbbDashboard() {
                                   </span>
                                 </div>
                                 <div
-                                  className={`flex h-full w-[90px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 2xl:w-[120px] ${rowBorderB}`}
+                                  className={`flex h-full w-[90px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 @[1500px]:w-[120px] ${rowBorderB}`}
                                 >
                                   <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                     {row.satuan}
                                   </span>
                                 </div>
                                 <div
-                                  className={`flex h-full w-[150px] shrink-0 items-center border-r border-[#e2e8f0] px-4 2xl:w-[200px] ${rowBorderB}`}
+                                  className={`flex h-full w-[150px] shrink-0 items-center border-r border-[#e2e8f0] px-4 @[1500px]:w-[200px] ${rowBorderB}`}
                                 >
                                   <span
                                     title={row.source}
@@ -445,7 +450,7 @@ export default function FbbDashboard() {
                                   </span>
                                 </div>
                                 <div
-                                  className={`flex h-full w-[100px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 2xl:w-[160px] ${rowBorderB}`}
+                                  className={`flex h-full w-[100px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 @[1500px]:w-[160px] ${rowBorderB}`}
                                 >
                                   <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                     {row.target}
