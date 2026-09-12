@@ -388,17 +388,26 @@ export default function FbbDashboard() {
                       min-width for the same reason: without one, a flex
                       item's default content-based minimum can force the
                       fixed columns to shrink to make room for it. */}
-                  <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
+                  <div className="flex min-h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
                     {TABLE_COLUMNS.map((col, idx) => {
                       const isFlex = col.width.startsWith("flex-1");
                       return (
                       <div
                         key={col.key}
-                        className={`flex h-full items-center gap-2.5 border-[#e2e8f0] ${
+                        className={`flex items-center gap-2.5 border-[#e2e8f0] py-2 ${
                           idx !== TABLE_COLUMNS.length - 1 ? "border-r" : ""
                         } ${isFlex ? "px-3" : "px-4 shrink-0"} ${col.width} ${col.align}`}
                       >
-                        <span className={`whitespace-nowrap text-sm font-medium leading-[19px] ${col.headerColor}`}>
+                        {/* Realisasi/Capaian labels wrap onto two lines instead
+                            of truncating with an ellipsis, so the week/period
+                            they refer to stays fully readable even when the
+                            column is squeezed narrow (e.g. sidebar open). The
+                            other, shorter labels keep a single line. */}
+                        <span
+                          className={`text-sm font-medium leading-[19px] ${
+                            isFlex ? "text-center" : "whitespace-nowrap"
+                          } ${col.headerColor}`}
+                        >
                           {col.label}
                         </span>
                       </div>
