@@ -345,30 +345,30 @@ export default function FbbDashboard() {
             <div className="flex min-h-0 flex-1 flex-col gap-4 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
               {/* Filters */}
               <div className="flex w-full flex-wrap items-center justify-between gap-3">
-                <div className="relative h-11 w-full max-w-[320px] shrink-0">
-                  <span className="pointer-events-none absolute left-3.5 top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#737373]">
-                    <Search className="size-4" strokeWidth={1.5} />
+                <div className="relative h-9 w-full max-w-[260px] shrink-0">
+                  <span className="pointer-events-none absolute left-3 top-1/2 flex size-3.5 -translate-y-1/2 items-center justify-center text-[#737373]">
+                    <Search className="size-3.5" strokeWidth={1.5} />
                   </span>
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search"
-                    className="h-11 w-full rounded-[24px] border border-[#e2e8f0] bg-white py-1 pl-9 pr-8 text-sm text-[#0f172a] outline-none placeholder:text-[#64748b]"
+                    className="h-9 w-full rounded-[20px] border border-[#e2e8f0] bg-white py-1 pl-8 pr-7 text-sm text-[#0f172a] outline-none placeholder:text-[#64748b]"
                   />
                   {search && (
                     <button
                       type="button"
                       aria-label="Clear search"
                       onClick={() => setSearch("")}
-                      className="absolute right-3.5 top-1/2 flex size-4 -translate-y-1/2 items-center justify-center text-[#64748b] hover:opacity-70"
+                      className="absolute right-3 top-1/2 flex size-3.5 -translate-y-1/2 items-center justify-center text-[#64748b] hover:opacity-70"
                     >
-                      <X className="size-4" strokeWidth={1.333} />
+                      <X className="size-3.5" strokeWidth={1.333} />
                     </button>
                   )}
                 </div>
 
-                <span className="shrink-0 rounded-full bg-[#f1f5f9] px-4 py-2 text-sm font-medium text-[#64748b]">
+                <span className="flex h-9 shrink-0 items-center rounded-full bg-[#f1f5f9] px-3 text-sm font-medium text-[#64748b]">
                   Showing {filteredRows.length} of {SLA_ROWS.length} entries
                 </span>
               </div>
