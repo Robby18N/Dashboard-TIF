@@ -66,9 +66,9 @@ export default function Sidebar({ activeKey }: SidebarProps) {
               <Link
                 href="/"
                 aria-label="Back to landing page"
-                className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
+                className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
               >
-                <LayoutDashboard className="size-6" strokeWidth={1.75} />
+                <LayoutDashboard className="size-5" strokeWidth={1.75} />
               </Link>
 
               {SIDEBAR_MENU_ITEMS.map(({ key, label, icon: Icon, href }) => {
@@ -84,7 +84,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
                         : "text-[#334155] hover:bg-[#f8fafc]"
                     }`}
                   >
-                    <Icon className="size-6 shrink-0" strokeWidth={1.75} />
+                    <Icon className="size-5 shrink-0" strokeWidth={1.75} />
                     <span className="whitespace-nowrap text-sm font-medium">
                       {label}
                     </span>
