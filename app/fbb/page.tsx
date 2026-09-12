@@ -195,8 +195,8 @@ const TABLE_COLUMNS = [
   { key: "satuan", label: "Satuan", width: "w-[90px] 2xl:w-[120px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
   { key: "source", label: "Source Data", width: "w-[150px] 2xl:w-[200px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
   { key: "target", label: "Target", width: "w-[100px] 2xl:w-[160px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
-  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#3b82f6]" },
-  { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#3b82f6]" },
+  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#334155]" },
 ] as const;
 
 type RowGroup = { segmen: string; rows: SlaRow[] };
@@ -378,14 +378,14 @@ export default function FbbDashboard() {
                 <div className="min-w-[900px] 2xl:min-w-[1400px]">
                   {/* Header */}
                   <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
-                    {TABLE_COLUMNS.map((col, idx) => (
+                    {TABLE_COLUMNS.map((col) => (
                       <div
                         key={col.key}
-                        className={`flex h-full items-center gap-2.5 px-4 ${col.width} ${col.align} ${
-                          idx !== TABLE_COLUMNS.length - 1 ? "border-r border-[#e2e8f0]" : ""
-                        }`}
+                        className={`flex h-full items-center gap-2.5 border-r border-[#e2e8f0] ${
+                          col.width === "flex-1" ? "px-3" : "px-4"
+                        } ${col.width} ${col.align}`}
                       >
-                        <span className={`whitespace-nowrap text-xs font-semibold ${col.headerColor}`}>
+                        <span className={`whitespace-nowrap text-sm font-medium leading-[19px] ${col.headerColor}`}>
                           {col.label}
                         </span>
                       </div>
@@ -394,62 +394,54 @@ export default function FbbDashboard() {
 
                   {/* Grouped rows */}
                   {groupedRows.map((group) => (
-                    <div
-                      key={`${group.segmen}-${group.rows[0].indicator}`}
-                      className="flex border-b border-[#e2e8f0] last:border-b-0"
-                    >
-                      <div className="flex w-[140px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-4 py-2 text-center 2xl:w-[200px]">
-                        <span className="text-sm font-medium text-[#020617]">
+                    <div key={`${group.segmen}-${group.rows[0].indicator}`} className="flex">
+                      <div className="flex w-[140px] shrink-0 items-center justify-center border-r border-b border-[#e2e8f0] px-4 py-2 text-center 2xl:w-[200px]">
+                        <span className="text-sm font-medium leading-[17px] text-[#020617]">
                           {group.segmen}
                         </span>
                       </div>
                       <div className="flex min-w-0 flex-1 flex-col">
-                        {group.rows.map((row, idx) => (
-                          <div
-                            key={row.indicator}
-                            className={`flex min-h-[48px] items-stretch ${
-                              idx !== group.rows.length - 1 ? "border-b border-[#e2e8f0]" : ""
-                            }`}
-                          >
-                            <div className="flex h-full w-[300px] shrink-0 items-center border-r border-[#e2e8f0] px-4 py-2 2xl:w-[360px]">
-                              <span className="text-sm font-medium text-[#020617]">
+                        {group.rows.map((row) => (
+                          <div key={row.indicator} className="flex min-h-[48px] items-stretch">
+                            <div className="flex h-full w-[300px] shrink-0 items-center border-r border-b border-[#e2e8f0] px-4 py-2 2xl:w-[360px]">
+                              <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                 {row.indicator}
                               </span>
                             </div>
-                            <div className="flex h-full w-[120px] shrink-0 items-center border-r border-[#e2e8f0] px-4 2xl:w-[160px]">
+                            <div className="flex h-full w-[120px] shrink-0 items-center border-r border-b border-[#e2e8f0] px-4 2xl:w-[160px]">
                               <span
                                 title={row.layanan}
-                                className="truncate text-sm font-medium text-[#020617]"
+                                className="truncate text-sm font-normal leading-[17px] text-[#020617]"
                               >
                                 {row.layanan}
                               </span>
                             </div>
-                            <div className="flex h-full w-[90px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 2xl:w-[120px]">
-                              <span className="text-sm font-medium text-[#020617]">
+                            <div className="flex h-full w-[90px] shrink-0 items-center justify-center border-r border-b border-[#e2e8f0] px-3 2xl:w-[120px]">
+                              <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                 {row.satuan}
                               </span>
                             </div>
-                            <div className="flex h-full w-[150px] shrink-0 items-center border-r border-[#e2e8f0] px-4 2xl:w-[200px]">
+                            <div className="flex h-full w-[150px] shrink-0 items-center border-r border-b border-[#e2e8f0] px-4 2xl:w-[200px]">
                               <span
                                 title={row.source}
-                                className="truncate text-sm font-medium text-[#020617]"
+                                className="truncate text-sm font-normal leading-[17px] text-[#020617]"
                               >
                                 {row.source}
                               </span>
                             </div>
-                            <div className="flex h-full w-[100px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-3 2xl:w-[160px]">
-                              <span className="text-sm font-medium text-[#020617]">
+                            <div className="flex h-full w-[100px] shrink-0 items-center justify-center border-r border-b border-[#e2e8f0] px-3 2xl:w-[160px]">
+                              <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                 {row.target}
                               </span>
                             </div>
-                            <div className="flex h-full flex-1 items-center justify-center border-r border-[#e2e8f0] px-3">
-                              <span className="text-sm font-medium text-[#020617]">
+                            <div className="flex h-full flex-1 items-center justify-center border-r border-b border-[#e2e8f0] px-3">
+                              <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                 {row.realisasi}
                               </span>
                             </div>
-                            <div className="flex h-full flex-1 items-center justify-center px-3">
+                            <div className="flex h-full flex-1 items-center justify-center border-r border-b border-[#e2e8f0] px-3">
                               <span
-                                className={`text-sm font-bold ${
+                                className={`text-sm font-normal leading-[16px] ${
                                   row.achieved ? "text-[#21a647]" : "text-[#c23837]"
                                 }`}
                               >
