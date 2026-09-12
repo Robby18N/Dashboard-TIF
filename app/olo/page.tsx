@@ -56,10 +56,10 @@ const QUARTERS: { label: string; months: string[] }[] = [
   { label: "Q4 2026", months: ["Okt", "Nov", "Des"] },
 ];
 
-const NO_COL_WIDTH = 48;
-const KPI_COL_WIDTH = 280;
-const THRESHOLD_COL_WIDTH = 90;
-const METRIC_COL_WIDTH = 62;
+const NO_COL_WIDTH = 40;
+const KPI_COL_WIDTH = 240;
+const THRESHOLD_COL_WIDTH = 76;
+const METRIC_COL_WIDTH = 58;
 
 const KPI_CATEGORIES = ["PL", "LATENCY", "JITTER", "MTTRQ"] as const;
 
@@ -421,28 +421,28 @@ function AchievementTable({ rows }: { rows: OloRow[] }) {
             <div className="flex">
               <div
                 style={{ width: NO_COL_WIDTH }}
-                className="flex h-[76px] shrink-0 items-center justify-center border-b border-r border-[#e2e8f0]"
+                className="flex h-[64px] shrink-0 items-center justify-center border-b border-r border-[#e2e8f0]"
               >
                 <span className="text-[14px] font-medium text-[#334155]">No</span>
               </div>
               <div
                 style={{ width: KPI_COL_WIDTH }}
-                className="flex h-[76px] shrink-0 items-center border-b border-r border-[#e2e8f0] px-4"
+                className="flex h-[64px] shrink-0 items-center border-b border-r border-[#e2e8f0] px-3"
               >
                 <span className="text-[14px] font-medium text-[#334155]">KPI</span>
               </div>
               <div
                 style={{ width: THRESHOLD_COL_WIDTH }}
-                className="flex h-[76px] shrink-0 items-center justify-center border-b border-r border-[#e2e8f0] px-2 text-center"
+                className="flex h-[64px] shrink-0 items-center justify-center border-b border-r border-[#e2e8f0] px-2 text-center"
               >
                 <span className="text-[14px] font-medium text-[#334155]">Threshold</span>
               </div>
 
               <div style={{ width: METRIC_COL_WIDTH * 16 }} className="flex shrink-0 flex-col">
-                <div className="flex h-7 items-center justify-center border-b border-[#e2e8f0] bg-[#f1f5f9]">
+                <div className="flex h-6 items-center justify-center border-b border-[#e2e8f0] bg-[#f1f5f9]">
                   <span className="text-[14px] font-medium text-[#334155]">Achievement</span>
                 </div>
-                <div className="flex h-[48px]">
+                <div className="flex h-10">
                   {QUARTERS.map((quarter, qIdx) => (
                     <div
                       key={quarter.label}
@@ -451,12 +451,12 @@ function AchievementTable({ rows }: { rows: OloRow[] }) {
                         qIdx !== QUARTERS.length - 1 ? "border-r border-[#e2e8f0]" : ""
                       }`}
                     >
-                      <div className="flex h-6 items-center justify-center border-b border-[#e2e8f0] bg-[#f2f6fa]">
+                      <div className="flex h-5 items-center justify-center border-b border-[#e2e8f0] bg-[#f2f6fa]">
                         <span className="text-[14px] font-medium text-[#334155]">
                           {quarter.label}
                         </span>
                       </div>
-                      <div className="flex h-6">
+                      <div className="flex h-5">
                         <div
                           style={{ width: METRIC_COL_WIDTH }}
                           className="flex shrink-0 items-center justify-center border-r border-[#e2e8f0] bg-[#f2f6fa]"
@@ -492,19 +492,19 @@ function AchievementTable({ rows }: { rows: OloRow[] }) {
             >
               <div
                 style={{ width: NO_COL_WIDTH }}
-                className="flex h-9 shrink-0 items-center justify-center border-r border-[#e2e8f0]"
+                className="flex h-8 shrink-0 items-center justify-center border-r border-[#e2e8f0]"
               >
                 <span className="text-[14px] font-normal text-[#020617]">{row.no}</span>
               </div>
               <div
                 style={{ width: KPI_COL_WIDTH }}
-                className="flex h-9 shrink-0 items-center border-r border-[#e2e8f0] px-4"
+                className="flex h-8 shrink-0 items-center border-r border-[#e2e8f0] px-3"
               >
                 <span className="truncate text-[14px] font-normal text-[#020617]">{row.kpi}</span>
               </div>
               <div
                 style={{ width: THRESHOLD_COL_WIDTH }}
-                className="flex h-9 shrink-0 items-center justify-center border-r border-[#e2e8f0] px-2 text-center"
+                className="flex h-8 shrink-0 items-center justify-center border-r border-[#e2e8f0] px-2 text-center"
               >
                 <span className="whitespace-nowrap text-[14px] font-normal text-[#020617]">
                   {row.threshold}
@@ -514,7 +514,7 @@ function AchievementTable({ rows }: { rows: OloRow[] }) {
                 <div
                   key={cIdx}
                   style={{ width: METRIC_COL_WIDTH }}
-                  className={`flex h-9 shrink-0 items-center justify-center ${
+                  className={`flex h-8 shrink-0 items-center justify-center ${
                     cIdx !== row.cells.length - 1 ? "border-r border-[#e2e8f0]" : ""
                   }`}
                 >
