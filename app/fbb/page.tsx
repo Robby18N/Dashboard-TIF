@@ -374,7 +374,7 @@ export default function FbbDashboard() {
               </div>
 
               {/* Table */}
-              <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-[#e2e8f0] shadow-[0px_1px_1.75px_-1px_rgba(0,0,0,0.1),0px_1px_2.625px_0px_rgba(0,0,0,0.1)]">
+              <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-[#e2e8f0]">
                 <div className="min-w-[900px] 2xl:min-w-[1400px]">
                   {/* Header */}
                   <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
