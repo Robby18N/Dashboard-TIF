@@ -378,12 +378,12 @@ export default function FbbDashboard() {
                 <div className="min-w-[900px] 2xl:min-w-[1400px]">
                   {/* Header */}
                   <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
-                    {TABLE_COLUMNS.map((col) => (
+                    {TABLE_COLUMNS.map((col, idx) => (
                       <div
                         key={col.key}
-                        className={`flex h-full items-center gap-2.5 border-r border-[#e2e8f0] ${
-                          col.width === "flex-1" ? "px-3" : "px-4"
-                        } ${col.width} ${col.align}`}
+                        className={`flex h-full items-center gap-2.5 border-[#e2e8f0] ${
+                          idx !== TABLE_COLUMNS.length - 1 ? "border-r" : ""
+                        } ${col.width === "flex-1" ? "px-3" : "px-4"} ${col.width} ${col.align}`}
                       >
                         <span className={`whitespace-nowrap text-sm font-medium leading-[19px] ${col.headerColor}`}>
                           {col.label}
@@ -461,7 +461,7 @@ export default function FbbDashboard() {
                                   </span>
                                 </div>
                                 <div
-                                  className={`flex h-full flex-1 items-center justify-center border-r border-[#e2e8f0] px-3 ${rowBorderB}`}
+                                  className={`flex h-full flex-1 items-center justify-center border-[#e2e8f0] px-3 ${rowBorderB}`}
                                 >
                                   <span
                                     className={`text-sm font-normal leading-[16px] ${
