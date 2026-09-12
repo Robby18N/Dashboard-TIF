@@ -409,38 +409,43 @@ export default function OloDashboard() {
 function AchievementTable({ rows }: { rows: OloRow[] }) {
   return (
     <div className="overflow-hidden rounded-[10px] border border-[#e2e8f0]">
-      <div className="max-h-[560px] overflow-auto">
+      <div className="overflow-x-auto">
         <div
           className="flex flex-col"
           style={{
             minWidth: NO_COL_WIDTH + KPI_COL_WIDTH + THRESHOLD_COL_WIDTH + METRIC_COL_WIDTH * 16,
           }}
         >
-          {/* 3-row grouped header, sticky while the body scrolls */}
-          <div className="sticky top-0 z-10 flex flex-col bg-[#f1f5f9]">
+          {/* 3-row grouped header — flat surface, group labels set in a small
+              uppercase caption style so they read as section labels rather
+              than data columns, with dividers kept only between the major
+              column groups for a cleaner, less gridded look. */}
+          <div className="flex flex-col border-b border-[#e2e8f0] bg-[#f8fafc]">
             <div className="flex">
               <div
                 style={{ width: NO_COL_WIDTH }}
-                className="flex h-[64px] shrink-0 items-center justify-center border-b border-r border-[#e2e8f0]"
+                className="flex h-[64px] shrink-0 items-center justify-center border-r border-[#e2e8f0]"
               >
                 <span className="text-[14px] font-medium text-[#334155]">No</span>
               </div>
               <div
                 style={{ width: KPI_COL_WIDTH }}
-                className="flex h-[64px] shrink-0 items-center border-b border-r border-[#e2e8f0] px-3"
+                className="flex h-[64px] shrink-0 items-center border-r border-[#e2e8f0] px-3"
               >
                 <span className="text-[14px] font-medium text-[#334155]">KPI</span>
               </div>
               <div
                 style={{ width: THRESHOLD_COL_WIDTH }}
-                className="flex h-[64px] shrink-0 items-center justify-center border-b border-r border-[#e2e8f0] px-2 text-center"
+                className="flex h-[64px] shrink-0 items-center justify-center border-r border-[#e2e8f0] px-2 text-center"
               >
                 <span className="text-[14px] font-medium text-[#334155]">Threshold</span>
               </div>
 
               <div style={{ width: METRIC_COL_WIDTH * 16 }} className="flex shrink-0 flex-col">
-                <div className="flex h-6 items-center justify-center border-b border-[#e2e8f0] bg-[#f1f5f9]">
-                  <span className="text-[14px] font-medium text-[#334155]">Achievement</span>
+                <div className="flex h-6 items-center justify-center">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#94a3b8]">
+                    Achievement
+                  </span>
                 </div>
                 <div className="flex h-10">
                   {QUARTERS.map((quarter, qIdx) => (
@@ -451,25 +456,23 @@ function AchievementTable({ rows }: { rows: OloRow[] }) {
                         qIdx !== QUARTERS.length - 1 ? "border-r border-[#e2e8f0]" : ""
                       }`}
                     >
-                      <div className="flex h-5 items-center justify-center border-b border-[#e2e8f0] bg-[#f2f6fa]">
-                        <span className="text-[14px] font-medium text-[#334155]">
+                      <div className="flex h-5 items-center justify-center">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#64748b]">
                           {quarter.label}
                         </span>
                       </div>
                       <div className="flex h-5">
                         <div
                           style={{ width: METRIC_COL_WIDTH }}
-                          className="flex shrink-0 items-center justify-center border-r border-[#e2e8f0] bg-[#f2f6fa]"
+                          className="flex shrink-0 items-center justify-center"
                         >
                           <span className="text-[14px] font-medium text-[#334155]">Target</span>
                         </div>
-                        {quarter.months.map((month, mIdx) => (
+                        {quarter.months.map((month) => (
                           <div
                             key={month}
                             style={{ width: METRIC_COL_WIDTH }}
-                            className={`flex shrink-0 items-center justify-center bg-[#f1f5f9] ${
-                              mIdx !== quarter.months.length - 1 ? "border-r border-[#e2e8f0]" : ""
-                            }`}
+                            className="flex shrink-0 items-center justify-center"
                           >
                             <span className="whitespace-nowrap text-[14px] font-medium text-[#334155]">
                               FM {month}
@@ -484,7 +487,7 @@ function AchievementTable({ rows }: { rows: OloRow[] }) {
             </div>
           </div>
 
-          {/* Body rows */}
+          {/* Body rows — all rows render in full, no vertical scroll cap */}
           {rows.map((row, rIdx) => (
             <div
               key={row.no}
@@ -504,9 +507,9 @@ function AchievementTable({ rows }: { rows: OloRow[] }) {
               </div>
               <div
                 style={{ width: THRESHOLD_COL_WIDTH }}
-                className="flex h-8 shrink-0 items-center justify-center border-r border-[#e2e8f0] px-2 text-center"
+                className="flex h-8 min-w-0 shrink-0 items-center justify-center border-r border-[#e2e8f0] px-2 text-center"
               >
-                <span className="whitespace-nowrap text-[14px] font-normal text-[#020617]">
+                <span className="min-w-0 truncate text-[14px] font-normal text-[#020617]">
                   {row.threshold}
                 </span>
               </div>
