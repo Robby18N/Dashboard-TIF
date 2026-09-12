@@ -376,8 +376,16 @@ export default function OnxDashboard() {
                 </div>
               </div>
 
-              {/* Details Metrics card */}
-              <div className="flex shrink-0 flex-col gap-3 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
+              {/* Details Metrics card. Gap to the (possibly collapsed) table
+                  below is dropped entirely while collapsed — a flex `gap`
+                  still reserves space between children even when one of
+                  them is squeezed to 0 height by the grid-rows trick, which
+                  left a dead strip under the header when collapsed. */}
+              <div
+                className={`flex shrink-0 flex-col rounded-[19px] border border-[#e2e8f0] bg-white p-3 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] ${
+                  isTableCollapsed ? "gap-0" : "gap-2"
+                }`}
+              >
               <div className="flex items-center justify-between gap-3">
                 <span className="text-sm font-medium text-[#020617]">Details Metrics</span>
                 <button
