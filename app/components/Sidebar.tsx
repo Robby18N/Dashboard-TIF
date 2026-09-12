@@ -59,7 +59,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
     // The full-width decorative header bar now lives above this sidebar (as
     // a page-level sibling), so the sidebar itself just needs its own
     // rounded top-right corner marking where it begins, right under that bar.
-    <aside className="flex w-[83px] shrink-0 flex-col items-center justify-between overflow-hidden rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[56px]">
+    <aside className="flex w-[72px] shrink-0 flex-col items-center justify-between overflow-hidden rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px]">
       <div className="flex w-full flex-col items-center">
         {/* Show/hide sidebar toggle */}
         <div className="flex w-full flex-col items-center gap-4 border-b border-[#e2e8f0] p-4">
