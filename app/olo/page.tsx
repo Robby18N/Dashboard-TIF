@@ -59,7 +59,7 @@ const QUARTERS: { label: string; months: string[] }[] = [
 const NO_COL_WIDTH = 40;
 const KPI_COL_WIDTH = 240;
 const THRESHOLD_COL_WIDTH = 76;
-const METRIC_COL_WIDTH = 58;
+const METRIC_COL_WIDTH = 72;
 
 const KPI_CATEGORIES = ["PL", "LATENCY", "JITTER", "MTTRQ"] as const;
 
