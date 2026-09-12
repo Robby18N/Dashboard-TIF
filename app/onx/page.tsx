@@ -1,12 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Bell,
-  ChevronDown,
-  Filter,
-  Moon,
-} from "lucide-react";
+import { ChevronDown, Filter } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import RegionMap from "./RegionMap";
 
@@ -378,30 +373,6 @@ export default function OnxDashboard() {
 
         {/* Main column */}
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          {/* Theme/notification/account controls, sitting just below the bar
-              (the page title itself now lives in the bar's notch above). */}
-          <div className="flex shrink-0 items-center justify-end gap-3 px-6 pb-3 pt-2">
-            <button
-              aria-label="Toggle theme"
-              className="flex size-[30px] items-center justify-center rounded-full bg-[#f8fafc] transition-colors hover:bg-[#eef2f6]"
-            >
-              <Moon className="size-4 text-[#64748b]" strokeWidth={1.333} />
-            </button>
-            <button
-              aria-label="Notifications"
-              className="flex size-[30px] items-center justify-center rounded-full bg-[#f8fafc] transition-colors hover:bg-[#eef2f6]"
-            >
-              <Bell className="size-4 text-[#64748b]" strokeWidth={1.333} />
-            </button>
-            <button className="flex items-center gap-2 rounded-full py-0.5 pl-0.5 pr-2 transition-colors hover:bg-[#eef2f6]">
-              <span className="flex size-[30px] items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
-                UN
-              </span>
-              <span className="text-sm font-medium text-[#334155]">username</span>
-              <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.333} />
-            </button>
-          </div>
-
           {/* Content */}
           <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#f1f5f9] p-4">
           {/* Unified card: comparison table + controls + map, sharing one border/radius.
