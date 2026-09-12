@@ -66,7 +66,7 @@ const DASHBOARD_SHORTCUTS: DashboardShortcut[] = [
   { label: "CNOP", icon: CnopIcon, href: "#" },
   { label: "FBB", icon: FbbIcon, href: "/fbb" },
   { label: "EBIS", icon: EbisIcon, href: "#" },
-  { label: "OLO", icon: OloIcon, href: "#" },
+  { label: "OLO", icon: OloIcon, href: "/olo" },
 ];
 
 export default function Home() {
