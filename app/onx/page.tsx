@@ -350,27 +350,27 @@ export default function OnxDashboard() {
               {/* Filter bar: static filter pills on the left, Export + avatar on
                   the right — replaces the old vertical "Filter Insight" side
                   panel with a horizontal bar matching the FBB dashboard. */}
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-2 rounded-full border border-[#e2e8f0] bg-white p-1.5">
                   {FILTER_PILLS.map((label) => (
                     <div
                       key={label}
-                      className="flex h-9 w-[190px] shrink-0 items-center justify-between gap-3 rounded-full border border-[#e2e8f0] bg-[#f8fafc] px-4"
+                      className="flex h-8 w-[160px] shrink-0 items-center justify-between gap-2 rounded-full border border-[#e2e8f0] bg-[#f8fafc] px-3"
                     >
-                      <span className="whitespace-nowrap text-sm font-medium text-[#0f172a]">
+                      <span className="whitespace-nowrap text-xs font-medium text-[#0f172a]">
                         {label}
                       </span>
-                      <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
+                      <ChevronDown className="size-3.5 shrink-0 text-[#64748b]" strokeWidth={1.75} />
                     </div>
                   ))}
                 </div>
 
-                <div className="flex shrink-0 items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
-                  <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-4 text-sm font-semibold text-white transition-opacity hover:opacity-90">
-                    <Upload className="size-4" strokeWidth={1.75} />
+                <div className="flex shrink-0 items-center gap-2 rounded-full border border-[#e2e8f0] bg-white p-1.5">
+                  <button className="flex h-7 items-center gap-1 whitespace-nowrap rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-3 text-xs font-semibold text-white transition-opacity hover:opacity-90">
+                    <Upload className="size-3.5" strokeWidth={1.75} />
                     Export
                   </button>
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#1f6eeb] text-[11px] font-medium text-white">
                     UN
                   </span>
                 </div>
@@ -379,13 +379,13 @@ export default function OnxDashboard() {
               {/* Details Metrics card */}
               <div className="flex shrink-0 flex-col gap-3 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
               <div className="flex items-center justify-between gap-3">
-                <span className="text-[18px] font-semibold text-[#020617]">Details Metrics</span>
+                <span className="text-sm font-medium text-[#020617]">Details Metrics</span>
                 <button
                   type="button"
                   aria-label={isTableCollapsed ? "Expand table" : "Collapse table"}
                   aria-expanded={!isTableCollapsed}
                   onClick={() => setIsTableCollapsed((collapsed) => !collapsed)}
-                  className="flex size-[30px] shrink-0 items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] transition-colors hover:bg-[#eef2f6]"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] transition-colors hover:bg-[#eef2f6]"
                 >
                   <ChevronDown
                     className={`size-4 text-[#334155] transition-transform duration-300 ${
@@ -412,7 +412,7 @@ export default function OnxDashboard() {
                               idx !== COMPARISON_COLUMNS.length - 1 ? "border-r border-[#e2e8f0]" : ""
                             } ${col.align}`}
                           >
-                            <span className="whitespace-nowrap text-[12px] font-semibold leading-[16px] text-[#334155]">
+                            <span className="whitespace-nowrap text-sm font-medium text-[#334155]">
                               {col.label}
                             </span>
                           </div>
@@ -435,7 +435,7 @@ export default function OnxDashboard() {
                             >
                               {col.key === "wow" ? (
                                 <span
-                                  className={`whitespace-nowrap text-[14px] font-bold leading-[17px] ${
+                                  className={`whitespace-nowrap text-sm font-normal ${
                                     row.wow === "Lose" ? "text-[#c23837]" : "text-[#21a647]"
                                   }`}
                                 >
@@ -443,7 +443,7 @@ export default function OnxDashboard() {
                                 </span>
                               ) : col.key === "highlight" ? (
                                 <span
-                                  className={`whitespace-nowrap text-[14px] font-bold leading-[17px] ${
+                                  className={`whitespace-nowrap text-sm font-normal ${
                                     row.highlight === "Need Improve"
                                       ? "text-[#c23837]"
                                       : "text-[#21a647]"
@@ -452,7 +452,7 @@ export default function OnxDashboard() {
                                   {row.highlight}
                                 </span>
                               ) : (
-                                <span className="whitespace-nowrap text-[14px] font-medium leading-[17px] text-[#020617]">
+                                <span className="whitespace-nowrap text-sm font-normal text-[#020617]">
                                   {row[col.key as keyof ComparisonRow]}
                                 </span>
                               )}
