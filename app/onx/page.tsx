@@ -119,11 +119,11 @@ const NATIONAL_ROW: DetailRegionRow = {
 };
 
 const BENCHMARK_STYLE: Record<BenchmarkStatus, string> = {
-  Consecutive: "text-[#525252]",
-  Improve: "text-[#22c55e]",
+  Consecutive: "text-[#64748b]",
+  Improve: "text-[#21a647]",
   Degrade: "text-[#f97316]",
-  "New Lose": "text-[#ef4444]",
-  "Inconsistent Lose": "text-[#ef4444]",
+  "New Lose": "text-[#c23837]",
+  "Inconsistent Lose": "text-[#c23837]",
 };
 
 const DETAIL_COLUMNS: { key: string; label: string; width: number }[] = [
@@ -142,7 +142,7 @@ const DETAIL_COLUMNS: { key: string; label: string; width: number }[] = [
 const DETAIL_TABLE_WIDTH = DETAIL_COLUMNS.reduce((sum, col) => sum + col.width, 0);
 
 function Sparkline({ trend }: { trend: "up" | "down" }) {
-  const color = trend === "up" ? "#22c55e" : "#ef4444";
+  const color = trend === "up" ? "#21a647" : "#c23837";
   const points =
     trend === "up"
       ? "0,18 8,14 16,16 24,9 32,11 40,3"
@@ -166,7 +166,7 @@ function StatusPill({ status }: { status: "Win" | "Lose" }) {
   return (
     <span
       className={`whitespace-nowrap rounded-[9px] px-2.5 py-1 text-[12px] font-medium ${
-        status === "Win" ? "bg-[#f0fdf4] text-[#22c55e]" : "bg-[#fef2f2] text-[#ef4444]"
+        status === "Win" ? "bg-[#f0fdf4] text-[#21a647]" : "bg-[#fef2f2] text-[#c23837]"
       }`}
     >
       {status}
@@ -191,14 +191,14 @@ function DetailTableRow({
 }) {
   return (
     <div
-      className={`group flex border-b border-l-[3px] border-l-transparent border-black/[0.08] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc] ${
-        isTotal ? "bg-black/[0.02]" : ""
+      className={`group flex border-b border-l-[3px] border-l-transparent border-[#e2e8f0] transition-colors last:border-b-0 hover:border-l-[#3b82f6] hover:bg-[#f8fafc] ${
+        isTotal ? "bg-[#f8fafc]" : ""
       }`}
     >
       <div
         style={{ width: 220, paddingLeft: indent ? 40 : 12 }}
         className={`sticky left-0 z-10 flex h-[38px] shrink-0 items-center gap-2 border-l-[3px] border-l-transparent pr-3 transition-colors group-hover:border-l-[#3b82f6] group-hover:bg-[#f8fafc] ${
-          isTotal ? "bg-[#fafafa]" : "bg-white"
+          isTotal ? "bg-[#f8fafc]" : "bg-white"
         }`}
       >
         {!indent &&
@@ -208,10 +208,10 @@ function DetailTableRow({
               onClick={onToggle}
               aria-label={isExpanded ? `Collapse ${row.name}` : `Expand ${row.name}`}
               aria-expanded={isExpanded}
-              className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#e6e5e3] bg-white transition-colors hover:bg-black/[0.02]"
+              className="flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#e2e8f0] bg-white transition-colors hover:bg-[#f8fafc]"
             >
               <ChevronDown
-                className={`size-4 text-[#525252] transition-transform duration-200 ${
+                className={`size-4 text-[#64748b] transition-transform duration-200 ${
                   isExpanded ? "" : "-rotate-90"
                 }`}
                 strokeWidth={1.67}
@@ -223,13 +223,13 @@ function DetailTableRow({
             // data exists for it too.
             <span
               aria-hidden="true"
-              className="flex size-6 shrink-0 cursor-default items-center justify-center overflow-hidden rounded-full border border-[#e6e5e3] bg-white opacity-60"
+              className="flex size-6 shrink-0 cursor-default items-center justify-center overflow-hidden rounded-full border border-[#e2e8f0] bg-white opacity-60"
             >
-              <ChevronDown className="size-4 -rotate-90 text-[#525252]" strokeWidth={1.67} />
+              <ChevronDown className="size-4 -rotate-90 text-[#64748b]" strokeWidth={1.67} />
             </span>
           ))}
         <span
-          className={`truncate text-[12px] text-[#050505] ${
+          className={`truncate text-[12px] text-[#020617] ${
             isTotal || isGroup ? "font-semibold" : "font-normal"
           }`}
         >
@@ -238,7 +238,7 @@ function DetailTableRow({
       </div>
 
       <div style={{ width: 120 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="text-[12px] font-normal text-[#050505]">{row.valueIndihome}</span>
+        <span className="text-[12px] font-normal text-[#020617]">{row.valueIndihome}</span>
       </div>
 
       <div style={{ width: 70 }} className="flex h-[38px] shrink-0 items-center px-3">
@@ -256,23 +256,23 @@ function DetailTableRow({
       </div>
 
       <div style={{ width: 140 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="truncate text-[12px] font-normal text-[#050505]">{row.nearestCompetitor}</span>
+        <span className="truncate text-[12px] font-normal text-[#020617]">{row.nearestCompetitor}</span>
       </div>
 
       <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="truncate text-[12px] font-normal text-[#050505]">{row.winner}</span>
+        <span className="truncate text-[12px] font-normal text-[#020617]">{row.winner}</span>
       </div>
 
       <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="text-[12px] font-normal text-[#050505]">{row.winnerValue}</span>
+        <span className="text-[12px] font-normal text-[#020617]">{row.winnerValue}</span>
       </div>
 
       <div style={{ width: 110 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="text-[12px] font-normal text-[#050505]">{row.gapToWinner}</span>
+        <span className="text-[12px] font-normal text-[#020617]">{row.gapToWinner}</span>
       </div>
 
       <div style={{ width: 160 }} className="flex h-[38px] shrink-0 items-center px-3">
-        <span className="truncate text-[12px] font-normal text-[#050505]">{row.highlight}</span>
+        <span className="truncate text-[12px] font-normal text-[#020617]">{row.highlight}</span>
       </div>
     </div>
   );
@@ -339,37 +339,37 @@ export default function OnxDashboard() {
         <Sidebar activeKey="onx" />
 
         {/* Filter Insight panel */}
-        <aside className="flex w-[232.5px] shrink-0 flex-col gap-6 border-r border-[#e2e8f0] bg-[#f9f8f7] px-4 pb-8 pt-[18px]">
+        <aside className="flex w-[232.5px] shrink-0 flex-col gap-6 border-r border-[#e2e8f0] bg-[#f8fafc] px-4 pb-8 pt-[18px]">
           <div className="flex h-[45px] shrink-0 items-center gap-3 border-b border-[#e2e8f0]">
-            <Filter className="size-[18px] text-[#050505]" strokeWidth={1.75} />
-            <span className="text-sm font-medium text-[#050505]">Filter Insight</span>
+            <Filter className="size-[18px] text-[#334155]" strokeWidth={1.75} />
+            <span className="text-sm font-medium text-[#334155]">Filter Insight</span>
           </div>
 
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-3">
-              <span className="text-sm text-[#050505]">Metrics</span>
+              <span className="text-sm text-[#334155]">Metrics</span>
               <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#636363]">Select Filter Metrics</span>
+                <span className="text-sm text-[#64748b]">Select Filter Metrics</span>
                 <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
               </div>
               <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#636363]">Select KPI</span>
+                <span className="text-sm text-[#64748b]">Select KPI</span>
                 <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
-              <span className="text-sm text-[#050505]">Location Level</span>
+              <span className="text-sm text-[#334155]">Location Level</span>
               <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#636363]">Select Level</span>
+                <span className="text-sm text-[#64748b]">Select Level</span>
                 <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
               </div>
               <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#636363]">Filter KPI</span>
+                <span className="text-sm text-[#64748b]">Filter KPI</span>
                 <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
               </div>
               <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#636363]">Category</span>
+                <span className="text-sm text-[#64748b]">Category</span>
                 <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
               </div>
             </div>
@@ -383,27 +383,27 @@ export default function OnxDashboard() {
           <div className="flex shrink-0 items-center justify-end gap-3 px-6 pb-3 pt-2">
             <button
               aria-label="Toggle theme"
-              className="flex size-[30px] items-center justify-center rounded-full bg-[#0505050a] transition-colors hover:bg-black/[0.08]"
+              className="flex size-[30px] items-center justify-center rounded-full bg-[#f8fafc] transition-colors hover:bg-[#eef2f6]"
             >
-              <Moon className="size-4 text-[#62748e]" strokeWidth={1.333} />
+              <Moon className="size-4 text-[#64748b]" strokeWidth={1.333} />
             </button>
             <button
               aria-label="Notifications"
-              className="flex size-[30px] items-center justify-center rounded-full bg-[#0505050a] transition-colors hover:bg-black/[0.08]"
+              className="flex size-[30px] items-center justify-center rounded-full bg-[#f8fafc] transition-colors hover:bg-[#eef2f6]"
             >
-              <Bell className="size-4 text-[#62748e]" strokeWidth={1.333} />
+              <Bell className="size-4 text-[#64748b]" strokeWidth={1.333} />
             </button>
-            <button className="flex items-center gap-2 rounded-full py-0.5 pl-0.5 pr-2 transition-colors hover:bg-black/[0.04]">
-              <span className="flex size-[30px] items-center justify-center rounded-full bg-[#3b82f6] text-xs font-medium text-white">
+            <button className="flex items-center gap-2 rounded-full py-0.5 pl-0.5 pr-2 transition-colors hover:bg-[#eef2f6]">
+              <span className="flex size-[30px] items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
                 UN
               </span>
-              <span className="text-sm font-medium text-[#314158]">username</span>
-              <ChevronDown className="size-4 text-[#62748e]" strokeWidth={1.333} />
+              <span className="text-sm font-medium text-[#334155]">username</span>
+              <ChevronDown className="size-4 text-[#64748b]" strokeWidth={1.333} />
             </button>
           </div>
 
           {/* Content */}
-          <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#0505050a] p-4">
+          <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#f1f5f9] p-4">
           {/* Unified card: comparison table + controls + map, sharing one border/radius.
               The Maps tab needs a fixed, viewport-filling height (the map has no
               intrinsic content height), but the Detail tab should never clip its
@@ -424,7 +424,7 @@ export default function OnxDashboard() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <span className="block py-1 text-[14px] font-medium text-[#525252]">
+                    <span className="block py-1 text-[14px] font-medium text-[#64748b]">
                       Details Metrics
                     </span>
                   </div>
@@ -437,15 +437,15 @@ export default function OnxDashboard() {
                   }`}
                 >
                   <div className="overflow-hidden">
-                    <div className="overflow-x-auto rounded-[12px] border border-[#00000014]">
+                    <div className="overflow-x-auto rounded-[12px] border border-[#e2e8f0]">
                       <div className="min-w-[640px]">
-                        <div className="flex items-center bg-[#0505050a]">
+                        <div className="flex items-center bg-[#f8fafc]">
                           {COMPARISON_COLUMNS.map((col) => (
                             <div
                               key={col.key}
                               className={`flex h-[40px] flex-1 items-center px-3 ${col.align}`}
                             >
-                              <span className="whitespace-nowrap text-[14px] font-semibold leading-[20px] text-[#050505]">
+                              <span className="whitespace-nowrap text-[14px] font-medium leading-[20px] text-[#334155]">
                                 {col.label}
                               </span>
                             </div>
@@ -455,7 +455,7 @@ export default function OnxDashboard() {
                         {COMPARISON_ROWS.map((row, i) => (
                           <div
                             key={`${row.kpi}-${i}`}
-                            className="flex items-center border-b border-l-[3px] border-l-transparent border-[#0505050a] bg-white transition-colors hover:border-l-[#3b82f6] hover:bg-[#f8fafc]"
+                            className="flex items-center border-b border-l-[3px] border-l-transparent border-[#e2e8f0] bg-white transition-colors hover:border-l-[#3b82f6] hover:bg-[#f8fafc]"
                           >
                             {COMPARISON_COLUMNS.map((col) => (
                               <div
@@ -465,7 +465,7 @@ export default function OnxDashboard() {
                                 {col.key === "wow" ? (
                                   <span
                                     className={`whitespace-nowrap text-[14px] font-normal leading-[20px] ${
-                                      row.wow === "Lose" ? "text-[#ef4444]" : "text-[#050505]"
+                                      row.wow === "Lose" ? "text-[#c23837]" : "text-[#020617]"
                                     }`}
                                   >
                                     {row.wow}
@@ -474,14 +474,14 @@ export default function OnxDashboard() {
                                   <span
                                     className={`whitespace-nowrap text-[14px] font-normal leading-[20px] ${
                                       row.highlight === "Need Improve"
-                                        ? "text-[#ef4444]"
-                                        : "text-[#050505]"
+                                        ? "text-[#c23837]"
+                                        : "text-[#020617]"
                                     }`}
                                   >
                                     {row.highlight}
                                   </span>
                                 ) : (
-                                  <span className="whitespace-nowrap text-[14px] font-normal leading-[20px] text-[#050505]">
+                                  <span className="whitespace-nowrap text-[14px] font-normal leading-[20px] text-[#020617]">
                                     {row[col.key as keyof ComparisonRow]}
                                   </span>
                                 )}
@@ -500,7 +500,7 @@ export default function OnxDashboard() {
                 aria-label={isTableCollapsed ? "Expand table" : "Collapse table"}
                 aria-expanded={!isTableCollapsed}
                 onClick={() => setIsTableCollapsed((collapsed) => !collapsed)}
-                className="flex size-8 shrink-0 items-center justify-center rounded-[10px] border border-[#e2e8f0] bg-white transition-colors hover:bg-black/[0.02]"
+                className="flex size-8 shrink-0 items-center justify-center rounded-[10px] border border-[#e2e8f0] bg-white transition-colors hover:bg-[#f8fafc]"
               >
                 <ChevronDown
                   className={`size-[18px] text-[#3b82f6] transition-transform duration-300 ${
@@ -518,7 +518,7 @@ export default function OnxDashboard() {
                   aria-label="Select metric"
                   value={selectedMetric}
                   onChange={(e) => setSelectedMetric(e.target.value)}
-                  className="h-9 w-[150px] appearance-none rounded-xl border border-[#e2e8f0] bg-white py-1 pl-3 pr-8 text-sm font-medium text-[#636363] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
+                  className="h-9 w-[150px] appearance-none rounded-xl border border-[#e2e8f0] bg-white py-1 pl-3 pr-8 text-sm font-medium text-[#64748b] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
                 >
                   {METRIC_OPTIONS.map((option) => (
                     <option key={option} value={option}>
@@ -527,19 +527,19 @@ export default function OnxDashboard() {
                   ))}
                 </select>
                 <ChevronDown
-                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-black"
+                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#64748b]"
                   strokeWidth={1}
                 />
               </div>
 
-              <div className="flex items-center rounded-[80px] bg-[#0505050a] p-1">
+              <div className="flex items-center rounded-[80px] bg-[#f1f5f9] p-1">
                 <button
                   type="button"
                   onClick={() => setActiveTab("maps")}
                   className={`rounded-3xl px-4 py-1 text-sm font-medium transition-colors ${
                     activeTab === "maps"
-                      ? "border border-[#e2e8f0] bg-white text-[#050505] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
-                      : "text-[#636363]"
+                      ? "border border-[#e2e8f0] bg-white text-[#020617] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
+                      : "text-[#64748b]"
                   }`}
                 >
                   Maps
@@ -549,8 +549,8 @@ export default function OnxDashboard() {
                   onClick={() => setActiveTab("detail")}
                   className={`rounded-3xl px-4 py-1 text-sm font-medium transition-colors ${
                     activeTab === "detail"
-                      ? "border border-[#e2e8f0] bg-white text-[#050505] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
-                      : "text-[#636363]"
+                      ? "border border-[#e2e8f0] bg-white text-[#020617] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
+                      : "text-[#64748b]"
                   }`}
                 >
                   Detail
@@ -592,19 +592,19 @@ function DetailTable() {
   };
 
   return (
-    <div className="overflow-x-auto overflow-y-visible rounded-[10px] border border-black/[0.08]">
+    <div className="overflow-x-auto overflow-y-visible rounded-[10px] border border-[#e2e8f0]">
       <div className="overflow-x-auto">
         <div style={{ minWidth: DETAIL_TABLE_WIDTH }}>
-          <div className="flex bg-black/[0.04]">
+          <div className="flex bg-[#f8fafc]">
             {DETAIL_COLUMNS.map((col) => (
               <div
                 key={col.key}
                 style={{ width: col.width }}
                 className={`flex h-10 shrink-0 items-center px-3 ${
-                  col.key === "region" ? "sticky left-0 z-10 bg-[#f5f5f5]" : ""
+                  col.key === "region" ? "sticky left-0 z-10 bg-[#f8fafc]" : ""
                 }`}
               >
-                <span className="whitespace-nowrap text-[12px] font-medium text-[#050505]">
+                <span className="whitespace-nowrap text-[12px] font-medium text-[#334155]">
                   {col.label}
                 </span>
               </div>
