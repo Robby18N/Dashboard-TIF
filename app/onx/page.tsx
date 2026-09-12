@@ -282,7 +282,7 @@ export default function OnxDashboard() {
   const [isTableCollapsed, setIsTableCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-[#f1f5f9]">
       {/* Decorative scalloped bar, full page width (spans over the sidebar
           too) — identical to the FBB dashboard's header bar, just with this
           page's own title in the notch. */}
@@ -341,7 +341,7 @@ export default function OnxDashboard() {
 
         {/* Main column */}
         <div className="flex min-w-0 flex-1 flex-col">
-          <main className="flex flex-1 flex-col gap-4 bg-[#f1f5f9] p-4">
+          <main className="flex flex-1 flex-col gap-4 p-4">
             {/* Filter bar: static filter pills on the left, Export + avatar on
                 the right — replaces the old vertical "Filter Insight" side
                 panel with a horizontal bar matching the FBB dashboard. */}
