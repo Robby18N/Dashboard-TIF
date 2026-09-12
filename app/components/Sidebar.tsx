@@ -36,18 +36,18 @@ export default function Sidebar({ activeKey }: SidebarProps) {
   const [isDark, setIsDark] = useState(false);
 
   return (
-    <aside className="flex w-[83px] shrink-0 flex-col items-center justify-between border-r border-[#e2e8f0] bg-white py-4">
-      <div className="flex w-full flex-col items-center gap-5">
+    <aside className="flex w-[60px] shrink-0 flex-col items-center justify-between border-r border-[#e2e8f0] bg-white py-3">
+      <div className="flex w-full flex-col items-center gap-3.5">
         <Link
           href="/"
           aria-label="Back to landing page"
-          className="group relative flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-2 text-[#334155] transition-colors hover:bg-[#eef2f6]"
+          className="group relative flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-1.5 text-[#334155] transition-colors hover:bg-[#eef2f6]"
         >
-          <ChevronLeft className="size-5" strokeWidth={1.75} />
+          <ChevronLeft className="size-3.5" strokeWidth={1.75} />
           <SidebarTooltip label="Back to landing page" />
         </Link>
 
-        <nav className="flex flex-col items-center gap-3">
+        <nav className="flex flex-col items-center gap-2">
           {SIDEBAR_MENU_ITEMS.map(({ key, label, icon: Icon, href }) => {
             const active = key === activeKey;
             return (
@@ -55,13 +55,13 @@ export default function Sidebar({ activeKey }: SidebarProps) {
                 key={key}
                 href={href}
                 aria-label={label}
-                className={`group relative flex size-12 items-center justify-center rounded-2xl transition-colors ${
+                className={`group relative flex size-9 items-center justify-center rounded-xl transition-colors ${
                   active
                     ? "bg-[linear-gradient(180deg,#86b4ff_0%,#0661f7_100%)] text-white shadow-[0px_4px_10px_0px_rgba(11,87,208,0.35)]"
                     : "bg-white text-[#334155] hover:bg-[#f8fafc]"
                 }`}
               >
-                <Icon className="size-5" strokeWidth={1.75} />
+                <Icon className="size-4" strokeWidth={1.75} />
                 <SidebarTooltip label={label} />
               </Link>
             );
@@ -75,17 +75,17 @@ export default function Sidebar({ activeKey }: SidebarProps) {
         aria-checked={isDark}
         aria-label="Toggle light/dark theme"
         onClick={() => setIsDark((prev) => !prev)}
-        className="relative flex h-8 w-14 shrink-0 items-center rounded-full border border-[#e2e8f0] bg-white p-1"
+        className="relative flex h-6 w-10 shrink-0 items-center rounded-full border border-[#e2e8f0] bg-white p-1"
       >
         <span
-          className={`flex size-6 items-center justify-center rounded-full transition-transform ${
-            isDark ? "translate-x-6 bg-[#334155]" : "translate-x-0 bg-[#ffaa04]"
+          className={`flex size-4 items-center justify-center rounded-full transition-transform ${
+            isDark ? "translate-x-4 bg-[#334155]" : "translate-x-0 bg-[#ffaa04]"
           }`}
         >
           {isDark ? (
-            <Moon className="size-3.5 text-white" strokeWidth={2} />
+            <Moon className="size-2.5 text-white" strokeWidth={2} />
           ) : (
-            <Sun className="size-3.5 text-white" strokeWidth={2} />
+            <Sun className="size-2.5 text-white" strokeWidth={2} />
           )}
         </span>
       </button>
