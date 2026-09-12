@@ -27,8 +27,14 @@ const SIDEBAR_MENU_ITEMS: SidebarMenuItem[] = [
   { key: "ookla", label: "Ookla Dashboard", icon: Radio, href: "/ookla" },
 ];
 
+// `border-image` ignores `border-radius` entirely, so it can't be used for a
+// rounded gradient border — it draws its corners square regardless of the
+// element's radius, mismatching the rounded gradient fill underneath. The
+// fix is the two-background-layer trick: the fill paints into the padding
+// box while a second gradient paints the (transparent-bordered) border box
+// behind it, and both correctly follow the shared `rounded-[14px]`.
 const ACTIVE_ITEM_CLASSES =
-  "border-[3px] border-transparent bg-[linear-gradient(180deg,#86b4ff_0%,#0661f7_100%)] text-white shadow-[0px_4px_10px_0px_rgba(11,87,208,0.35)] [background-clip:padding-box,border-box] [background-origin:padding-box,border-box] [border-image:linear-gradient(180deg,#cee1ff_0%,rgba(11,87,208,0)_46.777%,#cee1ff_100%)_1]";
+  "border-[3px] border-transparent text-white shadow-[0px_4px_10px_0px_rgba(11,87,208,0.35)] [background-origin:border-box] [background-clip:padding-box,border-box] [background-image:linear-gradient(180deg,#86b4ff_0%,#0661f7_100%),linear-gradient(180deg,#cee1ff_0%,rgba(11,87,208,0)_46.777%,#cee1ff_100%)]";
 
 type SidebarProps = {
   /** key of the menu item that should render as active/highlighted */
