@@ -341,38 +341,43 @@ export default function OnxDashboard() {
 
         {/* Main column */}
         <div className="flex min-w-0 flex-1 flex-col">
-          <main className="flex flex-1 flex-col gap-4 p-4">
-            {/* Filter bar: static filter pills on the left, Export + avatar on
-                the right — replaces the old vertical "Filter Insight" side
-                panel with a horizontal bar matching the FBB dashboard. */}
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
-                {FILTER_PILLS.map((label) => (
-                  <div
-                    key={label}
-                    className="flex h-9 w-[190px] shrink-0 items-center justify-between gap-3 rounded-full border border-[#e2e8f0] bg-[#f8fafc] px-4"
-                  >
-                    <span className="whitespace-nowrap text-sm font-medium text-[#0f172a]">
-                      {label}
-                    </span>
-                    <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
-                  </div>
-                ))}
+          <main className="flex flex-1 flex-col p-4">
+            {/* Outer card — wraps the filter bar and both content cards in one
+                continuous white surface, matching the uploaded mockup (the
+                filter bar sits inside this card here, unlike FBB where it
+                sits above the card). */}
+            <div className="flex flex-1 flex-col gap-4 rounded-[36px] border border-[#e2e8f0] bg-white p-4">
+              {/* Filter bar: static filter pills on the left, Export + avatar on
+                  the right — replaces the old vertical "Filter Insight" side
+                  panel with a horizontal bar matching the FBB dashboard. */}
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
+                  {FILTER_PILLS.map((label) => (
+                    <div
+                      key={label}
+                      className="flex h-9 w-[190px] shrink-0 items-center justify-between gap-3 rounded-full border border-[#e2e8f0] bg-[#f8fafc] px-4"
+                    >
+                      <span className="whitespace-nowrap text-sm font-medium text-[#0f172a]">
+                        {label}
+                      </span>
+                      <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex shrink-0 items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
+                  <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-4 text-sm font-semibold text-white transition-opacity hover:opacity-90">
+                    <Upload className="size-4" strokeWidth={1.75} />
+                    Export
+                  </button>
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
+                    UN
+                  </span>
+                </div>
               </div>
 
-              <div className="flex shrink-0 items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
-                <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-4 text-sm font-semibold text-white transition-opacity hover:opacity-90">
-                  <Upload className="size-4" strokeWidth={1.75} />
-                  Export
-                </button>
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
-                  UN
-                </span>
-              </div>
-            </div>
-
-            {/* Details Metrics card */}
-            <div className="flex shrink-0 flex-col gap-3 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
+              {/* Details Metrics card */}
+              <div className="flex shrink-0 flex-col gap-3 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
               <div className="flex items-center justify-between gap-3">
                 <span className="text-[18px] font-semibold text-[#020617]">Details Metrics</span>
                 <button
@@ -513,6 +518,7 @@ export default function OnxDashboard() {
               <div className={activeTab === "maps" ? "h-[520px]" : ""}>
                 {activeTab === "maps" ? <RegionMap /> : <DetailTable />}
               </div>
+            </div>
             </div>
           </main>
         </div>
