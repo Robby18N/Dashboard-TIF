@@ -165,8 +165,8 @@ export const REGION_METRICS: Record<string, RegionMetrics> = {
 };
 
 const STATUS_COLOR: Record<RegionStatus, string> = {
-  win: "#22c55e",
-  lose: "#ef4444",
+  win: "#21a647",
+  lose: "#c23837",
 };
 
 const REGIONS_SOURCE_ID = "telkom-regions";
@@ -185,7 +185,7 @@ function buildPopupContent(metrics: RegionMetrics): HTMLDivElement {
   header.className = "flex items-center gap-2.5";
 
   const name = document.createElement("p");
-  name.className = "whitespace-nowrap text-sm font-semibold leading-5 text-[#050505]";
+  name.className = "whitespace-nowrap text-sm font-semibold leading-5 text-[#020617]";
   name.textContent = metrics.name;
 
   const badge = document.createElement("span");
@@ -213,11 +213,11 @@ function buildPopupContent(metrics: RegionMetrics): HTMLDivElement {
     row.className = "flex w-full items-center gap-2";
 
     const labelEl = document.createElement("p");
-    labelEl.className = "w-[120px] shrink-0 text-xs leading-[18px] text-[#636363]";
+    labelEl.className = "w-[120px] shrink-0 text-xs leading-[18px] text-[#64748b]";
     labelEl.textContent = label;
 
     const valueEl = document.createElement("p");
-    valueEl.className = "w-20 shrink-0 text-xs leading-[18px] text-[#050505]";
+    valueEl.className = "w-20 shrink-0 text-xs leading-[18px] text-[#020617]";
     valueEl.textContent = value;
 
     row.append(labelEl, valueEl);
@@ -409,14 +409,14 @@ export default function RegionMap() {
 
   if (!token) {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-[10px] bg-[#f5f3f2] px-6 text-center">
-        <p className="text-sm font-medium text-[#050505]">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-[10px] bg-[#f1f5f9] px-6 text-center">
+        <p className="text-sm font-medium text-[#020617]">
           Peta belum aktif
         </p>
-        <p className="max-w-[420px] text-xs text-[#636363]">
-          Tambahkan <code className="rounded bg-black/[0.06] px-1 py-0.5">NEXT_PUBLIC_MAPBOX_TOKEN</code>{" "}
-          (dan opsional <code className="rounded bg-black/[0.06] px-1 py-0.5">NEXT_PUBLIC_MAPBOX_STYLE</code>)
-          di file <code className="rounded bg-black/[0.06] px-1 py-0.5">.env.local</code> dengan access
+        <p className="max-w-[420px] text-xs text-[#64748b]">
+          Tambahkan <code className="rounded bg-[#e2e8f0] px-1 py-0.5">NEXT_PUBLIC_MAPBOX_TOKEN</code>{" "}
+          (dan opsional <code className="rounded bg-[#e2e8f0] px-1 py-0.5">NEXT_PUBLIC_MAPBOX_STYLE</code>)
+          di file <code className="rounded bg-[#e2e8f0] px-1 py-0.5">.env.local</code> dengan access
           token Mapbox kamu untuk menampilkan peta ini.
         </p>
       </div>
@@ -428,20 +428,20 @@ export default function RegionMap() {
       <div ref={mapContainerRef} className="h-full w-full" />
 
       {/* Legend */}
-      <div className="absolute right-4 top-4 flex items-center gap-4 rounded-[24px] border border-[#0505050a] bg-white px-4 py-2">
+      <div className="absolute right-4 top-4 flex items-center gap-4 rounded-[24px] border border-[#e2e8f0] bg-white px-4 py-2">
         <span className="flex items-center gap-1">
           <span
             className="size-3 rounded-full"
-            style={{ backgroundColor: "#22c55e33", outline: "1px solid #22c55e", outlineOffset: "-0.5px" }}
+            style={{ backgroundColor: "#21a64733", outline: "1px solid #21a647", outlineOffset: "-0.5px" }}
           />
-          <span className="text-xs text-[#050505]">Win</span>
+          <span className="text-xs text-[#020617]">Win</span>
         </span>
         <span className="flex items-center gap-1">
           <span
             className="size-3 rounded-full"
             style={{ backgroundColor: "#c2383733", outline: "1px solid #c23837", outlineOffset: "-0.5px" }}
           />
-          <span className="text-xs text-[#050505]">Lose</span>
+          <span className="text-xs text-[#020617]">Lose</span>
         </span>
       </div>
     </div>
