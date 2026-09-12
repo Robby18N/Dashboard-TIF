@@ -27,6 +27,9 @@ const SIDEBAR_MENU_ITEMS: SidebarMenuItem[] = [
   { key: "ookla", label: "Ookla Dashboard", icon: Radio, href: "/ookla" },
 ];
 
+const ACTIVE_ITEM_CLASSES =
+  "border-[3px] border-transparent bg-[linear-gradient(180deg,#86b4ff_0%,#0661f7_100%)] text-white shadow-[0px_4px_10px_0px_rgba(11,87,208,0.35)] [background-clip:padding-box,border-box] [background-origin:padding-box,border-box] [border-image:linear-gradient(180deg,#cee1ff_0%,rgba(11,87,208,0)_46.777%,#cee1ff_100%)_1]";
+
 type SidebarProps = {
   /** key of the menu item that should render as active/highlighted */
   activeKey: string;
@@ -36,21 +39,63 @@ export default function Sidebar({ activeKey }: SidebarProps) {
   // Visual-only theme switch to match the design; the app has no dark theme
   // wired up yet, so this doesn't change anything else on the page.
   const [isDark, setIsDark] = useState(false);
-  // Show/hide the sidebar. The chevron button toggles this; when collapsed
-  // only a slim rail with a re-open handle is shown.
-  const [collapsed, setCollapsed] = useState(false);
+  // The chevron button toggles between the compact icon-only rail (72px,
+  // labels shown as hover tooltips) and the open rail (208px, labels shown
+  // inline next to each icon).
+  const [open, setOpen] = useState(false);
 
-  if (collapsed) {
+  if (open) {
     return (
-      <aside className="flex w-[28px] shrink-0 flex-col items-center border-r border-[#e2e8f0] bg-white pt-4">
-        <button
-          type="button"
-          aria-label="Show sidebar"
-          onClick={() => setCollapsed(false)}
-          className="flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-1 text-[#334155] transition-colors hover:bg-[#eef2f6]"
-        >
-          <ChevronRight className="size-3.5" strokeWidth={1.75} />
-        </button>
+      <aside className="flex w-[208px] shrink-0 flex-col items-center justify-between rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px]">
+        <div className="flex w-full flex-col items-center">
+          {/* Collapse-sidebar toggle */}
+          <div className="flex w-full items-center justify-end border-b border-[#e2e8f0] p-4">
+            <button
+              type="button"
+              aria-label="Collapse sidebar"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-center rounded-[8px_20px_8px_8px] border border-[#e2e8f0] bg-[#f8fafc] p-2 text-[#334155] transition-colors hover:bg-[#eef2f6]"
+            >
+              <ChevronLeft className="size-6" strokeWidth={1.75} />
+            </button>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex w-full flex-col gap-5 p-4">
+            <div className="flex w-full flex-col items-start gap-2">
+              <Link
+                href="/"
+                aria-label="Back to landing page"
+                className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-white text-[#334155] transition-colors hover:bg-[#f8fafc]"
+              >
+                <LayoutDashboard className="size-6" strokeWidth={1.75} />
+              </Link>
+
+              {SIDEBAR_MENU_ITEMS.map(({ key, label, icon: Icon, href }) => {
+                const active = key === activeKey;
+                return (
+                  <Link
+                    key={key}
+                    href={href}
+                    aria-label={label}
+                    className={`flex w-full items-center gap-3 rounded-[14px] p-3 transition-colors ${
+                      active
+                        ? ACTIVE_ITEM_CLASSES
+                        : "text-[#334155] hover:bg-[#f8fafc]"
+                    }`}
+                  >
+                    <Icon className="size-6 shrink-0" strokeWidth={1.75} />
+                    <span className="whitespace-nowrap text-sm font-medium">
+                      {label}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <ThemeToggle isDark={isDark} onToggle={() => setIsDark((prev) => !prev)} />
       </aside>
     );
   }
@@ -61,15 +106,15 @@ export default function Sidebar({ activeKey }: SidebarProps) {
     // rounded top-right corner marking where it begins, right under that bar.
     <aside className="flex w-[72px] shrink-0 flex-col items-center justify-between rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px]">
       <div className="flex w-full flex-col items-center">
-        {/* Show/hide sidebar toggle */}
+        {/* Open-sidebar toggle */}
         <div className="flex w-full flex-col items-center gap-4 border-b border-[#e2e8f0] p-4">
           <button
             type="button"
-            aria-label="Hide sidebar"
-            onClick={() => setCollapsed(true)}
+            aria-label="Expand sidebar"
+            onClick={() => setOpen(true)}
             className="flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-2 text-[#334155] transition-colors hover:bg-[#eef2f6]"
           >
-            <ChevronLeft className="size-4" strokeWidth={1.75} />
+            <ChevronRight className="size-4" strokeWidth={1.75} />
           </button>
         </div>
 
@@ -107,27 +152,34 @@ export default function Sidebar({ activeKey }: SidebarProps) {
         </div>
       </div>
 
-      <button
-        type="button"
-        role="switch"
-        aria-checked={isDark}
-        aria-label="Toggle light/dark theme"
-        onClick={() => setIsDark((prev) => !prev)}
-        className="relative flex h-8 w-14 shrink-0 items-center rounded-full border border-[#e2e8f0] bg-white p-1"
-      >
-        <span
-          className={`flex size-6 items-center justify-center rounded-full transition-transform ${
-            isDark ? "translate-x-6 bg-[#334155]" : "translate-x-0 bg-[#ffaa04]"
-          }`}
-        >
-          {isDark ? (
-            <Moon className="size-3.5 text-white" strokeWidth={2} />
-          ) : (
-            <Sun className="size-3.5 text-white" strokeWidth={2} />
-          )}
-        </span>
-      </button>
+      <ThemeToggle isDark={isDark} onToggle={() => setIsDark((prev) => !prev)} />
     </aside>
+  );
+}
+
+/** Light/dark visual-only switch shown at the bottom of the sidebar, in both widths. */
+function ThemeToggle({ isDark, onToggle }: { isDark: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={isDark}
+      aria-label="Toggle light/dark theme"
+      onClick={onToggle}
+      className="relative flex h-8 w-14 shrink-0 items-center rounded-full border border-[#e2e8f0] bg-white p-1"
+    >
+      <span
+        className={`flex size-6 items-center justify-center rounded-full transition-transform ${
+          isDark ? "translate-x-6 bg-[#334155]" : "translate-x-0 bg-[#ffaa04]"
+        }`}
+      >
+        {isDark ? (
+          <Moon className="size-3.5 text-white" strokeWidth={2} />
+        ) : (
+          <Sun className="size-3.5 text-white" strokeWidth={2} />
+        )}
+      </span>
+    </button>
   );
 }
 
