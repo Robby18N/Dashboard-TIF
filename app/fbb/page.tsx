@@ -195,8 +195,8 @@ const TABLE_COLUMNS = [
   { key: "satuan", label: "Satuan", width: "w-[90px] @[1500px]:w-[120px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
   { key: "source", label: "Source Data", width: "w-[150px] @[1500px]:w-[200px]", align: "justify-start text-left", headerColor: "text-[#334155]" },
   { key: "target", label: "Target", width: "w-[100px] @[1500px]:w-[160px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
-  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#334155]" },
-  { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "realisasi", label: "Realisasi W4 Aug‘26", width: "flex-1 min-w-[110px] @[1500px]:min-w-[140px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
+  { key: "capaian", label: "Capaian W4 Aug‘26", width: "flex-1 min-w-[110px] @[1500px]:min-w-[140px]", align: "justify-center text-center", headerColor: "text-[#334155]" },
 ] as const;
 
 type RowGroup = { segmen: string; rows: SlaRow[] };
@@ -378,21 +378,32 @@ export default function FbbDashboard() {
 
               {/* Table */}
               <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-[#e2e8f0]">
-                <div className="min-w-[900px] @[1500px]:min-w-[1400px]">
-                  {/* Header */}
+                <div className="min-w-[1130px] @[1500px]:min-w-[1500px]">
+                  {/* Header. Fixed-width columns get `shrink-0` (matching the
+                      body cells below) so the flex row never silently
+                      squeezes them narrower than their declared width when
+                      space is tight — instead the wrapper's min-width kicks
+                      in and the table scrolls, keeping header and body
+                      columns aligned. The two flex-1 columns get an explicit
+                      min-width for the same reason: without one, a flex
+                      item's default content-based minimum can force the
+                      fixed columns to shrink to make room for it. */}
                   <div className="flex h-12 border-b border-[#e2e8f0] bg-[#f8fafc]">
-                    {TABLE_COLUMNS.map((col, idx) => (
+                    {TABLE_COLUMNS.map((col, idx) => {
+                      const isFlex = col.width.startsWith("flex-1");
+                      return (
                       <div
                         key={col.key}
                         className={`flex h-full items-center gap-2.5 border-[#e2e8f0] ${
                           idx !== TABLE_COLUMNS.length - 1 ? "border-r" : ""
-                        } ${col.width === "flex-1" ? "px-3" : "px-4"} ${col.width} ${col.align}`}
+                        } ${isFlex ? "px-3" : "px-4 shrink-0"} ${col.width} ${col.align}`}
                       >
                         <span className={`whitespace-nowrap text-sm font-medium leading-[19px] ${col.headerColor}`}>
                           {col.label}
                         </span>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {/* Grouped rows */}
@@ -457,14 +468,14 @@ export default function FbbDashboard() {
                                   </span>
                                 </div>
                                 <div
-                                  className={`flex h-full flex-1 items-center justify-center border-r border-[#e2e8f0] px-3 ${rowBorderB}`}
+                                  className={`flex h-full flex-1 min-w-[110px] items-center justify-center border-r border-[#e2e8f0] px-3 @[1500px]:min-w-[140px] ${rowBorderB}`}
                                 >
                                   <span className="text-sm font-normal leading-[17px] text-[#020617]">
                                     {row.realisasi}
                                   </span>
                                 </div>
                                 <div
-                                  className={`flex h-full flex-1 items-center justify-center border-[#e2e8f0] px-3 ${rowBorderB}`}
+                                  className={`flex h-full flex-1 min-w-[110px] items-center justify-center border-[#e2e8f0] px-3 @[1500px]:min-w-[140px] ${rowBorderB}`}
                                 >
                                   <span
                                     className={`text-sm font-normal leading-[16px] ${
