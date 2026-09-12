@@ -312,7 +312,7 @@ export default function OloDashboard() {
               {/* Chart panel */}
               <div className="flex flex-col gap-4 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <span className="text-lg font-semibold text-[#020617]">
+                  <span className="text-[14px] font-medium text-[#020617]">
                     Trend Total KPI Not Clear
                   </span>
                   <div className="flex flex-wrap items-center gap-4">
