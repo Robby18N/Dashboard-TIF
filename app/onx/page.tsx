@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Filter } from "lucide-react";
+import { ChevronDown, Upload } from "lucide-react";
 import Sidebar from "../components/Sidebar";
 import RegionMap from "./RegionMap";
 
@@ -35,6 +35,9 @@ const COMPARISON_COLUMNS = [
 ] as const;
 
 const METRIC_OPTIONS = ["TTFB", "Latency", "Jitter", "Packetloss", "Download", "Upload"];
+
+/** Static filter pills shown in the top filter bar — placeholders until real filter logic lands. */
+const FILTER_PILLS = ["Select Filter Metrics", "Select KPI", "Select Level", "Filter KPI", "Category"];
 
 type BenchmarkStatus =
   | "Consecutive"
@@ -279,7 +282,7 @@ export default function OnxDashboard() {
   const [isTableCollapsed, setIsTableCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       {/* Decorative scalloped bar, full page width (spans over the sidebar
           too) — identical to the FBB dashboard's header bar, just with this
           page's own title in the notch. */}
@@ -330,216 +333,189 @@ export default function OnxDashboard() {
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 overflow-hidden">
+      {/* Sidebar + content row. No fixed height / overflow-hidden here — the
+          page is meant to scroll vertically when content grows past the
+          viewport, rather than clipping everything to a fixed screen height. */}
+      <div className="flex flex-1">
         <Sidebar activeKey="onx" />
 
-        {/* Filter Insight panel */}
-        <aside className="flex w-[232.5px] shrink-0 flex-col gap-6 border-r border-[#e2e8f0] bg-[#f8fafc] px-4 pb-8 pt-[18px]">
-          <div className="flex h-[45px] shrink-0 items-center gap-3 border-b border-[#e2e8f0]">
-            <Filter className="size-[18px] text-[#334155]" strokeWidth={1.75} />
-            <span className="text-sm font-medium text-[#334155]">Filter Insight</span>
-          </div>
-
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-3">
-              <span className="text-sm text-[#334155]">Metrics</span>
-              <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#64748b]">Select Filter Metrics</span>
-                <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
-              </div>
-              <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#64748b]">Select KPI</span>
-                <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <span className="text-sm text-[#334155]">Location Level</span>
-              <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#64748b]">Select Level</span>
-                <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
-              </div>
-              <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#64748b]">Filter KPI</span>
-                <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
-              </div>
-              <div className="flex min-h-9 w-[200px] items-center justify-between gap-2 rounded-xl border border-[#e2e8f0] bg-white px-3 py-[7.5px]">
-                <span className="text-sm text-[#64748b]">Category</span>
-                <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
-              </div>
-            </div>
-          </div>
-        </aside>
-
         {/* Main column */}
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          {/* Content */}
-          <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#f1f5f9] p-4">
-          {/* Unified card: comparison table + controls + map, sharing one border/radius.
-              The Maps tab needs a fixed, viewport-filling height (the map has no
-              intrinsic content height), but the Detail tab should never clip its
-              rows — so only the Maps tab stretches to fill/min-h-0; on Detail the
-              card grows to fit its content and this <main> scrolls instead. */}
-          <div
-            className={`flex flex-col rounded-[24px] border border-[#e2e8f0] bg-white ${
-              activeTab === "maps" ? "min-h-0 flex-1 overflow-hidden" : "overflow-visible"
-            }`}
-          >
-            {/* Comparison table */}
-            <div className="flex shrink-0 items-start gap-3 border-b border-[#e2e8f0] p-3">
-              <div className="flex min-w-0 flex-1 flex-col">
-                {/* Collapsed label */}
-                <div
-                  className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-                    isTableCollapsed ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <span className="block py-1 text-[14px] font-medium text-[#64748b]">
-                      Details Metrics
+        <div className="flex min-w-0 flex-1 flex-col">
+          <main className="flex flex-1 flex-col gap-4 bg-[#f1f5f9] p-4">
+            {/* Filter bar: static filter pills on the left, Export + avatar on
+                the right — replaces the old vertical "Filter Insight" side
+                panel with a horizontal bar matching the FBB dashboard. */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
+                {FILTER_PILLS.map((label) => (
+                  <div
+                    key={label}
+                    className="flex h-9 w-[190px] shrink-0 items-center justify-between gap-3 rounded-full border border-[#e2e8f0] bg-[#f8fafc] px-4"
+                  >
+                    <span className="whitespace-nowrap text-sm font-medium text-[#0f172a]">
+                      {label}
                     </span>
+                    <ChevronDown className="size-4 shrink-0 text-[#64748b]" strokeWidth={1.75} />
                   </div>
-                </div>
+                ))}
+              </div>
 
-                {/* Table content */}
-                <div
-                  className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-                    isTableCollapsed ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
-                  }`}
+              <div className="flex shrink-0 items-center gap-3 rounded-full border border-[#e2e8f0] bg-white p-2">
+                <button className="flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#6810f4_100%)] px-4 text-sm font-semibold text-white transition-opacity hover:opacity-90">
+                  <Upload className="size-4" strokeWidth={1.75} />
+                  Export
+                </button>
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#1f6eeb] text-xs font-medium text-white">
+                  UN
+                </span>
+              </div>
+            </div>
+
+            {/* Details Metrics card */}
+            <div className="flex shrink-0 flex-col gap-3 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-[18px] font-semibold text-[#020617]">Details Metrics</span>
+                <button
+                  type="button"
+                  aria-label={isTableCollapsed ? "Expand table" : "Collapse table"}
+                  aria-expanded={!isTableCollapsed}
+                  onClick={() => setIsTableCollapsed((collapsed) => !collapsed)}
+                  className="flex size-[30px] shrink-0 items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] transition-colors hover:bg-[#eef2f6]"
                 >
-                  <div className="overflow-hidden">
-                    <div className="overflow-x-auto rounded-[12px] border border-[#e2e8f0]">
-                      <div className="min-w-[640px]">
-                        <div className="flex items-center bg-[#f8fafc]">
-                          {COMPARISON_COLUMNS.map((col) => (
-                            <div
-                              key={col.key}
-                              className={`flex h-[40px] flex-1 items-center px-3 ${col.align}`}
-                            >
-                              <span className="whitespace-nowrap text-[14px] font-medium leading-[20px] text-[#334155]">
-                                {col.label}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
+                  <ChevronDown
+                    className={`size-4 text-[#334155] transition-transform duration-300 ${
+                      isTableCollapsed ? "-rotate-90" : ""
+                    }`}
+                    strokeWidth={1.75}
+                  />
+                </button>
+              </div>
 
-                        {COMPARISON_ROWS.map((row, i) => (
+              <div
+                className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+                  isTableCollapsed ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="overflow-x-auto rounded-lg border border-[#e2e8f0] shadow-[0px_1px_2.625px_0px_rgba(0,0,0,0.1)]">
+                    <div className="min-w-[640px]">
+                      <div className="flex items-center border-b border-[#e2e8f0] bg-[#f8fafc]">
+                        {COMPARISON_COLUMNS.map((col, idx) => (
                           <div
-                            key={`${row.kpi}-${i}`}
-                            className="flex items-center border-b border-l-[3px] border-l-transparent border-[#e2e8f0] bg-white transition-colors hover:border-l-[#3b82f6] hover:bg-[#f8fafc]"
+                            key={col.key}
+                            className={`flex h-10 flex-1 items-center px-4 ${
+                              idx !== COMPARISON_COLUMNS.length - 1 ? "border-r border-[#e2e8f0]" : ""
+                            } ${col.align}`}
                           >
-                            {COMPARISON_COLUMNS.map((col) => (
-                              <div
-                                key={col.key}
-                                className={`flex h-[30px] flex-1 items-center px-3 ${col.align}`}
-                              >
-                                {col.key === "wow" ? (
-                                  <span
-                                    className={`whitespace-nowrap text-[14px] font-normal leading-[20px] ${
-                                      row.wow === "Lose" ? "text-[#c23837]" : "text-[#020617]"
-                                    }`}
-                                  >
-                                    {row.wow}
-                                  </span>
-                                ) : col.key === "highlight" ? (
-                                  <span
-                                    className={`whitespace-nowrap text-[14px] font-normal leading-[20px] ${
-                                      row.highlight === "Need Improve"
-                                        ? "text-[#c23837]"
-                                        : "text-[#020617]"
-                                    }`}
-                                  >
-                                    {row.highlight}
-                                  </span>
-                                ) : (
-                                  <span className="whitespace-nowrap text-[14px] font-normal leading-[20px] text-[#020617]">
-                                    {row[col.key as keyof ComparisonRow]}
-                                  </span>
-                                )}
-                              </div>
-                            ))}
+                            <span className="whitespace-nowrap text-[12px] font-semibold leading-[16px] text-[#334155]">
+                              {col.label}
+                            </span>
                           </div>
                         ))}
                       </div>
+
+                      {COMPARISON_ROWS.map((row, i) => (
+                        <div
+                          key={`${row.kpi}-${i}`}
+                          className={`flex items-center ${
+                            i !== COMPARISON_ROWS.length - 1 ? "border-b border-[#e2e8f0]" : ""
+                          }`}
+                        >
+                          {COMPARISON_COLUMNS.map((col, idx) => (
+                            <div
+                              key={col.key}
+                              className={`flex h-8 flex-1 items-center px-4 ${
+                                idx !== COMPARISON_COLUMNS.length - 1 ? "border-r border-[#e2e8f0]" : ""
+                              } ${col.align}`}
+                            >
+                              {col.key === "wow" ? (
+                                <span
+                                  className={`whitespace-nowrap text-[14px] font-bold leading-[17px] ${
+                                    row.wow === "Lose" ? "text-[#c23837]" : "text-[#21a647]"
+                                  }`}
+                                >
+                                  {row.wow}
+                                </span>
+                              ) : col.key === "highlight" ? (
+                                <span
+                                  className={`whitespace-nowrap text-[14px] font-bold leading-[17px] ${
+                                    row.highlight === "Need Improve"
+                                      ? "text-[#c23837]"
+                                      : "text-[#21a647]"
+                                  }`}
+                                >
+                                  {row.highlight}
+                                </span>
+                              ) : (
+                                <span className="whitespace-nowrap text-[14px] font-medium leading-[17px] text-[#020617]">
+                                  {row[col.key as keyof ComparisonRow]}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
-
-              <button
-                type="button"
-                aria-label={isTableCollapsed ? "Expand table" : "Collapse table"}
-                aria-expanded={!isTableCollapsed}
-                onClick={() => setIsTableCollapsed((collapsed) => !collapsed)}
-                className="flex size-8 shrink-0 items-center justify-center rounded-[10px] border border-[#e2e8f0] bg-white transition-colors hover:bg-[#f8fafc]"
-              >
-                <ChevronDown
-                  className={`size-[18px] text-[#3b82f6] transition-transform duration-300 ${
-                    isTableCollapsed ? "" : "rotate-180"
-                  }`}
-                  strokeWidth={1.67}
-                />
-              </button>
             </div>
 
-            {/* Metric selector + Maps/Detail tabs */}
-            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-0 border-b border-solid border-[#e2e8f0] px-4 py-2">
-              <div className="relative">
-                <select
-                  aria-label="Select metric"
-                  value={selectedMetric}
-                  onChange={(e) => setSelectedMetric(e.target.value)}
-                  className="h-9 w-[150px] appearance-none rounded-xl border border-[#e2e8f0] bg-white py-1 pl-3 pr-8 text-sm font-medium text-[#64748b] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
-                >
-                  {METRIC_OPTIONS.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#64748b]"
-                  strokeWidth={1}
-                />
+            {/* Map View / Detail View card */}
+            <div className="flex flex-1 flex-col gap-3 rounded-[19px] border border-[#e2e8f0] bg-white p-4 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
+              <div className="flex shrink-0 flex-wrap items-center justify-between gap-3">
+                <div className="relative">
+                  <select
+                    aria-label="Select metric"
+                    value={selectedMetric}
+                    onChange={(e) => setSelectedMetric(e.target.value)}
+                    className="h-9 w-[150px] appearance-none rounded-full border border-[#e2e8f0] bg-white py-1 pl-4 pr-8 text-sm font-medium text-[#0a0a0a] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)] outline-none"
+                  >
+                    {METRIC_OPTIONS.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-[#737373]"
+                    strokeWidth={1.5}
+                  />
+                </div>
+
+                <div className="flex items-center rounded-[48px] border border-[#e2e8f0] bg-white p-1 shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("maps")}
+                    className={`rounded-[48px] px-3 py-1 text-sm font-medium transition-colors ${
+                      activeTab === "maps"
+                        ? "bg-[#3b82f6] text-white"
+                        : "text-[#64748b]"
+                    }`}
+                  >
+                    Map View
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("detail")}
+                    className={`rounded-[48px] px-3 py-1 text-sm font-medium transition-colors ${
+                      activeTab === "detail"
+                        ? "bg-[#3b82f6] text-white"
+                        : "text-[#64748b]"
+                    }`}
+                  >
+                    Detail View
+                  </button>
+                </div>
               </div>
 
-              <div className="flex items-center rounded-[80px] bg-[#f1f5f9] p-1">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab("maps")}
-                  className={`rounded-3xl px-4 py-1 text-sm font-medium transition-colors ${
-                    activeTab === "maps"
-                      ? "border border-[#e2e8f0] bg-white text-[#020617] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
-                      : "text-[#64748b]"
-                  }`}
-                >
-                  Maps
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab("detail")}
-                  className={`rounded-3xl px-4 py-1 text-sm font-medium transition-colors ${
-                    activeTab === "detail"
-                      ? "border border-[#e2e8f0] bg-white text-[#020617] shadow-[0px_1px_1.75px_0px_rgba(0,0,0,0.05)]"
-                      : "text-[#64748b]"
-                  }`}
-                >
-                  Detail
-                </button>
+              {/* Maps / Detail area */}
+              <div className={activeTab === "maps" ? "h-[520px]" : ""}>
+                {activeTab === "maps" ? <RegionMap /> : <DetailTable />}
               </div>
             </div>
-
-            {/* Maps / Detail area */}
-            <div className={`p-3 ${activeTab === "maps" ? "min-h-0 flex-1" : ""}`}>
-              {activeTab === "maps" ? (
-                <RegionMap />
-              ) : (
-                <DetailTable />
-              )}
-            </div>
-          </div>
-        </main>
-      </div>
+          </main>
+        </div>
       </div>
     </div>
   );
