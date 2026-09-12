@@ -46,7 +46,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
 
   if (open) {
     return (
-      <aside className="flex w-[208px] shrink-0 flex-col items-center justify-between rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px]">
+      <aside className="flex w-[208px] shrink-0 flex-col items-center justify-between overflow-hidden rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px] transition-[width] duration-300 ease-in-out">
         <div className="flex w-full flex-col items-center">
           {/* Collapse-sidebar toggle */}
           <div className="flex w-full items-center justify-end border-b border-[#e2e8f0] p-4">
@@ -54,14 +54,14 @@ export default function Sidebar({ activeKey }: SidebarProps) {
               type="button"
               aria-label="Collapse sidebar"
               onClick={() => setOpen(false)}
-              className="flex items-center justify-center rounded-[8px_20px_8px_8px] border border-[#e2e8f0] bg-[#f8fafc] p-2 text-[#334155] transition-colors hover:bg-[#eef2f6]"
+              className="flex items-center justify-center rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-2 text-[#334155] transition-colors hover:bg-[#eef2f6]"
             >
-              <ChevronLeft className="size-6" strokeWidth={1.75} />
+              <ChevronLeft className="size-4" strokeWidth={1.75} />
             </button>
           </div>
 
           {/* Navigation */}
-          <div className="flex w-full flex-col gap-5 p-4">
+          <div className="flex w-full flex-col gap-5 p-4 animate-[sidebar-content-in_250ms_ease-out]">
             <div className="flex w-full flex-col items-start gap-2">
               <Link
                 href="/"
@@ -104,7 +104,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
     // The full-width decorative header bar now lives above this sidebar (as
     // a page-level sibling), so the sidebar itself just needs its own
     // rounded top-right corner marking where it begins, right under that bar.
-    <aside className="flex w-[72px] shrink-0 flex-col items-center justify-between rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px]">
+    <aside className="flex w-[72px] shrink-0 flex-col items-center justify-between rounded-tr-[33px] border-r border-[#e2e8f0] bg-white pb-[48px] transition-[width] duration-300 ease-in-out">
       <div className="flex w-full flex-col items-center">
         {/* Open-sidebar toggle */}
         <div className="flex w-full flex-col items-center gap-4 border-b border-[#e2e8f0] p-4">
@@ -119,7 +119,7 @@ export default function Sidebar({ activeKey }: SidebarProps) {
         </div>
 
         {/* Navigation */}
-        <div className="flex w-full flex-col gap-5 p-4">
+        <div className="flex w-full flex-col gap-5 p-4 animate-[sidebar-content-in_250ms_ease-out]">
           <div className="flex w-full flex-col items-center gap-4">
             <Link
               href="/"
